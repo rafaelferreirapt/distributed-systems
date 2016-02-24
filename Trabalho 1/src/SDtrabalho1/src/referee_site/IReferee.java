@@ -10,4 +10,12 @@ package referee_site;
  */
 public interface IReferee {
     
+    /* REFEREE METHODS */
+    
+    public void annouceNewGame();
+    
+    public void declareGameWinner();
+    
+    public void declareMatchWinner();
+
 }

@@ -10,4 +10,11 @@ package referee_site;
  */
 public interface ICoach {
     
+    /* COACH METHODS */
+
+    /**
+     *the referee is waken up by the last of the coaches in operation 
+     *"informReferee" when the teams are ready to proceed
+     */
+    public void informReferee();
 }

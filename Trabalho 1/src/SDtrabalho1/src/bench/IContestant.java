@@ -10,7 +10,7 @@ package bench;
  */
 public interface IContestant {
     
-    /* PLAYERS METHODS */
+    /* CONTESTANTS METHODS */
 
     /**
      * the coaches are waken up in operation followCoachAdvice by the last of 
