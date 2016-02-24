@@ -1,0 +1,8 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}Distributed Systems
+${licensePrefix}Rafael Ferreira and Rodrigo Cunha
+<#if licenseLast??>
+${licenseLast}
+</#if>
