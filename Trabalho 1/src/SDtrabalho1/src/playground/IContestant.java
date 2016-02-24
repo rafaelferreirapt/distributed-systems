@@ -8,6 +8,6 @@ package playground;
  *
  * @author
  */
-public class IContestant {
+public interface IContestant {
     
 }

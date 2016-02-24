@@ -8,6 +8,6 @@ package referee_site;
  *
  * @author
  */
-public class IReferee {
+public interface IReferee {
     
 }
