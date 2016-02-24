@@ -8,6 +8,17 @@ package bench;
  *
  * @author
  */
-public class ICoach {
+public interface ICoach {
     
+    /* COACH METHODS */
+
+    /**
+     * In coach life cycle, transition between "watch trial" and "wait for referee command"
+     */
+    public void reviewNotes();
+
+    /**
+     * In coach life cycle, transition between "wait for referee command" and "assemble team"
+     */
+    public void callContestants();
 }
