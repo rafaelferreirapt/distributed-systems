@@ -9,9 +9,7 @@ package bench;
  * @author
  */
 public interface IContestant {
-    
-    /* PLAYERS METHODS */
-
+   
     /**
      * the coaches are waken up in operation followCoachAdvice by the last of 
      * their selected contestants to stand in position

@@ -22,9 +22,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         Button btn = new Button();
-        btn.setText("Say 'Hello World'");
+        btn.setText("Start");
+        
         btn.setOnAction(new EventHandler<ActionEvent>() {
-            
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("Hello World!");
@@ -36,7 +36,7 @@ public class Main extends Application {
         
         Scene scene = new Scene(root, 300, 250);
         
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("GAME OF THE ROPE");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

@@ -9,8 +9,6 @@ package bench;
  * @author
  */
 public interface ICoach {
-    
-    /* COACH METHODS */
 
     /**
      * In coach life cycle, transition between "watch trial" and "wait for referee command"
