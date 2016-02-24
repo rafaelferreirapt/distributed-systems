@@ -16,16 +16,26 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     
     /* REFEREE METHODS */
     
+    /**
+    * In referee life cycle, transition between "start of the match" and "start of a game" or 
+    * between "end of a game" and "start of a game"
+    */
     @Override
     public void annouceNewGame() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+    * In referee life cycle, transition between "wait for trial conclusion" and "end of a game" 
+    */
     @Override
     public void declareGameWinner() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+    * In referee life cycle, transition between "end of a game" and "end of the match" 
+    */
     @Override
     public void declareMatchWinner() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
