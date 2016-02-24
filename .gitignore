@@ -14,3 +14,4 @@ nb-configuration.xml
 *.jar
 *.war
 *.ear
+/Trabalho 1/src/SDtrabalho1/nbproject/private/
