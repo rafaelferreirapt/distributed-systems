@@ -10,8 +10,6 @@ package bench;
  */
 public interface IReferee {
     
-    /* REFEREE METHODS */
-    
     /**
      * the coaches are waken up by the referee in operation callTrial to start 
      * selecting next team
