@@ -25,4 +25,7 @@ public interface IContestant {
      * callContestants by their coaches if they are selected to join the next trial
      */
     public void seatDown();
+    
+    public void waitForCallContestants();
+    
 }

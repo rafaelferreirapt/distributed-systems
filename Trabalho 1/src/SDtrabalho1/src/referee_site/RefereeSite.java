@@ -52,6 +52,11 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    @Override
+    public synchronized void waitForInformReferee(){
+        
+    }
+    
     /* PLAYERS METHODS */
     
      /**
@@ -61,6 +66,11 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     @Override
     public synchronized void amDone() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public synchronized void waitForAmDone(){
+        
     }
     
 }

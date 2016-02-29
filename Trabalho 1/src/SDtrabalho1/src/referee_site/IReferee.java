@@ -27,5 +27,8 @@ public interface IReferee {
     * In referee life cycle, transition between "end of a game" and "end of the match" 
     */
     public void declareMatchWinner();
-
+    
+    /* */
+    public void waitForInformReferee();
+    public void waitForAmDone();
 }

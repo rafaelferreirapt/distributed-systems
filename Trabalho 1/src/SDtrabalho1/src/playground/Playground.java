@@ -24,6 +24,11 @@ public class Playground implements IReferee, IContestant{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public synchronized void waitForStartTrial(){
+        
+    }
+    
     /**
      * In Referee life cycle, transition between "wait for trial conclusion" and "wait for trial conclusion"
      */
@@ -32,6 +37,11 @@ public class Playground implements IReferee, IContestant{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public synchronized void waitForAssertTrialDecision(){
+        
+    }
+    
     /* CONTESTANT METHODS */
     
     /**

@@ -22,7 +22,15 @@ public class Bench implements IReferee, ICoach, IContestant{
      */
     @Override
     public synchronized void callTrial() {
+        // signalForCallTrial
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public synchronized void waitForCallTrial(){
+        // to the coach
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     /**
@@ -35,6 +43,11 @@ public class Bench implements IReferee, ICoach, IContestant{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public synchronized void waitForAssertTrialDecision(){
+        
+    }
+    
     /* COACH METHODS */
 
     /**
@@ -52,7 +65,12 @@ public class Bench implements IReferee, ICoach, IContestant{
     public synchronized void callContestants() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
+    @Override
+    public synchronized void waitForCallContestants(){
+        
+    }
+    
     /* PLAYERS METHODS */
 
     /**
@@ -64,7 +82,12 @@ public class Bench implements IReferee, ICoach, IContestant{
     public synchronized void followCoachAdvice() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
+    @Override
+    public synchronized void waitForFollowCoachAdvice(){
+        
+    }
+    
     /**
      * In Contestants life cycle, transition between "doYourBest" and "seat at the bench"
      * SEAT_AT_THE_BENCH – blocking state the contestants are waken up in operation 

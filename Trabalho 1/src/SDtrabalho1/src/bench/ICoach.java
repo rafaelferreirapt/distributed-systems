@@ -19,4 +19,10 @@ public interface ICoach {
      * In coach life cycle, transition between "wait for referee command" and "assemble team"
      */
     public void callContestants();
+    
+    public void waitForCallTrial();
+    
+    public void waitForAssertTrialDecision();
+    
+    public void waitForFollowCoachAdvice();
 }
