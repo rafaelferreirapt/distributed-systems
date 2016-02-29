@@ -6,7 +6,7 @@ package entities;
 
 /**
  *
- * @author RodrigoCunha
+ * @author
  */
 public class Contestant {
     

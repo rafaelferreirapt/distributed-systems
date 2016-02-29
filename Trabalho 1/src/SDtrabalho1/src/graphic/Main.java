@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author gipmon
+ * @author
  */
 public class Main extends Application {
     
