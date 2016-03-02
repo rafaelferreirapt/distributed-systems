@@ -6,9 +6,9 @@ package entities;
 
 /**
  *
- * @author
+ * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
-public class Contestant {
+public class Contestant  extends Thread {
     
     private playground.IContestant playground;
     private bench.IContestant bench;

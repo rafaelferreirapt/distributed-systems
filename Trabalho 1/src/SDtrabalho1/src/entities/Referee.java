@@ -6,9 +6,9 @@ package entities;
 
 /**
  *
- * @author
+ * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
-public class Referee {
+public class Referee extends Thread {
     
     private playground.IReferee playground;
     private bench.IReferee bench;
@@ -20,4 +20,17 @@ public class Referee {
         this.referee_site = r;
     }
     
+    private boolean TEST_CONDITION = true;
+    private boolean OTHER_CONTIDITON = false;
+    
+    public void teste(){
+        while(TEST_CONDITION){
+            referee_site.waitForAmDone();
+            
+            if(true){
+                this.TEST_CONDITION = false;
+                this.OTHER_CONTIDITON = true;
+            }
+        }
+    }
 }

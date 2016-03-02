@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author
+ * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Main extends Application {
     

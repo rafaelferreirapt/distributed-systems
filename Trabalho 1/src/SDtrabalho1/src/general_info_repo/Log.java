@@ -6,7 +6,7 @@ package general_info_repo;
 
 /**
  *
- * @author
+ * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Log {
     

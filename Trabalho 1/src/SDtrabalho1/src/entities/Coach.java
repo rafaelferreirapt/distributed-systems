@@ -6,9 +6,9 @@ package entities;
 
 /**
  *
- * @author
+ * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
-public class Coach {
+public class Coach extends Thread {
     
     private bench.ICoach bench;
     private referee_site.ICoach referee_site;
