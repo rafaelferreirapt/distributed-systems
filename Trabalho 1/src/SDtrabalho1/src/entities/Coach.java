@@ -33,9 +33,11 @@ public class Coach extends Thread {
     
     @Override
     public void run(){
+        /*
         while(!referee_site.endOfMatch()){
             bench.waitForCallTrial();
         }
+        */
     }
     
     public void setState(CoachState state){
