@@ -27,9 +27,15 @@ public class Coach extends Thread {
         state = CoachState.WAIT_FOR_REFEREE_COMMAND;
     }
     
+    /**
+     * This function represents the life cycle of Coach.
+     */
+    
     @Override
     public void run(){
-        
+        while(!referee_site.endOfMatch()){
+            bench.waitForCallTrial();
+        }
     }
     
     public void setState(CoachState state){
