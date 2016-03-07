@@ -17,4 +17,6 @@ public interface ICoach {
      *"informReferee" when the teams are ready to proceed
      */
     public void informReferee();
+
+    public boolean endOfMatch();
 }

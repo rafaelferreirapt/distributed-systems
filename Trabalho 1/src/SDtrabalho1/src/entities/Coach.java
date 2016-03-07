@@ -15,13 +15,15 @@ public class Coach extends Thread {
     private CoachState state;
     private final int id;
     private final Log log;
-    private bench.ICoach bench;
-    private referee_site.ICoach referee_site;
+    private final String team;
+    private final bench.ICoach bench;
+    private final referee_site.ICoach referee_site;
     
-    public Coach(bench.ICoach b, referee_site.ICoach r, int id, Log log){
+    public Coach(bench.ICoach b, referee_site.ICoach r, int id, String team, Log log){
         this.bench = b;
         this.referee_site = r;
-        this.setName("Coach " + id);
+        this.team = team;
+        this.setName("Coach " + id + " of the team " + team);
         this.id = id;
         this.log = log;
         state = CoachState.WAIT_FOR_REFEREE_COMMAND;
