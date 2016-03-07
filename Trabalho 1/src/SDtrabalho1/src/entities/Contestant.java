@@ -5,6 +5,7 @@
 package entities;
 
 import general_info_repo.Log;
+import java.lang.Math;
 
 /**
  *
@@ -14,19 +15,25 @@ public class Contestant  extends Thread {
     
     private ContestantState state;
     private final int id;
+    private final String team;
     private final Log log;
     private playground.IContestant playground;
     private bench.IContestant bench;
     private referee_site.IContestant referee_site;
+    private static final int MAX_STRENGTH = 5;
+    private static final int MIN_STRENGTH = 5;
+    private int strength;
     
-    public Contestant(playground.IContestant p, bench.IContestant b, referee_site.IContestant r, int id, Log log){
+    public Contestant(playground.IContestant p, bench.IContestant b, referee_site.IContestant r, int id, String team, Log log){
         this.playground = p;
         this.bench = b;
         this.referee_site = r;
-        this.setName("Contestant " + id);
+        this.team = team;
+        this.setName("Contestant " + id + " of the team " + team);
         this.id = id;
         this.log = log;
         state = ContestantState.SEAT_AT_THE_BENCH;
+        this.strength = (int)Math.ceil((Math.random() * (MAX_STRENGTH - MIN_STRENGTH + 1)) + MIN_STRENGTH);
     }
     
     @Override
