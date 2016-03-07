@@ -45,7 +45,32 @@ public class Referee extends Thread {
     
     @Override
     public void run(){
-        
+        while(!referee_site.endOfMatch()){
+            if(this.state.getState().equals(RefereeState.START_OF_THE_MATCH.toString())){
+                this.referee_site.annouceNewGame();
+                this.setState(RefereeState.START_OF_A_GAME);
+            }else if(this.state.getState().equals(RefereeState.START_OF_A_GAME.toString())){
+                this.bench.callTrial();
+                this.setState(RefereeState.TEAMS_READY);
+            }else if(this.state.getState().equals(RefereeState.TEAMS_READY.toString())){
+                this.referee_site.waitForInformReferee();
+                this.playground.startTrial();
+                this.setState(RefereeState.WAIT_FOR_TRIAL_CONCLUSION);
+            }else if(this.state.getState().equals(RefereeState.WAIT_FOR_TRIAL_CONCLUSION.toString())){
+                this.referee_site.waitForAmDone();
+                
+                this.bench.assertTrialDecision();
+                this.playground.assertTrialDecision();
+                
+                this.referee_site.declareGameWinner();
+                
+                this.setState(RefereeState.END_OF_A_GAME);
+            }else if(this.state.getState().equals(RefereeState.END_OF_A_GAME.toString())){
+                //verificação estado do jogo para saber se anuncia um novo ou nao
+                this.setState(RefereeState.START_OF_A_GAME);
+                this.setState(RefereeState.END_OF_THE_MATCH);
+            }
+        }
     }
     
     public void setState(RefereeState state){

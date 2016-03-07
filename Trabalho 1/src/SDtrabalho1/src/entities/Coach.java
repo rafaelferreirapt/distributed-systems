@@ -33,11 +33,18 @@ public class Coach extends Thread {
     
     @Override
     public void run(){
-        /*
         while(!referee_site.endOfMatch()){
-            bench.waitForCallTrial();
+            if(this.state.getState().equals(CoachState.ASSEMBLE_TEAM.toString())){
+                this.bench.waitForFollowCoachAdvice();
+                this.setState(CoachState.WATCH_TRIAL);
+            }else if(this.state.getState().equals(CoachState.WAIT_FOR_REFEREE_COMMAND.toString())){
+                this.bench.waitForCallTrial();
+                this.setState(CoachState.ASSEMBLE_TEAM);
+            }else if(this.state.getState().equals(CoachState.WATCH_TRIAL.toString())){
+                this.bench.waitForAssertTrialDecision();
+                this.setState(CoachState.WAIT_FOR_REFEREE_COMMAND);
+            }
         }
-        */
     }
     
     public void setState(CoachState state){

@@ -54,6 +54,7 @@ public class Playground implements IReferee, IContestant{
 
     /**
      * In Contestants life cycle, transition between "doYourBest" and "doYourBest"
+     * Random time interval in the simulation 
      */
     @Override
     public void pullTheRope() {

@@ -31,7 +31,24 @@ public class Contestant  extends Thread {
     
     @Override
     public void run(){
-        
+        while(!referee_site.endOfMatch()){
+            if(this.state.getState().equals(ContestantState.DO_YOUR_BEST.toString())){
+                this.playground.pullTheRope();
+                // only the last one informs the referee
+                this.referee_site.amDone();
+                this.playground.waitForAssertTrialDecision();
+                this.bench.seatDown();
+                this.setState(ContestantState.SEAT_AT_THE_BENCH);
+            }else if(this.state.getState().equals(ContestantState.SEAT_AT_THE_BENCH.toString())){
+                this.bench.waitForCallContestants();
+                this.bench.followCoachAdvice();
+                this.setState(ContestantState.STAND_IN_POSITION);
+            }else if(this.state.getState().equals(ContestantState.STAND_IN_POSITION.toString())){
+                this.playground.waitForStartTrial();
+                this.playground.getReady();
+                this.setState(ContestantState.DO_YOUR_BEST);
+            }
+        }
     }
     
     public void setState(ContestantState state){

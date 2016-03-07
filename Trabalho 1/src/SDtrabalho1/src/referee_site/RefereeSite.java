@@ -4,8 +4,6 @@
  */
 package referee_site;
 
-import entities.RefereeState;
-
 /**
  *
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
@@ -79,5 +77,4 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     public synchronized boolean endOfMatch(){
         return false;
     }
-    
 }

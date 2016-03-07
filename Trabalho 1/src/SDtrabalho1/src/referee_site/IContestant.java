@@ -17,4 +17,6 @@ public interface IContestant {
      *when the trial has come to an end
      */
     public void amDone();
+
+    public boolean endOfMatch();
 }
