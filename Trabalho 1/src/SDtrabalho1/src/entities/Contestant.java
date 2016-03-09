@@ -42,12 +42,19 @@ public class Contestant  extends Thread {
         this.strength = (int)Math.ceil((Math.random() * (MAX_STRENGTH - MIN_STRENGTH + 1)) + MIN_STRENGTH);
     }
     
+    public String getTeam(){
+        return this.team;
+    }
+    
+    public int getID(){
+        return this.id;
+    }
+    
     @Override
     public void run(){
         while(!referee_site.endOfMatch()){
             if(this.state.getState().equals(ContestantState.DO_YOUR_BEST.toString())){
                 this.playedTrials++;
-                // streng_initial - trials_q_ja_foi + trial_no_banco
                 int now_strength = this.strength-this.playedTrials+(this.match.trials_played-this.playedTrials);
                 this.playground.pullTheRope(now_strength, this.team);
                 this.referee_site.amDone();
