@@ -57,12 +57,12 @@ public class Main extends Application {
         
         assert nCoaches == teams.length;
         
-        Bench bench = new Bench();
+        Bench bench = new Bench(nContestants, nContestants);
         Playground playground = new Playground();
         RefereeSite referee_site = new RefereeSite();
         Log lg = new Log();
         
-        Referee ref =  new Referee((playground.IReferee) playground, (bench.IReferee) bench, (referee_site.IReferee) referee_site, 1, lg);
+        Referee ref =  new Referee((playground.IReferee) playground, (bench.IReferee) bench, (referee_site.IReferee) referee_site, lg);
         ref.start();
         
         Coach [] coach =  new Coach [nCoaches];
@@ -114,5 +114,4 @@ public class Main extends Application {
         launch(args);
         startEntities();
     }
-    
 }

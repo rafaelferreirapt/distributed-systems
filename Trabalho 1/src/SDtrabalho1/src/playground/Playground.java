@@ -47,6 +47,12 @@ public class Playground implements IReferee, IContestant{
     @Override
     public synchronized void assertTrialDecision() {
         trialDecisionTaken = true;
+        notifyAll();
+    }
+    
+    @Override
+    public int getTrialState(){
+        return this.trialState;
     }
 
     @Override

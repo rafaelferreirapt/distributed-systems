@@ -17,15 +17,15 @@ public interface IContestant {
      * their selected contestants to stand in position
      * In Contestants life cycle, transition between "seat at the bench" and "stand in position"
      */
-    public void followCoachAdvice();
+    public void followCoachAdvice(String team);
     
     /**
      * In Contestants life cycle, transition between "doYourBest" and "seat at the bench"
      * SEAT_AT_THE_BENCH – blocking state the contestants are waken up in operation 
      * callContestants by their coaches if they are selected to join the next trial
      */
-    public void seatDown();
+    public void seatDown(String team);
     
-    public void waitForCallContestants();
+    public void waitForCallContestants(String team);
     
 }

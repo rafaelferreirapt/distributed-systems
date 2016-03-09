@@ -5,6 +5,7 @@
 package entities;
 
 import general_info_repo.Log;
+import playground.Match;
 
 /**
  *
@@ -13,43 +14,33 @@ import general_info_repo.Log;
 public class Referee extends Thread {
     
     private RefereeState state;
-    private final int id;
+    
     private final Log log;
     private playground.IReferee playground;
     private bench.IReferee bench;
     private referee_site.IReferee referee_site;
     
-    public Referee(playground.IReferee p, bench.IReferee b, referee_site.IReferee r, int id, Log log){
+    private Match match;
+    private int centre_of_the_rope = 0;
+    
+    public Referee(playground.IReferee p, bench.IReferee b, referee_site.IReferee r, Log log){
         this.playground = p;
         this.bench = b;
         this.referee_site = r;
-        this.setName("Referee " + id);
-        this.id = id;
         this.log = log;
         state = RefereeState.START_OF_THE_MATCH;
-    }
-    
-    private boolean TEST_CONDITION = true;
-    private boolean OTHER_CONTIDITON = false;
-    
-    public void teste(){
-        while(TEST_CONDITION){
-            referee_site.waitForAmDone();
-            
-            if(true){
-                this.TEST_CONDITION = false;
-                this.OTHER_CONTIDITON = true;
-            }
-        }
     }
     
     @Override
     public void run(){
         while(!referee_site.endOfMatch()){
             if(this.state.getState().equals(RefereeState.START_OF_THE_MATCH.toString())){
+                this.match = Match.getInstance();
                 this.referee_site.annouceNewGame();
+                this.match.newGame();
                 this.setState(RefereeState.START_OF_A_GAME);
             }else if(this.state.getState().equals(RefereeState.START_OF_A_GAME.toString())){
+                this.match.newTrial(centre_of_the_rope);
                 this.bench.callTrial();
                 this.setState(RefereeState.TEAMS_READY);
             }else if(this.state.getState().equals(RefereeState.TEAMS_READY.toString())){
@@ -59,16 +50,65 @@ public class Referee extends Thread {
             }else if(this.state.getState().equals(RefereeState.WAIT_FOR_TRIAL_CONCLUSION.toString())){
                 this.referee_site.waitForAmDone();
                 
-                this.bench.assertTrialDecision();
-                this.playground.assertTrialDecision();
-                
-                this.referee_site.declareGameWinner();
-                
-                this.setState(RefereeState.END_OF_A_GAME);
+                if(this.playground.getTrialState() >= 4){
+                    this.bench.assertTrialDecision();
+                    this.playground.assertTrialDecision();
+                    
+                    this.referee_site.declareGameWinner();
+                    this.setState(RefereeState.END_OF_A_GAME);
+                }else if(this.playground.getTrialState() <= -4){
+                    this.bench.assertTrialDecision();
+                    this.playground.assertTrialDecision();
+                    
+                    this.referee_site.declareGameWinner();
+                    this.setState(RefereeState.END_OF_A_GAME);
+                }else if(this.playground.getTrialState() > 0){
+                    this.bench.assertTrialDecision();
+                    this.playground.assertTrialDecision();
+                    
+                    this.match.setPontuation(this.match.getPontuation("B")+1, "B");
+                    
+                    if(this.match.gameNumberOfTrials() >= 6){
+                        this.referee_site.declareGameWinner();
+                        this.setState(RefereeState.END_OF_A_GAME);
+                    }else{
+                        this.centre_of_the_rope = this.playground.getTrialState();
+                        this.setState(RefereeState.TEAMS_READY);
+                    }
+                }else if(this.playground.getTrialState() < 0){
+                    this.bench.assertTrialDecision();
+                    this.playground.assertTrialDecision();
+                    
+                    this.match.setPontuation(this.match.getPontuation("A")+1, "A");
+                    
+                    if(this.match.gameNumberOfTrials() >= 6){
+                        this.referee_site.declareGameWinner();
+                        this.setState(RefereeState.END_OF_A_GAME);
+                    }else{
+                        this.centre_of_the_rope = this.playground.getTrialState();
+                        this.setState(RefereeState.TEAMS_READY);
+                    }
+                }else if(this.playground.getTrialState() == 0){
+                    this.bench.assertTrialDecision();
+                    this.playground.assertTrialDecision();
+                    
+                    if(this.match.gameNumberOfTrials() >= 6){
+                        this.referee_site.declareGameWinner();
+                        this.setState(RefereeState.END_OF_A_GAME);
+                    }else{
+                        this.centre_of_the_rope = this.playground.getTrialState();
+                        this.setState(RefereeState.TEAMS_READY);
+                    }
+                }
             }else if(this.state.getState().equals(RefereeState.END_OF_A_GAME.toString())){
-                //verificação estado do jogo para saber se anuncia um novo ou nao
-                this.setState(RefereeState.START_OF_A_GAME);
-                this.setState(RefereeState.END_OF_THE_MATCH);
+                if(this.match.getNumberOfGames() < 3){
+                    this.referee_site.annouceNewGame();
+                    this.match.newGame();
+                    this.setState(RefereeState.START_OF_A_GAME);
+                }else{
+                    this.referee_site.declareMatchWinner();
+                    this.setState(RefereeState.END_OF_THE_MATCH);
+                }
             }
         }
     }

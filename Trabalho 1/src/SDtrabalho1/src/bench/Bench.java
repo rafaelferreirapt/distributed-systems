@@ -36,6 +36,13 @@ public class Bench implements IReferee, ICoach, IContestant{
      */
     @Override
     public synchronized void callTrial() {
+        while(this.nContestantsInBenchTeamA != this.nContestantsTeamA || this.nContestantsInBenchTeamB != this.nContestantsTeamB){
+            try {
+                wait();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         callTrialTaken = true;
         notifyAll();
     }
@@ -59,6 +66,7 @@ public class Bench implements IReferee, ICoach, IContestant{
     @Override
     public synchronized void assertTrialDecision() {
         trialDecisionTaken = true;
+        notifyAll();
     }
 
     @Override
@@ -188,11 +196,11 @@ public class Bench implements IReferee, ICoach, IContestant{
     public synchronized void seatDown(String team){
         if(team.equals("A")){
             this.nContestantsInBenchTeamA++;
-            notifyAll();
         }else if(team.equals("B")){
             this.nContestantsInBenchTeamB++;
-            notifyAll();
         }
+        notifyAll();
+
     }
     
 }

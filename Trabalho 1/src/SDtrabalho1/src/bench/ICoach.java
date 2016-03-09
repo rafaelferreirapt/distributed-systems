@@ -13,16 +13,16 @@ public interface ICoach {
     /**
      * In coach life cycle, transition between "watch trial" and "wait for referee command"
      */
-    public void reviewNotes();
+    public void reviewNotes(String team);
 
     /**
      * In coach life cycle, transition between "wait for referee command" and "assemble team"
      */
-    public void callContestants();
+    public void callContestants(String team);
     
     public void waitForCallTrial();
     
     public void waitForAssertTrialDecision();
     
-    public void waitForFollowCoachAdvice();
+    public void waitForFollowCoachAdvice(String team);
 }
