@@ -4,12 +4,18 @@
  */
 package playground;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Playground implements IReferee, IContestant{
     
+    private static boolean trialDecisionTaken = false, startTrialTaken = false;
+    private int trialState = 0;
+
     public Playground(){
     
     }
@@ -21,12 +27,18 @@ public class Playground implements IReferee, IContestant{
      */
     @Override
     public synchronized void startTrial() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        startTrialTaken = true;
     }
 
     @Override
     public synchronized void waitForStartTrial(){
-        
+        while(!startTrialTaken){
+            try {
+                wait();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     /**
@@ -34,12 +46,18 @@ public class Playground implements IReferee, IContestant{
      */
     @Override
     public synchronized void assertTrialDecision() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        trialDecisionTaken = true;
     }
 
     @Override
     public synchronized void waitForAssertTrialDecision(){
-        
+        while(!trialDecisionTaken){
+            try {
+                wait();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     /* CONTESTANT METHODS */
@@ -49,7 +67,7 @@ public class Playground implements IReferee, IContestant{
      */
     @Override
     public void getReady() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
     /**
@@ -57,8 +75,18 @@ public class Playground implements IReferee, IContestant{
      * Random time interval in the simulation 
      */
     @Override
-    public void pullTheRope() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void pullTheRope(int strength, String team) {
+        try {
+            Thread.sleep((int)Math.ceil(Math.random() * 2000 + 1000));
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(team.equals("A")){
+            trialState -= strength;
+        }else if(team.equals("B")){
+            trialState += strength;
+        }
+        
     }
     
 }
