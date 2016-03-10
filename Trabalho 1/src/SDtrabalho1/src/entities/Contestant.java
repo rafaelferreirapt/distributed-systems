@@ -56,6 +56,13 @@ public class Contestant  extends Thread {
             if(this.state.getState().equals(ContestantState.DO_YOUR_BEST.toString())){
                 this.playedTrials++;
                 int now_strength = this.strength-this.playedTrials+(this.match.trials_played-this.playedTrials);
+                
+                if(now_strength > 5){
+                    now_strength = 5;
+                }else if(now_strength < 1){
+                    now_strength = 1;
+                }
+                
                 this.playground.pullTheRope(now_strength, this.team);
                 this.referee_site.amDone();
                 this.playground.waitForAssertTrialDecision();
