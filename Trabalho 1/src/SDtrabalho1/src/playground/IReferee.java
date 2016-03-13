@@ -19,4 +19,6 @@ public interface IReferee {
      * In Referee life cycle, transition between "wait for trial conclusion" and "wait for trial conclusion"
      */
     public void assertTrialDecision();
+    
+    public int getTrialState();
 }

@@ -37,7 +37,7 @@ public class Coach extends Thread {
     public void run(){
         while(!referee_site.endOfMatch()){
             if(this.state.getState().equals(CoachState.ASSEMBLE_TEAM.toString())){
-                this.bench.waitForFollowCoachAdvice();
+                this.bench.waitForFollowCoachAdvice(this.team);
                 this.setState(CoachState.WATCH_TRIAL);
             }else if(this.state.getState().equals(CoachState.WAIT_FOR_REFEREE_COMMAND.toString())){
                 this.bench.waitForCallTrial();

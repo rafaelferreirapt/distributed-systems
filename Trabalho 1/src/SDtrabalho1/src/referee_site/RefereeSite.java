@@ -4,12 +4,18 @@
  */
 package referee_site;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class RefereeSite implements ICoach, IContestant, IReferee{
     
+    private boolean informRefereeA = false, informRefereeB = false;
+    private int amDoneCounter = 0;
+    private boolean matchEnds = false;
     public RefereeSite(){
     
     }
@@ -22,7 +28,7 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     */
     @Override
     public void annouceNewGame() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     /**
@@ -30,7 +36,7 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     */
     @Override
     public void declareGameWinner() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     /**
@@ -38,7 +44,7 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     */
     @Override
     public void declareMatchWinner() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.matchEnds = true;
     }
     
     /* COACH METHODS */
@@ -48,13 +54,25 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
      *"informReferee" when the teams are ready to proceed
      */
     @Override
-    public synchronized void informReferee() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public synchronized void informReferee(String team) {
+        if(team.equals("A")){
+            this.informRefereeA = true;
+        }else if(team.equals("B")){
+            this.informRefereeB = true;
+        }
+        notifyAll();
+
     }
     
     @Override
     public synchronized void waitForInformReferee(){
-        
+        while(!this.informRefereeA || !this.informRefereeB){
+            try {
+                wait();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     /* PLAYERS METHODS */
@@ -65,16 +83,26 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
      */
     @Override
     public synchronized void amDone() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.amDoneCounter++;
+        if(this.amDoneCounter == 6){
+            notifyAll();
+        }
     }
     
     @Override
     public synchronized void waitForAmDone(){
-        
+        while(this.amDoneCounter != 6){
+            try {
+                wait();
+                
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     @Override
     public synchronized boolean endOfMatch(){
-        return false;
+        return this.matchEnds;
     }
 }

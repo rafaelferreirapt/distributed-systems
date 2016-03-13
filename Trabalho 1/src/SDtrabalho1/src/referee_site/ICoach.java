@@ -16,7 +16,7 @@ public interface ICoach {
      *the referee is waken up by the last of the coaches in operation 
      *"informReferee" when the teams are ready to proceed
      */
-    public void informReferee();
+    public void informReferee(String team);
 
     public boolean endOfMatch();
 }
