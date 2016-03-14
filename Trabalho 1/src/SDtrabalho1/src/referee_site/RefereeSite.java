@@ -15,10 +15,14 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     
     private boolean informRefereeA = false, informRefereeB = false;
     private int amDoneCounter = 0;
-    private boolean matchEnds = false;
+    private boolean matchEnds = false, amDoneCondition = false;
     public RefereeSite(){
     
     }
+    
+    /**
+     *
+     */
     
     /* REFEREE METHODS */
     
@@ -73,6 +77,8 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
                 Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        this.informRefereeA = false;
+        this.informRefereeB = false;
     }
     
     /* PLAYERS METHODS */
@@ -85,13 +91,14 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     public synchronized void amDone() {
         this.amDoneCounter++;
         if(this.amDoneCounter == 6){
+            this.amDoneCondition = true;
             notifyAll();
         }
     }
     
     @Override
     public synchronized void waitForAmDone(){
-        while(this.amDoneCounter != 6){
+        while(!this.amDoneCondition){
             try {
                 wait();
                 
@@ -99,6 +106,8 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
                 Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        this.amDoneCounter = 0;
+        this.amDoneCondition = false;
     }
     
     @Override

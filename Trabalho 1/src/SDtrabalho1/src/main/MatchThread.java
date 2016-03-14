@@ -53,9 +53,9 @@ public class MatchThread extends Thread{
         
         for(int i = 0; i<nContestants; i++){
             if(i < (nContestants/teams.length)){
-                contestants[i] = new Contestant((playground.IContestant) playground,(bench.IContestant) bench, (referee_site.IContestant) referee_site, i, teams[0], lg);
+                contestants[i] = new Contestant((playground.IContestant) playground,(bench.IContestant) bench, (referee_site.IContestant) referee_site, i+1, teams[0], lg);
             }else{
-                contestants[i] = new Contestant((playground.IContestant) playground,(bench.IContestant) bench, (referee_site.IContestant) referee_site, i, teams[1], lg);
+                contestants[i] = new Contestant((playground.IContestant) playground,(bench.IContestant) bench, (referee_site.IContestant) referee_site, i-4, teams[1], lg);
             }
             contestants[i].start();
         }
@@ -63,6 +63,7 @@ public class MatchThread extends Thread{
         for(int i = 0; i<nCoaches; i++){
             try {
                 coachs[i].join();
+                System.err.println("Coach Died: " + i);
             } catch (InterruptedException ex) {
                 //Escrever para o log
             }
@@ -71,6 +72,8 @@ public class MatchThread extends Thread{
         for(int i = 0; i<nContestants; i++){
             try {
                 contestants[i].join();
+                System.err.println("Contestant Died: " + i);
+
             } catch (InterruptedException ex) {
                 //Escrever para o log
             }
@@ -78,6 +81,8 @@ public class MatchThread extends Thread{
         
         try {
             ref.join();
+            System.err.println("Referee Died");
+
         } catch (InterruptedException ex) {
             //Escrever para o log
         }

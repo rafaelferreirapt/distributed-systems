@@ -53,7 +53,7 @@ public class Contestant  extends Thread {
     @Override
     public void run(){
         while(!referee_site.endOfMatch()){
-            if(this.state.getState().equals(ContestantState.DO_YOUR_BEST.toString())){
+            if(this.state.getState().equals(ContestantState.DO_YOUR_BEST.getState())){
                 this.playedTrials++;
                 int now_strength = this.strength-this.playedTrials+(this.match.trials_played-this.playedTrials);
                 
@@ -65,16 +65,21 @@ public class Contestant  extends Thread {
                 
                 this.playground.pullTheRope(now_strength, this.team);
                 this.referee_site.amDone();
+
                 this.playground.waitForAssertTrialDecision();
                 this.bench.seatDown(this.team);
                 this.setState(ContestantState.SEAT_AT_THE_BENCH);
-            }else if(this.state.getState().equals(ContestantState.SEAT_AT_THE_BENCH.toString())){
-                this.bench.waitForCallContestants(this.team);
-                this.bench.followCoachAdvice(this.team);
+            }else if(this.state.getState().equals(ContestantState.SEAT_AT_THE_BENCH.getState())){
+                System.err.println("A ir para waiting " + this.team);
+                this.bench.waitForCallContestants(this.team, this.id); // espera que o treinador o chame
+                System.err.println("Waited: " + this.id + " " + this.team);
+                if(this.referee_site.endOfMatch()){
+                    break;
+                }
+                this.bench.followCoachAdvice(this.team, this.id); // o ultimo informa o utilizador
+                System.err.println("Followed: " + this.id + " " + this.team);
                 this.setState(ContestantState.STAND_IN_POSITION);
-            }else if(this.state.getState().equals(ContestantState.STAND_IN_POSITION.toString())){
-                this.match.setPosition(this.id, this.team);
-                        
+            }else if(this.state.getState().equals(ContestantState.STAND_IN_POSITION.getState())){
                 this.playground.waitForStartTrial();
                 this.playground.getReady();
                 this.setState(ContestantState.DO_YOUR_BEST);

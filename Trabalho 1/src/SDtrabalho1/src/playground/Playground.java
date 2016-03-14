@@ -15,11 +15,16 @@ public class Playground implements IReferee, IContestant{
     
     private static boolean trialDecisionTaken = false, startTrialTaken = false;
     private int trialState = 0;
+    private int contestantsIn = 0;
+    private int contestantsAlerted = 0;
 
     public Playground(){
     
     }
     
+    /**
+     *
+     */
     /* REFEREE METHODS */
     
     /**
@@ -27,7 +32,10 @@ public class Playground implements IReferee, IContestant{
      */
     @Override
     public synchronized void startTrial() {
+        this.trialState = 0;
+
         startTrialTaken = true;
+        notifyAll();
     }
 
     @Override
@@ -39,6 +47,12 @@ public class Playground implements IReferee, IContestant{
                 Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        this.contestantsIn++;
+        if(this.contestantsIn == 6){
+            startTrialTaken = false;
+            this.contestantsIn = 0;
+        }
+
     }
     
     /**
@@ -64,6 +78,12 @@ public class Playground implements IReferee, IContestant{
                 Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        this.contestantsAlerted++;
+        if(this.contestantsAlerted == 6){
+            trialDecisionTaken = false;
+            this.contestantsAlerted = 0;
+        }
+
     }
     
     /* CONTESTANT METHODS */
@@ -82,11 +102,14 @@ public class Playground implements IReferee, IContestant{
      */
     @Override
     public void pullTheRope(int strength, String team) {
+        /*
+        // meter configurável
         try {
             Thread.sleep((int)Math.ceil(Math.random() * 2000 + 1000));
         } catch (InterruptedException ex) {
             Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
         }
+        */
         if(team.equals("A")){
             trialState -= strength;
         }else if(team.equals("B")){

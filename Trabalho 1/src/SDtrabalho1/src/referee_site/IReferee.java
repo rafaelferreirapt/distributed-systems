@@ -33,4 +33,5 @@ public interface IReferee {
     /* */
     public void waitForInformReferee();
     public void waitForAmDone();
+    
 }

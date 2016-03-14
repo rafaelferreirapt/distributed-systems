@@ -17,7 +17,7 @@ public interface IContestant {
      * their selected contestants to stand in position
      * In Contestants life cycle, transition between "seat at the bench" and "stand in position"
      */
-    public void followCoachAdvice(String team);
+    public void followCoachAdvice(String team, int idC);
     
     /**
      * In Contestants life cycle, transition between "doYourBest" and "seat at the bench"
@@ -26,6 +26,6 @@ public interface IContestant {
      */
     public void seatDown(String team);
     
-    public void waitForCallContestants(String team);
+    public void waitForCallContestants(String team, int idC);
     
 }

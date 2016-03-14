@@ -13,7 +13,7 @@ public class Game {
     private int id;
     private String winner;
     private Trial[] trials;
-    private int next_trial_idx = 0;
+    private int trial_idx = 0;
     private int[] pontuation = new int[2];
     
     public Game(int id){
@@ -22,7 +22,9 @@ public class Game {
     }
     
     public void newTrial(int centre_of_the_rope){
-        this.trials[next_trial_idx] = new Trial(next_trial_idx++, centre_of_the_rope);
+        assert trial_idx < this.trials.length;
+        
+        this.trials[trial_idx] = new Trial(trial_idx++, centre_of_the_rope);
     }
     
     public void setPontuation(int pontuation, String team){
@@ -41,11 +43,7 @@ public class Game {
         }
     }
     
-    public void setPosition(int ContestantID, String team){
-        this.trials[this.next_trial_idx-1].setPosition(ContestantID, team);
-    }
-    
     public int gameNumberOfTrials(){
-        return this.next_trial_idx-1;
+        return this.trial_idx;
     }
 }
