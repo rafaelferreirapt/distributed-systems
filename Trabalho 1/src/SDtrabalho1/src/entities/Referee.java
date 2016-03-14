@@ -114,7 +114,7 @@ public class Referee extends Thread {
                 }
             }else if(this.state.getState().equals(RefereeState.END_OF_A_GAME.getState())){
                 a++;
-                System.err.println("Ended game: " + a);
+                System.out.println("Ended game: " + a);
                 if(this.match.getNumberOfGames() < numberOfGames){
                     this.referee_site.annouceNewGame();
                     this.setState(RefereeState.START_OF_A_GAME);
