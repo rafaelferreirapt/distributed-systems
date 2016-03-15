@@ -18,7 +18,7 @@ public class Match {
     private static Match instance = null;
     
     protected Match() {
-        this.games = new Game[100000];
+        this.games = new Game[1000000];
     }
     public static Match getInstance() {
        if(instance == null) {

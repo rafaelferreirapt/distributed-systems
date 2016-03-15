@@ -82,6 +82,9 @@ public class Bench implements IReferee, ICoach, IContestant{
                 Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        if(this.endMatch){
+            return;
+        }
         if(++this.nCoaches == 2){
             callTrialTaken = false;
             this.nCoaches = 0;
@@ -171,14 +174,12 @@ public class Bench implements IReferee, ICoach, IContestant{
         if(team.equals("A")){
             for(int i=0; i<this.selectedContestantsA.length; i++){
                 if(this.selectedContestantsA[i]==idC){
-                    this.selectedContestantsA[i] = 0;
                     return true;
                 }
             }
         }else if(team.equals("B")){
             for(int i=0; i<this.selectedContestantsB.length; i++){
                 if(this.selectedContestantsB[i]==idC){
-                    this.selectedContestantsB[i] = 0;
                     return true;
                 }
             }
@@ -199,13 +200,14 @@ public class Bench implements IReferee, ICoach, IContestant{
                     Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            if(this.endMatch){
+                return;
+            }
             this.nContestantsInBench--;
             //System.err.println("Entrou A");
 
             if(++this.nContestantsSelectedA == 3){
                 this.lastContestantUpA = idC;
-            }else if(this.nContestantsSelectedA > 3){
-                System.out.println(""+idC);
             }
         }else if(team.equals("B")){
             while(!this.amISelected(team, idC) || this.nContestantsSelectedB >= 3){
@@ -218,12 +220,13 @@ public class Bench implements IReferee, ICoach, IContestant{
                     Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            if(this.endMatch){
+                return;
+            }
             this.nContestantsInBench--;
             //System.err.println("Entrou B");
             if(++this.nContestantsSelectedB == 3){
                 this.lastContestantUpB = idC;
-            }else if(this.nContestantsSelectedB > 3){
-                System.out.println(""+idC);
             }
         }
     }
@@ -240,12 +243,18 @@ public class Bench implements IReferee, ICoach, IContestant{
     public synchronized void followCoachAdvice(String team, int idC) {
         if(team.equals("A")){
             if(idC == this.lastContestantUpA){
+                if(this.nContestantsSelectedA != 3){
+                    System.out.println("");
+                }
                 this.followCoachA = true;
                 this.lastContestantUpA = 0;
                 notifyAll();
             }
         }else if(team.equals("B")){
             if(idC == this.lastContestantUpB){
+                if(this.nContestantsSelectedB != 3){
+                    System.out.println("");
+                }
                 this.followCoachB = true;
                 this.lastContestantUpB = 0;
                 notifyAll();
@@ -263,7 +272,10 @@ public class Bench implements IReferee, ICoach, IContestant{
                     Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-     
+            
+            for(int i = 0; i< this.selectedContestantsA.length; i++){
+                this.selectedContestantsA[i] = 0;
+            }
             this.followCoachA = false;
         }else if(team.equals("B")){
             while(!this.followCoachB){
@@ -273,7 +285,10 @@ public class Bench implements IReferee, ICoach, IContestant{
                     Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
+            for(int i = 0; i< this.selectedContestantsB.length; i++){
+                this.selectedContestantsB[i] = 0;
+            }
             this.followCoachB = false;
         }
     }

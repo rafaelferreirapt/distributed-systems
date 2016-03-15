@@ -22,7 +22,7 @@ public class Referee extends Thread {
     
     private Match match;
     private int centre_of_the_rope = 0;
-    private int numberOfGames = 100000;
+    private int numberOfGames = 1000000;
     private int a = 0;
     public Referee(playground.IReferee p, bench.IReferee b, referee_site.IReferee r, Log log){
         this.playground = p;
@@ -43,7 +43,7 @@ public class Referee extends Thread {
             }else if(this.state.getState().equals(RefereeState.START_OF_A_GAME.getState())){
                 this.match.newGame();
                 this.match.newTrial(0);
-                System.err.println("New Trial");
+                //System.err.println("New Trial");
                 this.bench.callTrial(); // vai acordar os treinadores <= esperar que os jogadores estejam todos sentados
                 this.setState(RefereeState.TEAMS_READY);
             }else if(this.state.getState().equals(RefereeState.TEAMS_READY.getState())){
@@ -77,7 +77,7 @@ public class Referee extends Thread {
                     }else{
                         this.centre_of_the_rope = this.playground.getTrialState();
                         this.match.newTrial(centre_of_the_rope);
-                        System.err.println("New Trial");
+                        //System.err.println("New Trial");
                         this.bench.callTrial();
                         this.setState(RefereeState.TEAMS_READY);
                     }
@@ -93,7 +93,7 @@ public class Referee extends Thread {
                     }else{
                         this.centre_of_the_rope = this.playground.getTrialState();
                         this.match.newTrial(centre_of_the_rope);
-                        System.err.println("New Trial");
+                        //System.err.println("New Trial");
                         this.bench.callTrial();
                         this.setState(RefereeState.TEAMS_READY);
                     }
@@ -107,7 +107,7 @@ public class Referee extends Thread {
                     }else{
                         this.centre_of_the_rope = this.playground.getTrialState();
                         this.match.newTrial(centre_of_the_rope);
-                        System.err.println("New Trial");
+                        //System.err.println("New Trial");
                         this.bench.callTrial();
                         this.setState(RefereeState.TEAMS_READY);
                     }
