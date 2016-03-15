@@ -27,10 +27,12 @@ public class Coach extends Thread {
     public Coach(bench.ICoach b, referee_site.ICoach r, int id, String team, Log log){
         this.bench = b;
         this.referee_site = r;
-        this.team = team;
-        this.setName("Coach " + id + " of the team " + team);
-        this.id = id;
         this.log = log;
+        
+        this.team = team;
+        this.id = id;
+        
+        this.setName("Coach " + id + " of the team " + team);
         state = CoachState.WAIT_FOR_REFEREE_COMMAND;
     }
     
