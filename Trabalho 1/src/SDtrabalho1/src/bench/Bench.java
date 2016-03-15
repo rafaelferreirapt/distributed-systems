@@ -23,7 +23,7 @@ public class Bench implements IReferee, ICoach, IContestant{
     private boolean canCallTrial = true;
     private int[] selectedContestantsA = new int[3];
     private int[] selectedContestantsB = new int[3];
-    private boolean endMatch = false;
+    private boolean endMatch = false, selectedA = false, selectedB = false;
     private int lastContestantUpA = 0;
     private int lastContestantUpB = 0;
     private Match match = Match.getInstance();
@@ -112,7 +112,7 @@ public class Bench implements IReferee, ICoach, IContestant{
                 Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         if(++this.nCoachesAlerted == 2){
             trialDecisionTaken = false;
             this.nCoachesAlerted = 0;
@@ -164,8 +164,10 @@ public class Bench implements IReferee, ICoach, IContestant{
         
         if(team.equals("A")){
             this.selectedContestantsA = tmp;
+            this.selectedA = true;
         }else if(team.equals("B")){
             this.selectedContestantsB = tmp;
+            this.selectedB = true;
         }
         notifyAll();
     }
@@ -174,12 +176,14 @@ public class Bench implements IReferee, ICoach, IContestant{
         if(team.equals("A")){
             for(int i=0; i<this.selectedContestantsA.length; i++){
                 if(this.selectedContestantsA[i]==idC){
+                    this.selectedContestantsA[i] = 0;
                     return true;
                 }
             }
         }else if(team.equals("B")){
             for(int i=0; i<this.selectedContestantsB.length; i++){
                 if(this.selectedContestantsB[i]==idC){
+                    this.selectedContestantsB[i] = 0;
                     return true;
                 }
             }
@@ -190,7 +194,7 @@ public class Bench implements IReferee, ICoach, IContestant{
     @Override
     public synchronized void waitForCallContestants(String team, int idC){
         if(team.equals("A")){
-            while(!this.amISelected(team, idC) || this.nContestantsSelectedA >= 3){
+            while(!this.selectedA || !this.amISelected(team, idC) || this.nContestantsSelectedA >= 3){
                 try {
                     wait();
                     if(this.endMatch){
@@ -210,7 +214,7 @@ public class Bench implements IReferee, ICoach, IContestant{
                 this.lastContestantUpA = idC;
             }
         }else if(team.equals("B")){
-            while(!this.amISelected(team, idC) || this.nContestantsSelectedB >= 3){
+            while(!this.selectedB || !this.amISelected(team, idC) || this.nContestantsSelectedB >= 3){
                 try {
                     wait();
                     if(this.endMatch){
@@ -243,29 +247,23 @@ public class Bench implements IReferee, ICoach, IContestant{
     public synchronized void followCoachAdvice(String team, int idC) {
         if(team.equals("A")){
             if(idC == this.lastContestantUpA){
-                if(this.nContestantsSelectedA != 3){
-                    System.out.println("");
-                }
                 this.followCoachA = true;
                 this.lastContestantUpA = 0;
-                notifyAll();
             }
         }else if(team.equals("B")){
             if(idC == this.lastContestantUpB){
-                if(this.nContestantsSelectedB != 3){
-                    System.out.println("");
-                }
                 this.followCoachB = true;
                 this.lastContestantUpB = 0;
-                notifyAll();
             }
         }
+        notifyAll();
+
     }
     
     @Override
     public synchronized void waitForFollowCoachAdvice(String team){
         if(team.equals("A")){
-            while(!this.followCoachA){
+            while(!this.followCoachA || this.nContestantsSelectedA != 3){
                 try {
                     wait();
                 } catch (InterruptedException ex) {
@@ -273,22 +271,16 @@ public class Bench implements IReferee, ICoach, IContestant{
                 }
             }
             
-            for(int i = 0; i< this.selectedContestantsA.length; i++){
-                this.selectedContestantsA[i] = 0;
-            }
             this.followCoachA = false;
         }else if(team.equals("B")){
-            while(!this.followCoachB){
+            while(!this.followCoachB || this.nContestantsSelectedB != 3){
                 try {
                     wait();
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-
-            for(int i = 0; i< this.selectedContestantsB.length; i++){
-                this.selectedContestantsB[i] = 0;
-            }
+            
             this.followCoachB = false;
         }
     }

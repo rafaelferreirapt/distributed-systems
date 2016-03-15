@@ -78,8 +78,8 @@ public class Playground implements IReferee, IContestant{
                 Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        this.contestantsAlerted++;
-        if(this.contestantsAlerted == 6){
+        
+        if(++this.contestantsAlerted == 6){
             trialDecisionTaken = false;
             this.contestantsAlerted = 0;
         }

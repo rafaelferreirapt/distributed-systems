@@ -13,7 +13,12 @@ import playground.Match;
  */
 public class Contestant  extends Thread {
     
+    public enum ContestantState{
+        SEAT_AT_THE_BENCH, STAND_IN_POSITION, DO_YOUR_BEST
+    }
+    
     private ContestantState state;
+    
     private final int id;
     private final String team;
     private final Log log;
@@ -38,8 +43,8 @@ public class Contestant  extends Thread {
         this.id = id;
         this.log = log;
         this.match = Match.getInstance();
-        state = ContestantState.SEAT_AT_THE_BENCH;
         this.strength = (int)Math.ceil((Math.random() * (MAX_STRENGTH - MIN_STRENGTH + 1)) + MIN_STRENGTH);
+        state = ContestantState.SEAT_AT_THE_BENCH;
     }
     
     public String getTeam(){
@@ -53,43 +58,40 @@ public class Contestant  extends Thread {
     @Override
     public void run(){
         while(!referee_site.endOfMatch()){
-            if(this.state.getState().equals(ContestantState.DO_YOUR_BEST.getState())){
-                this.playedTrials++;
-                int now_strength = this.strength-this.playedTrials+(this.match.trials_played-this.playedTrials);
-                
-                if(now_strength > 5){
-                    now_strength = 5;
-                }else if(now_strength < 1){
-                    now_strength = 1;
-                }
-                
-                this.playground.pullTheRope(now_strength, this.team);
-                this.referee_site.amDone();
+            switch(this.state){
+                case DO_YOUR_BEST:
+                    this.playedTrials++;
+                    int now_strength = this.strength-this.playedTrials+(this.match.trials_played-this.playedTrials);
 
-                this.playground.waitForAssertTrialDecision();
-                this.bench.seatDown(this.team);
-                this.setState(ContestantState.SEAT_AT_THE_BENCH);
-            }else if(this.state.getState().equals(ContestantState.SEAT_AT_THE_BENCH.getState())){
-                this.bench.waitForCallContestants(this.team, this.id); // espera que o treinador o chame
-                //System.err.println("Waited: " + this.id + " " + this.team);
-                if(this.referee_site.endOfMatch()){
+                    if(now_strength > 5){
+                        now_strength = 5;
+                    }else if(now_strength < 1){
+                        now_strength = 1;
+                    }
+
+                    this.playground.pullTheRope(now_strength, this.team);
+                    this.referee_site.amDone();
+
+                    this.playground.waitForAssertTrialDecision();
+                    this.bench.seatDown(this.team);
+                    this.state = ContestantState.SEAT_AT_THE_BENCH;
                     break;
-                }
-                this.bench.followCoachAdvice(this.team, this.id); // o ultimo informa o utilizador
-                this.setState(ContestantState.STAND_IN_POSITION);
-            }else if(this.state.getState().equals(ContestantState.STAND_IN_POSITION.getState())){
-                this.playground.waitForStartTrial();
-                this.playground.getReady();
-                this.setState(ContestantState.DO_YOUR_BEST);
+                case SEAT_AT_THE_BENCH:
+                    this.bench.waitForCallContestants(this.team, this.id); // espera que o treinador o chame
+                    
+                    if(this.referee_site.endOfMatch()){
+                        break;
+                    }
+                    
+                    this.bench.followCoachAdvice(this.team, this.id); // o ultimo informa o utilizador
+                    this.state = ContestantState.STAND_IN_POSITION;
+                    break;
+                case STAND_IN_POSITION:
+                    this.playground.waitForStartTrial();
+                    this.playground.getReady();
+                    this.state = ContestantState.DO_YOUR_BEST;
+                    break;
             }
         }
-    }
-    
-    public void setState(ContestantState state){
-        this.state = state;
-    }
-    
-    public ContestantState getCurrentState(){
-        return this.state;
     }
 }

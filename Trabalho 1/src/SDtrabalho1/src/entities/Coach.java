@@ -12,7 +12,12 @@ import general_info_repo.Log;
  */
 public class Coach extends Thread {
     
+    private enum CoachState { 
+        WAIT_FOR_REFEREE_COMMAND, ASSEMBLE_TEAM, WATCH_TRIAL
+    }
+    
     private CoachState state;
+    
     private final int id;
     private final Log log;
     private final String team;
@@ -36,31 +41,28 @@ public class Coach extends Thread {
     @Override
     public void run(){
         while(!referee_site.endOfMatch()){
-            if(this.state.getState().equals(CoachState.ASSEMBLE_TEAM.getState())){
-                this.bench.callContestants(this.team);
-                this.bench.waitForFollowCoachAdvice(this.team);
-                //System.err.println("vou informar " + this.team);
-                this.referee_site.informReferee(this.team);
-                this.setState(CoachState.WATCH_TRIAL);
-            }else if(this.state.getState().equals(CoachState.WAIT_FOR_REFEREE_COMMAND.getState())){
-                this.bench.waitForCallTrial();
-                if(this.referee_site.endOfMatch()){
+            switch(this.state){
+                case ASSEMBLE_TEAM:
+                    this.bench.waitForFollowCoachAdvice(this.team);
+                    this.referee_site.informReferee(this.team);
+                    this.state = CoachState.WATCH_TRIAL;
                     break;
-                }
-                this.setState(CoachState.ASSEMBLE_TEAM);
-            }else if(this.state.getState().equals(CoachState.WATCH_TRIAL.getState())){
-                this.bench.waitForAssertTrialDecision();
+                case WAIT_FOR_REFEREE_COMMAND:
+                    this.bench.waitForCallTrial();
 
-                this.setState(CoachState.WAIT_FOR_REFEREE_COMMAND);
+                    if(this.referee_site.endOfMatch()){
+                        break;
+                    }
+
+                    this.bench.callContestants(this.team);
+                    this.state = CoachState.ASSEMBLE_TEAM;
+                    break;
+                case WATCH_TRIAL:
+                    this.bench.waitForAssertTrialDecision();
+                    this.bench.reviewNotes(team);
+                    this.state = CoachState.WAIT_FOR_REFEREE_COMMAND;
+                    break;
             }
         }
-    }
-    
-    public void setState(CoachState state){
-        this.state = state;
-    }
-    
-    public CoachState getCurrentState(){
-        return this.state;
     }
 }
