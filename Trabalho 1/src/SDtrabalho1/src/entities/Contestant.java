@@ -70,14 +70,12 @@ public class Contestant  extends Thread {
                 this.bench.seatDown(this.team);
                 this.setState(ContestantState.SEAT_AT_THE_BENCH);
             }else if(this.state.getState().equals(ContestantState.SEAT_AT_THE_BENCH.getState())){
-                //System.err.println("Sentei " + this.team);
                 this.bench.waitForCallContestants(this.team, this.id); // espera que o treinador o chame
                 //System.err.println("Waited: " + this.id + " " + this.team);
                 if(this.referee_site.endOfMatch()){
                     break;
                 }
                 this.bench.followCoachAdvice(this.team, this.id); // o ultimo informa o utilizador
-                //System.err.println("Followed: " + this.id + " " + this.team);
                 this.setState(ContestantState.STAND_IN_POSITION);
             }else if(this.state.getState().equals(ContestantState.STAND_IN_POSITION.getState())){
                 this.playground.waitForStartTrial();

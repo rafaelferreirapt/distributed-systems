@@ -6,6 +6,7 @@ package bench;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import playground.Match;
 
 /**
  *
@@ -13,26 +14,24 @@ import java.util.logging.Logger;
  */
 public class Bench implements IReferee, ICoach, IContestant{
     
-    private int nContestantsInBenchTeamA, nContestantsInBenchTeamB;
-    private int nContestantsTeamA, nContestantsTeamB;
+    private int nContestantsInBench;
     private int nCoachesAlerted = 0;
     private int nContestantsSelectedA = 0, nContestantsSelectedB = 0;
     private int nCoaches = 0;
-    private int nFollowedA = 0, nFollowedB = 0;
-    private boolean calledByCoachA = false, followCoachA = false;
-    private boolean calledByCoachB = false, followCoachB = false;
-    private boolean canCallTrial = true, canCallA = true, canCallB = true;
+    private boolean followCoachA = false;
+    private boolean followCoachB = false;
+    private boolean canCallTrial = true;
     private int[] selectedContestantsA = new int[3];
     private int[] selectedContestantsB = new int[3];
     private boolean endMatch = false;
     private int lastContestantUpA = 0;
     private int lastContestantUpB = 0;
+    private Match match = Match.getInstance();
     
     private static boolean trialDecisionTaken = false, callTrialTaken = false;
             
     public Bench(int nContestantsTeamA, int nContestantsTeamB){
-        this.nContestantsTeamA = this.nContestantsInBenchTeamA = nContestantsTeamA;
-        this.nContestantsTeamB = this.nContestantsInBenchTeamB= nContestantsTeamB;
+        this.nContestantsInBench = nContestantsTeamA + nContestantsTeamB;
     }
     
     /**
@@ -44,21 +43,21 @@ public class Bench implements IReferee, ICoach, IContestant{
     
     /**
      * the coaches are waken up by the referee in operation callTrial to start 
-     * selecting next team
-     * called by the referee
+     * selecting next team called by the referee
      * 
-     * -> canCallA or canCallB are used to inform the referee that can wake up the
+     * -> canCallTrial is used to inform the referee that can wake up the
      * coaches that can select the next team
      */
     @Override
     public synchronized void callTrial() {
-        while(!this.canCallTrial){
+        while(!this.canCallTrial || this.nContestantsInBench != 10){
             try {
                 wait();
             } catch (InterruptedException ex) {
                 Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        this.nContestantsSelectedA=this.nContestantsSelectedB=0;
         this.canCallTrial = false;
         callTrialTaken = true;
         notifyAll();
@@ -114,7 +113,6 @@ public class Bench implements IReferee, ICoach, IContestant{
         if(++this.nCoachesAlerted == 2){
             trialDecisionTaken = false;
             this.nCoachesAlerted = 0;
-
         }
     }
     
@@ -126,21 +124,11 @@ public class Bench implements IReferee, ICoach, IContestant{
      */
     @Override
     public synchronized void reviewNotes(String team) {
-        if(team.equals("A")){
-            while(this.nContestantsInBenchTeamA != 5){
-                try {
-                    wait();
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }else if(team.equals("B")){
-            while(this.nContestantsInBenchTeamB != 5){
-                try {
-                    wait();
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        while(this.nContestantsInBench < 10){
+            try {
+                wait();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -151,48 +139,31 @@ public class Bench implements IReferee, ICoach, IContestant{
      */
     @Override
     public synchronized void callContestants(String team) {
-        if(team.equals("A")){
-            this.selectedContestantsA = new int[3];
-            for(int i=0; i<this.selectedContestantsA.length; i++){
-                boolean repeated = false;
-                int selected;
-                
-                do{
-                    selected = (int)Math.ceil(Math.random() * 4 + 1);
-                    repeated = false;
-                    
-                    for(int j=0; j<i; j++){
-                        if(selected==this.selectedContestantsA[j]){
-                            repeated = true;
-                            break;
-                        }
+        int tmp[] = new int[3];
+        
+        for(int i=0; i<tmp.length; i++){
+            boolean repeated = false;
+            int selected;
+
+            do{
+                selected = (int)Math.ceil(Math.random() * 4 + 1);
+                repeated = false;
+
+                for(int j=0; j<i; j++){
+                    if(selected==tmp[j]){
+                        repeated = true;
+                        break;
                     }
-                }while(repeated);
-                this.selectedContestantsA[i] = selected;       
-            }
-            this.calledByCoachA = true;  
-        }else if(team.equals("B")){
-            this.selectedContestantsB = new int[3];
-            for(int i=0; i<this.selectedContestantsB.length; i++){
-                boolean repeated = false;
-                int selected;
-                
-                do{
-                    selected = (int)Math.ceil(Math.random() * 4 + 1);
-                    repeated = false;
-                    
-                    for(int j=0; j<i; j++){
-                        if(selected==this.selectedContestantsB[j]){
-                            repeated = true;
-                            break;
-                        }
-                    }
-                }while(repeated);
-                this.selectedContestantsB[i] = selected;       
-            }
-            this.calledByCoachB = true;
+                }
+            }while(repeated);
+            tmp[i] = selected;
         }
         
+        if(team.equals("A")){
+            this.selectedContestantsA = tmp;
+        }else if(team.equals("B")){
+            this.selectedContestantsB = tmp;
+        }
         notifyAll();
     }
     
@@ -200,12 +171,14 @@ public class Bench implements IReferee, ICoach, IContestant{
         if(team.equals("A")){
             for(int i=0; i<this.selectedContestantsA.length; i++){
                 if(this.selectedContestantsA[i]==idC){
+                    this.selectedContestantsA[i] = 0;
                     return true;
                 }
             }
         }else if(team.equals("B")){
             for(int i=0; i<this.selectedContestantsB.length; i++){
                 if(this.selectedContestantsB[i]==idC){
+                    this.selectedContestantsB[i] = 0;
                     return true;
                 }
             }
@@ -216,7 +189,7 @@ public class Bench implements IReferee, ICoach, IContestant{
     @Override
     public synchronized void waitForCallContestants(String team, int idC){
         if(team.equals("A")){
-            while(!this.calledByCoachA || !this.amISelected(team, idC)){
+            while(!this.amISelected(team, idC) || this.nContestantsSelectedA >= 3){
                 try {
                     wait();
                     if(this.endMatch){
@@ -226,15 +199,16 @@ public class Bench implements IReferee, ICoach, IContestant{
                     Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            this.nContestantsInBenchTeamA--;
+            this.nContestantsInBench--;
             //System.err.println("Entrou A");
 
             if(++this.nContestantsSelectedA == 3){
-                this.calledByCoachA = false;
                 this.lastContestantUpA = idC;
+            }else if(this.nContestantsSelectedA > 3){
+                System.out.println(""+idC);
             }
         }else if(team.equals("B")){
-            while(!this.calledByCoachB || !this.amISelected(team, idC)){
+            while(!this.amISelected(team, idC) || this.nContestantsSelectedB >= 3){
                 try {
                     wait();
                     if(this.endMatch){
@@ -244,11 +218,12 @@ public class Bench implements IReferee, ICoach, IContestant{
                     Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            this.nContestantsInBenchTeamB--;
+            this.nContestantsInBench--;
             //System.err.println("Entrou B");
             if(++this.nContestantsSelectedB == 3){
-                this.calledByCoachB = false;
                 this.lastContestantUpB = idC;
+            }else if(this.nContestantsSelectedB > 3){
+                System.out.println(""+idC);
             }
         }
     }
@@ -267,15 +242,15 @@ public class Bench implements IReferee, ICoach, IContestant{
             if(idC == this.lastContestantUpA){
                 this.followCoachA = true;
                 this.lastContestantUpA = 0;
+                notifyAll();
             }
         }else if(team.equals("B")){
             if(idC == this.lastContestantUpB){
                 this.followCoachB = true;
                 this.lastContestantUpB = 0;
+                notifyAll();
             }
         }
-        notifyAll();
-
     }
     
     @Override
@@ -290,8 +265,6 @@ public class Bench implements IReferee, ICoach, IContestant{
             }
      
             this.followCoachA = false;
-            this.nFollowedA = 0;
-  
         }else if(team.equals("B")){
             while(!this.followCoachB){
                 try {
@@ -302,8 +275,6 @@ public class Bench implements IReferee, ICoach, IContestant{
             }
             
             this.followCoachB = false;
-            this.nFollowedB = 0;
-            
         }
     }
     
@@ -315,18 +286,11 @@ public class Bench implements IReferee, ICoach, IContestant{
      */
     @Override
     public synchronized void seatDown(String team){
-        if(team.equals("A")){
-            this.nContestantsInBenchTeamA++;
-            this.nContestantsSelectedA--;               
-        }else if(team.equals("B")){
-            this.nContestantsInBenchTeamB++;
-            this.nContestantsSelectedB--;
-        }
-        if(this.nContestantsInBenchTeamA == this.nContestantsTeamA && this.nContestantsInBenchTeamB == this.nContestantsTeamB){
+        if(++this.nContestantsInBench==10){
             this.canCallTrial = true;
+            
             notifyAll();
         }
-
     }
     
     @Override
