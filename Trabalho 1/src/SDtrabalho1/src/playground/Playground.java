@@ -89,14 +89,6 @@ public class Playground implements IReferee, IContestant{
     /* CONTESTANT METHODS */
     
     /**
-     * In Contestants life cycle, transition between "stand in position" and "doYourBest"
-     */
-    @Override
-    public void getReady() {
-
-    }
-
-    /**
      * In Contestants life cycle, transition between "doYourBest" and "doYourBest"
      * Random time interval in the simulation 
      */

@@ -28,7 +28,7 @@ public class Contestant  extends Thread {
     private referee_site.IContestant referee_site;
     private Match match;
     
-    private static final int MAX_STRENGTH = 5;
+    private static final int MAX_STRENGTH = 4;
     private static final int MIN_STRENGTH = 1;
     private int strength;
     
@@ -38,12 +38,14 @@ public class Contestant  extends Thread {
         this.playground = p;
         this.bench = b;
         this.referee_site = r;
-        this.team = team;
-        this.setName("Contestant " + id + " of the team " + team);
-        this.id = id;
         this.log = log;
+        
+        this.team = team;
+        this.id = id;
+        
+        this.setName("Contestant " + id + " of the team " + team);
         this.match = Match.getInstance();
-        this.strength = (int)Math.ceil((Math.random() * (MAX_STRENGTH - MIN_STRENGTH + 1)) + MIN_STRENGTH);
+        this.strength = (int)Math.ceil(Math.random() * MAX_STRENGTH + MIN_STRENGTH);
         state = ContestantState.SEAT_AT_THE_BENCH;
     }
     
@@ -73,10 +75,10 @@ public class Contestant  extends Thread {
                     this.referee_site.amDone();
 
                     this.playground.waitForAssertTrialDecision();
-                    this.bench.seatDown(this.team);
                     this.state = ContestantState.SEAT_AT_THE_BENCH;
                     break;
                 case SEAT_AT_THE_BENCH:
+                    this.bench.seatDown(this.team);
                     this.bench.waitForCallContestants(this.team, this.id); // espera que o treinador o chame
                     
                     if(this.referee_site.endOfMatch()){
@@ -88,7 +90,6 @@ public class Contestant  extends Thread {
                     break;
                 case STAND_IN_POSITION:
                     this.playground.waitForStartTrial();
-                    this.playground.getReady();
                     this.state = ContestantState.DO_YOUR_BEST;
                     break;
             }
