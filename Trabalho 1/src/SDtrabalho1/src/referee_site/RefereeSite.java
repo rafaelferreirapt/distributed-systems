@@ -89,8 +89,7 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
      */
     @Override
     public synchronized void amDone() {
-        this.amDoneCounter++;
-        if(this.amDoneCounter == 6){
+        if(++this.amDoneCounter == 6){
             this.amDoneCondition = true;
             notifyAll();
         }

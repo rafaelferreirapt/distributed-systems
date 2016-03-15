@@ -21,7 +21,7 @@ public class Bench implements IReferee, ICoach, IContestant{
     private int nFollowedA = 0, nFollowedB = 0;
     private boolean calledByCoachA = false, followCoachA = false;
     private boolean calledByCoachB = false, followCoachB = false;
-    private boolean canCallTrial = true;
+    private boolean canCallTrial = true, canCallA = true, canCallB = true;
     private int[] selectedContestantsA = new int[3];
     private int[] selectedContestantsB = new int[3];
     private boolean endMatch = false;
@@ -45,6 +45,10 @@ public class Bench implements IReferee, ICoach, IContestant{
     /**
      * the coaches are waken up by the referee in operation callTrial to start 
      * selecting next team
+     * called by the referee
+     * 
+     * -> canCallA or canCallB are used to inform the referee that can wake up the
+     * coaches that can select the next team
      */
     @Override
     public synchronized void callTrial() {
@@ -60,11 +64,18 @@ public class Bench implements IReferee, ICoach, IContestant{
         notifyAll();
     }
     
+    
+    /**
+     * The coaches are sleeping in this method waiting that the referee inform  
+     * and can select the next team
+     */
     @Override
     public synchronized void waitForCallTrial(){
         while(!callTrialTaken){
             try {
                 wait();
+                
+                // when the referee sees that the match ends they must died
                 if(this.endMatch){
                     break;
                 }
@@ -72,8 +83,7 @@ public class Bench implements IReferee, ICoach, IContestant{
                 Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        this.nCoaches++;
-        if(this.nCoaches == 2){
+        if(++this.nCoaches == 2){
             callTrialTaken = false;
             this.nCoaches = 0;
         }
@@ -81,8 +91,6 @@ public class Bench implements IReferee, ICoach, IContestant{
 
     /**
      * the coaches are waken up in operation assertTrialDecision by the referee
-     * the contestants are made to sleep for a random time interval in the 
-     * simulation they block next and are waken up in operation assertTrialDecision by the referee
      */
     @Override
     public synchronized void assertTrialDecision() {
@@ -90,6 +98,9 @@ public class Bench implements IReferee, ICoach, IContestant{
         notifyAll();
     }
 
+    /**
+     * the coaches are waken up in operation assertTrialDecision by the referee
+     */
     @Override
     public synchronized void waitForAssertTrialDecision(){
         while(!trialDecisionTaken){
@@ -100,8 +111,7 @@ public class Bench implements IReferee, ICoach, IContestant{
             }
         }
         
-        this.nCoachesAlerted++;
-        if(this.nCoachesAlerted == 2){
+        if(++this.nCoachesAlerted == 2){
             trialDecisionTaken = false;
             this.nCoachesAlerted = 0;
 
@@ -216,11 +226,10 @@ public class Bench implements IReferee, ICoach, IContestant{
                     Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            this.nContestantsSelectedA++;
             this.nContestantsInBenchTeamA--;
-            System.err.println("Entrou A");
+            //System.err.println("Entrou A");
 
-            if(this.nContestantsSelectedA == 3){
+            if(++this.nContestantsSelectedA == 3){
                 this.calledByCoachA = false;
                 this.lastContestantUpA = idC;
             }
@@ -235,10 +244,9 @@ public class Bench implements IReferee, ICoach, IContestant{
                     Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            this.nContestantsSelectedB++;
             this.nContestantsInBenchTeamB--;
-            System.err.println("Entrou B");
-            if(this.nContestantsSelectedB == 3){
+            //System.err.println("Entrou B");
+            if(++this.nContestantsSelectedB == 3){
                 this.calledByCoachB = false;
                 this.lastContestantUpB = idC;
             }

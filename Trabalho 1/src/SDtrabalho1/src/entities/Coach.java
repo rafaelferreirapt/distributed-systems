@@ -39,7 +39,7 @@ public class Coach extends Thread {
             if(this.state.getState().equals(CoachState.ASSEMBLE_TEAM.getState())){
                 this.bench.callContestants(this.team);
                 this.bench.waitForFollowCoachAdvice(this.team);
-                System.err.println("vou informar " + this.team);
+                //System.err.println("vou informar " + this.team);
                 this.referee_site.informReferee(this.team);
                 this.setState(CoachState.WATCH_TRIAL);
             }else if(this.state.getState().equals(CoachState.WAIT_FOR_REFEREE_COMMAND.getState())){

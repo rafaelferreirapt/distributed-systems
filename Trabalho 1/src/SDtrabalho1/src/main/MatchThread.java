@@ -35,7 +35,7 @@ public class MatchThread extends Thread{
         
         assert nCoaches == teams.length;
         
-        bench = new Bench(nContestants, nContestants);
+        bench = new Bench(nContestants/2, nContestants/2);
         playground = new Playground();
         referee_site = new RefereeSite();
         lg = new Log();
