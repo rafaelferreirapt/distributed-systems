@@ -20,6 +20,4 @@ public interface IReferee {
      */
     public void assertTrialDecision();
     
-    public int getTrialState();
-    
 }

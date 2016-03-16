@@ -17,4 +17,16 @@ public class Trial {
         this.number = number;    
         this.centre_of_the_rope = centre_of_the_rope;
     }
+    
+    public void updateRope(String team, int strength){
+        if(team.equals("A")){
+            this.centre_of_the_rope -= strength;
+        }else if(team.equals("B")){
+            this.centre_of_the_rope += strength;
+        }
+    }
+    
+    public int getRope(){
+        return this.centre_of_the_rope;
+    }
 }

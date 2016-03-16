@@ -14,10 +14,10 @@ import java.util.logging.Logger;
 public class Playground implements IReferee, IContestant{
     
     private static boolean trialDecisionTaken = false, startTrialTaken = false;
-    private int trialState = 0;
     private int contestantsIn = 0;
     private int contestantsAlerted = 0;
-
+    private Match match = Match.getInstance();
+    
     public Playground(){
     
     }
@@ -32,8 +32,6 @@ public class Playground implements IReferee, IContestant{
      */
     @Override
     public synchronized void startTrial() {
-        this.trialState = 0;
-
         startTrialTaken = true;
         notifyAll();
     }
@@ -47,12 +45,10 @@ public class Playground implements IReferee, IContestant{
                 Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        this.contestantsIn++;
-        if(this.contestantsIn == 6){
-            startTrialTaken = false;
+        if(++this.contestantsIn == 6){
             this.contestantsIn = 0;
+            startTrialTaken = false;
         }
-
     }
     
     /**
@@ -64,11 +60,6 @@ public class Playground implements IReferee, IContestant{
         notifyAll();
     }
     
-    @Override
-    public int getTrialState(){
-        return this.trialState;
-    }
-
     @Override
     public synchronized void waitForAssertTrialDecision(){
         while(!trialDecisionTaken){
@@ -83,7 +74,6 @@ public class Playground implements IReferee, IContestant{
             trialDecisionTaken = false;
             this.contestantsAlerted = 0;
         }
-
     }
     
     /* CONTESTANT METHODS */
@@ -102,12 +92,7 @@ public class Playground implements IReferee, IContestant{
             Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
         }
         */
-        if(team.equals("A")){
-            trialState -= strength;
-        }else if(team.equals("B")){
-            trialState += strength;
-        }
-        
+        match.updateRope(team, strength);
     }
     
 }

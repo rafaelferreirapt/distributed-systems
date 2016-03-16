@@ -17,10 +17,10 @@ public class Bench implements IReferee, ICoach, IContestant{
     private int nContestantsInBench;
     private int nCoachesAlerted = 0;
     private int nContestantsSelectedA = 0, nContestantsSelectedB = 0;
-    private int nCoaches = 0;
     private boolean followCoachA = false;
     private boolean followCoachB = false;
     private boolean canCallTrial = true;
+    private int coachesWaitCallTrial = 0;
     private int[] selectedContestantsA = new int[3];
     private int[] selectedContestantsB = new int[3];
     private boolean endMatch = false, selectedA = false, selectedB = false;
@@ -28,38 +28,34 @@ public class Bench implements IReferee, ICoach, IContestant{
     private int lastContestantUpB = 0;
     private Match match = Match.getInstance();
     
-    private static boolean trialDecisionTaken = false, callTrialTaken = false;
+    private boolean trialDecisionTaken = false;
+    private boolean callTrialTaken = false;
             
     public Bench(int nContestantsTeamA, int nContestantsTeamB){
         this.nContestantsInBench = nContestantsTeamA + nContestantsTeamB;
     }
-    
+      
     /**
-     *
-     */
-
-    
-    /* REFEREE METHODS */
-    
-    /**
-     * the coaches are waken up by the referee in operation callTrial to start 
-     * selecting next team called by the referee
-     * 
-     * -> canCallTrial is used to inform the referee that can wake up the
-     * coaches that can select the next team
+     * the referee must wait that all the coaches are waiting for the call trial
+     * and all the contestants are in the bench, then the referee can continue 
+     * the trial
      */
     @Override
     public synchronized void callTrial() {
-        while(!this.canCallTrial || this.nContestantsInBench != 10){
+        while(this.coachesWaitCallTrial != 2 || this.nContestantsInBench != 10){
             try {
                 wait();
             } catch (InterruptedException ex) {
                 Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        this.nContestantsSelectedA=this.nContestantsSelectedB=0;
-        this.canCallTrial = false;
-        callTrialTaken = true;
+        
+        this.nContestantsSelectedA=0;
+        this.nContestantsSelectedB=0;
+        
+        this.coachesWaitCallTrial=0;
+        
+        this.callTrialTaken=true;
         notifyAll();
     }
     
@@ -70,24 +66,21 @@ public class Bench implements IReferee, ICoach, IContestant{
      */
     @Override
     public synchronized void waitForCallTrial(){
-        while(!callTrialTaken){
+        this.callTrialTaken = false;
+        this.coachesWaitCallTrial++;
+        notifyAll();
+        
+        while(!this.callTrialTaken){
             try {
                 wait();
                 
                 // when the referee sees that the match ends they must died
                 if(this.endMatch){
-                    break;
+                    return;
                 }
             } catch (InterruptedException ex) {
                 Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        if(this.endMatch){
-            return;
-        }
-        if(++this.nCoaches == 2){
-            callTrialTaken = false;
-            this.nCoaches = 0;
         }
     }
 
@@ -164,12 +157,9 @@ public class Bench implements IReferee, ICoach, IContestant{
         
         if(team.equals("A")){
             this.selectedContestantsA = tmp;
-            this.selectedA = true;
         }else if(team.equals("B")){
             this.selectedContestantsB = tmp;
-            this.selectedB = true;
         }
-        notifyAll();
     }
     
     private boolean amISelected(String team, int idC){
@@ -194,7 +184,7 @@ public class Bench implements IReferee, ICoach, IContestant{
     @Override
     public synchronized void waitForCallContestants(String team, int idC){
         if(team.equals("A")){
-            while(!this.selectedA || !this.amISelected(team, idC) || this.nContestantsSelectedA >= 3){
+            while(!this.selectedA || !this.amISelected(team, idC)){
                 try {
                     wait();
                     if(this.endMatch){
@@ -214,7 +204,7 @@ public class Bench implements IReferee, ICoach, IContestant{
                 this.lastContestantUpA = idC;
             }
         }else if(team.equals("B")){
-            while(!this.selectedB || !this.amISelected(team, idC) || this.nContestantsSelectedB >= 3){
+            while(!this.selectedB || !this.amISelected(team, idC)){
                 try {
                     wait();
                     if(this.endMatch){
@@ -242,6 +232,7 @@ public class Bench implements IReferee, ICoach, IContestant{
      * their selected contestants to stand in position
      * In Contestants life cycle, transition between "seat at the bench" and "stand in position"
      * @param team
+     * @param idC
      */
     @Override
     public synchronized void followCoachAdvice(String team, int idC) {
@@ -257,13 +248,15 @@ public class Bench implements IReferee, ICoach, IContestant{
             }
         }
         notifyAll();
-
     }
     
     @Override
     public synchronized void waitForFollowCoachAdvice(String team){
         if(team.equals("A")){
-            while(!this.followCoachA || this.nContestantsSelectedA != 3){
+            this.selectedA = true;
+            notifyAll();
+            
+            while(!this.followCoachA){
                 try {
                     wait();
                 } catch (InterruptedException ex) {
@@ -271,9 +264,13 @@ public class Bench implements IReferee, ICoach, IContestant{
                 }
             }
             
+            this.selectedA = false;
             this.followCoachA = false;
         }else if(team.equals("B")){
-            while(!this.followCoachB || this.nContestantsSelectedB != 3){
+            this.selectedB = true;
+            notifyAll();
+            
+            while(!this.followCoachB){
                 try {
                     wait();
                 } catch (InterruptedException ex) {
@@ -281,6 +278,7 @@ public class Bench implements IReferee, ICoach, IContestant{
                 }
             }
             
+            this.selectedB = false;
             this.followCoachB = false;
         }
     }
@@ -294,8 +292,6 @@ public class Bench implements IReferee, ICoach, IContestant{
     @Override
     public synchronized void seatDown(String team){
         if(++this.nContestantsInBench==10){
-            this.canCallTrial = true;
-            
             notifyAll();
         }
     }

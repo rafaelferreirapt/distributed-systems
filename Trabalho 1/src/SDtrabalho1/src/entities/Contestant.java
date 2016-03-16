@@ -75,10 +75,10 @@ public class Contestant  extends Thread {
                     this.referee_site.amDone();
 
                     this.playground.waitForAssertTrialDecision();
+                    this.bench.seatDown(this.team);
                     this.state = ContestantState.SEAT_AT_THE_BENCH;
                     break;
                 case SEAT_AT_THE_BENCH:
-                    this.bench.seatDown(this.team);
                     this.bench.waitForCallContestants(this.team, this.id); // espera que o treinador o chame
                     
                     if(this.referee_site.endOfMatch()){
