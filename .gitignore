@@ -15,3 +15,5 @@ nb-configuration.xml
 *.war
 *.ear
 /Trabalho 1/src/SDtrabalho1/nbproject/private/
+
+*.log

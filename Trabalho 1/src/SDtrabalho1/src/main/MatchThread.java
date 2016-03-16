@@ -9,6 +9,8 @@ import entities.Coach;
 import entities.Contestant;
 import entities.Referee;
 import general_info_repo.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import playground.Playground;
 import referee_site.RefereeSite;
 
@@ -38,7 +40,12 @@ public class MatchThread extends Thread{
         bench = new Bench(nContestants/2, nContestants/2);
         playground = new Playground();
         referee_site = new RefereeSite();
-        lg = new Log();
+        
+        try {
+            lg = Log.init(""); // specify the name of the log, if not, it will be date
+        } catch (Exception ex) {
+            Logger.getLogger(MatchThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         ref =  new Referee((playground.IReferee) playground, (bench.IReferee) bench, (referee_site.IReferee) referee_site, lg);
         ref.start();
@@ -86,6 +93,8 @@ public class MatchThread extends Thread{
         } catch (InterruptedException ex) {
             //Escrever para o log
         }
+        
+        lg.writeEnd();
     }
     
 }
