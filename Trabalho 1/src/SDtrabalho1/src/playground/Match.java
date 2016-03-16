@@ -12,7 +12,7 @@ public class Match {
     
     private Game[] games;
     private int game = 0;
-    private final int number_of_games = 1000000;
+    private final int number_of_games = 3;
     private int pontuation[];
     
     public int trials_played = 0;
@@ -34,21 +34,14 @@ public class Match {
     public void newGame(){
         assert game < this.games.length;
         
-        if(game!=0){
-            char winner = this.games[game-1].getWinner();
-            if(winner=='A'){
-                this.pontuation[0]++;
-            }else if(winner=='B'){
-                this.pontuation[1]++;
-            }
-        }
+        this.updatePontuation();
         
         this.games[game] = new Game(game++);
     }
     
     public void newTrial(int centre_of_the_rope){
         this.games[(game-1)].newTrial(centre_of_the_rope);
-        this.trials_played++;
+        
     }
     
     public int gameNumberOfTrials(){
@@ -60,6 +53,8 @@ public class Match {
     }
     
     public void declareMatchWinner(){
+        this.updatePontuation();
+
         if(this.pontuation[0] > this.pontuation[1]){
             //A
             System.err.println("Match was won by team A ("+this.pontuation[0]+"-"+this.pontuation[1]+").");
@@ -81,6 +76,18 @@ public class Match {
     }
     
     public int assertTrialDecision(){
+        this.trials_played++;
         return this.games[(game-1)].assertTrialDecision();
+    }
+    
+    private void updatePontuation(){
+        if(game!=0){
+            char winner = this.games[game-1].getWinner();
+            if(winner=='A'){
+                this.pontuation[0]++;
+            }else if(winner=='B'){
+                this.pontuation[1]++;
+            }
+        }
     }
 }

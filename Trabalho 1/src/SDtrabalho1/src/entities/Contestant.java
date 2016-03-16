@@ -62,9 +62,9 @@ public class Contestant  extends Thread {
         while(!referee_site.endOfMatch()){
             switch(this.state){
                 case DO_YOUR_BEST:
-                    this.playedTrials++;
-                    int now_strength = this.strength-this.playedTrials+(this.match.trials_played-this.playedTrials);
-
+                    
+                    int now_strength = this.strength-this.playedTrials+(this.match.trials_played - this.playedTrials);
+                    
                     if(now_strength > 5){
                         now_strength = 5;
                     }else if(now_strength < 1){
@@ -72,6 +72,8 @@ public class Contestant  extends Thread {
                     }
 
                     this.playground.pullTheRope(now_strength, this.team);
+                    this.playedTrials++;
+
                     this.referee_site.amDone();
 
                     this.playground.waitForAssertTrialDecision();
@@ -79,6 +81,7 @@ public class Contestant  extends Thread {
                     this.state = ContestantState.SEAT_AT_THE_BENCH;
                     break;
                 case SEAT_AT_THE_BENCH:
+
                     this.bench.waitForCallContestants(this.team, this.id); // espera que o treinador o chame
                     
                     if(this.referee_site.endOfMatch()){
