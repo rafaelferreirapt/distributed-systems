@@ -5,7 +5,7 @@
 package entities;
 
 import general_info_repo.Log;
-import playground.Match;
+import general_info_repo.Match;
 
 /**
  *

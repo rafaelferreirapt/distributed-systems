@@ -2,7 +2,7 @@
  * Distributed Systems
  * Rafael Ferreira and Rodrigo Cunha
  */
-package playground;
+package general_info_repo;
 
 /**-
  *

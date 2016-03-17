@@ -5,12 +5,16 @@
 package general_info_repo;
 
 import com.sun.javafx.binding.Logging;
+import entities.CoachState;
+import entities.ContestantState;
+import entities.RefereeState;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,6 +23,9 @@ import java.util.logging.Logger;
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Log {
+    
+    private Match match = Match.getInstance();
+    
     /**
      *  File where the log will be saved
      */
@@ -65,7 +72,7 @@ public class Log {
      * @return the unique  Log instance
      * @throws Exception 
      */
-    public static Log init(String filename) throws Exception{
+    public synchronized static Log init(String filename) throws Exception{
         if(!canBeInstantiated){
             throw new Exception("The log was already been instantiated!");
         }
@@ -75,7 +82,7 @@ public class Log {
         return instance;
     }
     
-    public static Log getInstance(){
+    public synchronized static Log getInstance(){
         return instance;
     }
     
@@ -88,7 +95,6 @@ public class Log {
             pw.println("                               Game of the Rope - Description of the internal state");
             pw.println("Ref Coa 1 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Coa 2 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5       Trial");
             pw.println("Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS");
-            pw.println("###  #### ### ## ### ## ### ## ### ## ### ##  #### ### ## ### ## ### ## ### ## ### ## - - - . - - - -- --");
             pw.flush();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Logging.class.getName()).log(Level.SEVERE, null, ex);
@@ -99,7 +105,7 @@ public class Log {
      *  to be done... 
      * @param line 
      */
-    public void writeLine(String line){
+    public synchronized void writeLine(String line){
         
     }
     
@@ -107,7 +113,7 @@ public class Log {
      * This method will be called every time that one game is started
      * @param gameNumber 
      */
-    public void newGame(int gameNumber){
+    public synchronized void newGame(int gameNumber){
         pw.println("Game " + gameNumber);
         pw.println("Ref Coa 1 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Coa 2 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5       Trial");
         pw.println("Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS");
@@ -117,7 +123,7 @@ public class Log {
     /**
      * This method will be called to finish write the logging file
      */
-    public void writeEnd(){
+    public synchronized void writeEnd(){
         pw.println("\nLegend:");
         pw.println("Ref Sta    – state of the referee");
         pw.println("Coa # Stat - state of the coach of team # (# - 1 .. 2)");
@@ -129,4 +135,64 @@ public class Log {
         pw.flush();
         pw.close();
     }
+    
+    /**
+     * 
+     */
+    public synchronized void newGame(){
+        match.newGame();
+    }
+    
+    /**
+     * 
+     */
+    public synchronized void newTrial(){
+        match.newTrial(0);
+    }
+    
+    /**
+     * 
+     */
+    public synchronized int gameNumberOfTrials(){
+        return this.gameNumberOfTrials();
+    }
+    
+    /**
+     * 
+     */
+    public synchronized int getNumberOfGames(){
+        return match.getNumberOfGames();
+    }
+    
+    /**
+     * 
+     */
+    public synchronized void declareMatchWinner(){
+        match.declareMatchWinner();
+    }
+    
+    /**
+     * 
+     */
+    public synchronized int getTotalNumberOfGames(){
+        return match.getTotalNumberOfGames();
+    }
+    
+    /**
+     * 
+     * @param team
+     * @param strength
+     */
+    public synchronized void updateRope(String team, int strength){
+        this.match.updateRope(team, strength);
+    }
+    
+    /**
+     * 
+     */
+    public synchronized int assertTrialDecision(){
+        return this.match.assertTrialDecision();
+    }
+    
+    
 }

@@ -2,7 +2,12 @@
  * Distributed Systems
  * Rafael Ferreira and Rodrigo Cunha
  */
-package playground;
+package general_info_repo;
+
+import entities.CoachState;
+import entities.ContestantState;
+import entities.RefereeState;
+import java.util.HashMap;
 
 /**
  *
@@ -15,11 +20,16 @@ public class Match {
     private final int number_of_games = 1000;
     private int pontuation[];
     
+    private HashMap<String, Integer> strengths;
+    private HashMap<HashMap<String, Integer>, ContestantState> contestants_states;
+    private HashMap<HashMap<String, Integer>, CoachState> coach_states;
+    private RefereeState referee_states;
+    
     public int trials_played = 0;
     
     private static Match instance = null;
     
-    protected Match() {
+    private Match() {
         this.games = new Game[number_of_games];
         this.pontuation = new int[2];   
         this.pontuation[0] = this.pontuation[1] = 0;

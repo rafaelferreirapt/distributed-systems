@@ -6,7 +6,7 @@ package bench;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import playground.Match;
+import general_info_repo.Match;
 
 /**
  *
