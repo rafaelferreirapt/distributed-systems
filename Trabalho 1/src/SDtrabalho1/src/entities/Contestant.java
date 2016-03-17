@@ -32,7 +32,7 @@ public class Contestant  extends Thread {
     private static final int MIN_STRENGTH = 1;
     private int strength;
     
-    private int playedTrials = 0;
+    private int lastTrial = 0, gamesInBench = 0;
     
     public Contestant(playground.IContestant p, bench.IContestant b, referee_site.IContestant r, int id, String team, Log log){
         this.playground = p;
@@ -62,18 +62,23 @@ public class Contestant  extends Thread {
         while(!referee_site.endOfMatch()){
             switch(this.state){
                 case DO_YOUR_BEST:
+                    this.gamesInBench = this.match.trials_played - this.lastTrial;
+                    if(this.gamesInBench > 0){
+                        this.strength = this.strength + this.gamesInBench;
+                    }
                     
-                    int now_strength = this.strength-this.playedTrials+(this.match.trials_played - this.playedTrials);
+                    if(this.strength > 5){
+                        this.strength = 5;
+                    }else if(this.strength < 1){
+                        this.strength = 1;
+                    }
                     
-                    if(now_strength > 5){
-                        now_strength = 5;
-                    }else if(now_strength < 1){
-                        now_strength = 1;
+                    this.playground.pullTheRope(this.strength, this.team);
+                    if(this.strength > 1){
+                        this.strength -= 1;
                     }
 
-                    this.playground.pullTheRope(now_strength, this.team);
-                    this.playedTrials++;
-
+                    this.lastTrial = this.match.trials_played + 1;
                     this.referee_site.amDone();
 
                     this.playground.waitForAssertTrialDecision();
