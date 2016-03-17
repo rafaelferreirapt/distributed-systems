@@ -68,7 +68,7 @@ public class Game {
             }
             return 0;
         }else{
-            this.newTrial(rope);
+            this.newTrial(0);
             return 1;
         }
     }
