@@ -13,10 +13,6 @@ import playground.Match;
  */
 public class Contestant  extends Thread {
     
-    public enum ContestantState{
-        SEAT_AT_THE_BENCH, STAND_IN_POSITION, DO_YOUR_BEST
-    }
-    
     private ContestantState state;
     
     private final int id;

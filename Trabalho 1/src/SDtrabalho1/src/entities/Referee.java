@@ -13,11 +13,6 @@ import playground.Match;
  */
 public class Referee extends Thread {
     
-    public enum RefereeState{
-        START_OF_THE_MATCH, START_OF_A_GAME, TEAMS_READY, WAIT_FOR_TRIAL_CONCLUSION, 
-        END_OF_A_GAME, END_OF_THE_MATCH
-    }
-    
     private RefereeState state;
     
     private final Log log;

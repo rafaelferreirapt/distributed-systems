@@ -12,10 +12,6 @@ import general_info_repo.Log;
  */
 public class Coach extends Thread {
     
-    private enum CoachState { 
-        WAIT_FOR_REFEREE_COMMAND, ASSEMBLE_TEAM, WATCH_TRIAL
-    }
-    
     private CoachState state;
     
     private final int id;
