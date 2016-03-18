@@ -5,16 +5,12 @@
 package general_info_repo;
 
 import com.sun.javafx.binding.Logging;
-import entities.CoachState;
-import entities.ContestantState;
-import entities.RefereeState;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class Log {
     
-    private Match match = Match.getInstance();
+    private final Match match = Match.getInstance();
     
     /**
      *  File where the log will be saved
@@ -152,13 +148,15 @@ public class Log {
     
     /**
      * 
+     * @return 
      */
     public synchronized int gameNumberOfTrials(){
-        return this.gameNumberOfTrials();
+        return match.gameNumberOfTrials();
     }
     
     /**
      * 
+     * @return 
      */
     public synchronized int getNumberOfGames(){
         return match.getNumberOfGames();
@@ -173,6 +171,7 @@ public class Log {
     
     /**
      * 
+     * @return 
      */
     public synchronized int getTotalNumberOfGames(){
         return match.getTotalNumberOfGames();
@@ -189,10 +188,14 @@ public class Log {
     
     /**
      * 
+     * @return 
      */
     public synchronized int assertTrialDecision(){
         return this.match.assertTrialDecision();
     }
     
+    public synchronized int getTrials_played() {
+        return match.getTrials_played();
+    }
     
 }

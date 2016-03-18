@@ -26,7 +26,6 @@ public class Bench implements IReferee, ICoach, IContestant{
     private boolean endMatch = false, selectedA = false, selectedB = false;
     private int lastContestantUpA = 0;
     private int lastContestantUpB = 0;
-    private Match match = Match.getInstance();
     
     private boolean trialDecisionTaken = false;
     private boolean callTrialTaken = false;

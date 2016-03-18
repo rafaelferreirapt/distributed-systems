@@ -20,10 +20,10 @@ public class Coach extends Thread {
     private final bench.ICoach bench;
     private final referee_site.ICoach referee_site;
     
-    public Coach(bench.ICoach b, referee_site.ICoach r, int id, String team, Log log){
+    public Coach(bench.ICoach b, referee_site.ICoach r, int id, String team){
         this.bench = b;
         this.referee_site = r;
-        this.log = log;
+        this.log = Log.getInstance();
         
         this.team = team;
         this.id = id;

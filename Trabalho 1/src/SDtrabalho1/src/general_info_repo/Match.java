@@ -15,17 +15,17 @@ import java.util.HashMap;
  */
 public class Match {
     
-    private Game[] games;
+    private final Game[] games;
     private int game = 0;
     private final int number_of_games = 1000;
-    private int pontuation[];
+    private final int pontuation[];
     
     private HashMap<String, Integer> strengths;
     private HashMap<HashMap<String, Integer>, ContestantState> contestants_states;
     private HashMap<HashMap<String, Integer>, CoachState> coach_states;
     private RefereeState referee_states;
     
-    public int trials_played = 0;
+    private int trials_played = 0;
     
     private static Match instance = null;
     
@@ -100,4 +100,9 @@ public class Match {
             }
         }
     }
+
+    public int getTrials_played() {
+        return trials_played;
+    }
+
 }
