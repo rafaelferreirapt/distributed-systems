@@ -27,11 +27,6 @@ public class Log {
      */
     private final File log;
     
-    /**
-     * Name of the file where the log will be saved
-     */
-    private final String filename;
-    
     private static PrintWriter pw;
     
     /**
@@ -47,35 +42,26 @@ public class Log {
     
     /**
      * This will instantiate the log Class
+     * Name of the file where the log will be saved
      * @param filename 
      */
     private Log(String filename){
         if(filename.length()==0){
             Date today = Calendar.getInstance().getTime();
             SimpleDateFormat date = new SimpleDateFormat("yyyyMMddhhmmss");
-            this.filename = "GameOfTheRope_" + date.format(today) + ".log";
-        }else{
-            this.filename = filename;
+            filename = "GameOfTheRope_" + date.format(today) + ".log";
         }
-        this.log = new File(this.filename);
+        this.log = new File(filename);
     }
     
     /**
-     * This method is used to init the log file, this is a singleton and we 
+     * This static constructor is used to init the log file, this is a singleton and we 
      * need to specify what is the filename, so we created this method that
      * will allow to instantiate the singleton.
-     * @param filename
-     * @return the unique  Log instance
-     * @throws Exception 
      */
-    public synchronized static Log init(String filename) throws Exception{
-        if(!canBeInstantiated){
-            throw new Exception("The log was already been instantiated!");
-        }
-        instance = new Log(filename);
-        canBeInstantiated = false;
+    static{
+        instance = new Log("");
         instance.writeInit();
-        return instance;
     }
     
     public synchronized static Log getInstance(){

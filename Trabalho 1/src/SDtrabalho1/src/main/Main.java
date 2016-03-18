@@ -42,13 +42,9 @@ public class Main{
         bench = new Bench(nContestants/2, nContestants/2);
         playground = new Playground();
         referee_site = new RefereeSite();
-        
-        try {
-            lg = Log.init(""); // specify the name of the log, if not, it will be date
-        } catch (Exception ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+
+        lg = Log.getInstance();
+
         ref =  new Referee((playground.IReferee) playground, (bench.IReferee) bench, (referee_site.IReferee) referee_site);
         ref.start();
         
