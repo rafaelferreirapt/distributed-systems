@@ -30,12 +30,6 @@ public class Log {
     private static PrintWriter pw;
     
     /**
-     * Blocking variable, when this variable is true, 
-     * no more instances of this class can be instantiated
-     */
-    private static boolean canBeInstantiated = true;
-    
-    /**
      * This will be a singleton
      */
     private static Log instance = null;
