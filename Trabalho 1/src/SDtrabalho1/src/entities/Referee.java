@@ -15,9 +15,9 @@ public class Referee extends Thread {
     private RefereeState state;
     
     private final Log log;
-    private playground.IReferee playground;
-    private bench.IReferee bench;
-    private referee_site.IReferee referee_site;
+    private final playground.IReferee playground;
+    private final bench.IReferee bench;
+    private final referee_site.IReferee referee_site;
     
     public Referee(playground.IReferee p, bench.IReferee b, referee_site.IReferee r){
         this.playground = p;

@@ -216,6 +216,10 @@ public class Log {
     }
     
     private void printLine(){
+        if(this.match.getNumberOfGames()==0){
+            return;
+        }
+        
         pw.print(this.match.getRefereeState());
         pw.print("  ");
         pw.print(this.match.getCoachState("A"));
