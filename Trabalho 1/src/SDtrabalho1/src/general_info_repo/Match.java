@@ -8,6 +8,7 @@ import entities.CoachState;
 import entities.ContestantState;
 import entities.RefereeState;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  *
@@ -20,9 +21,9 @@ public class Match {
     private final int number_of_games = 1000;
     private final int pontuation[];
     
-    private HashMap<ContestantTeam, Integer> strengths;
-    private HashMap<ContestantTeam, ContestantState> contestants_states;
-    private HashMap<String, CoachState> coach_states;
+    private final HashMap<String, HashMap<Integer, Integer>> strengths;
+    private final HashMap<String, HashMap<Integer, ContestantState>> contestants_states;
+    private final HashMap<String, CoachState> coach_states;
     private RefereeState referee_state;
     
     private int trials_played = 0;
@@ -30,6 +31,10 @@ public class Match {
     private static Match instance = null;
     
     private Match() {
+        this.strengths = new HashMap<>();
+        this.contestants_states = new HashMap<>();
+        this.coach_states = new HashMap<>();
+        
         this.games = new Game[number_of_games];
         this.pontuation = new int[2];   
         this.pontuation[0] = this.pontuation[1] = 0;
@@ -42,12 +47,15 @@ public class Match {
     }
     
     public synchronized void setContestantState(ContestantState state, String team, int contestant){
-        ContestantTeam constestant_team = new ContestantTeam(team, contestant);
-        
-        if(this.contestants_states.containsKey(constestant_team)){
-            this.contestants_states.replace(constestant_team, state);
+        if(this.contestants_states.containsKey(team)){
+            if(this.contestants_states.get(team).containsKey(contestant)){
+                this.contestants_states.get(team).replace(contestant, state);
+            }else{
+                this.contestants_states.get(team).put(contestant, state);
+            }
         }else{
-            this.contestants_states.put(constestant_team, state);
+            this.contestants_states.put(team, new HashMap<>());
+            this.contestants_states.get(team).put(contestant, state);
         }
     }
     
@@ -64,12 +72,15 @@ public class Match {
     }
     
     public synchronized void setContestantStrength(int strength, String team, int contestant){
-        ContestantTeam constestant_team = new ContestantTeam(team, contestant);
-        
-        if(this.strengths.containsKey(constestant_team)){
-            this.strengths.replace(constestant_team, strength);
+        if(this.strengths.containsKey(team)){
+            if(this.strengths.get(team).containsKey(contestant)){
+                this.strengths.get(team).replace(contestant, strength);
+            }else{
+                this.strengths.get(team).put(contestant, strength);
+            }
         }else{
-            this.strengths.put(constestant_team, strength);
+            this.strengths.put(team, new HashMap<>());
+            this.strengths.get(team).put(contestant, strength);
         }
     }
     
@@ -137,4 +148,23 @@ public class Match {
         return trials_played;
     }
 
+    public synchronized RefereeState getRefereeState() {
+        return referee_state;
+    }
+    
+    public synchronized CoachState getCoachState(String team){
+        return this.coach_states.get(team);
+    }
+    
+    public synchronized ContestantState getContestantState(String team, int contestant){
+        return this.contestants_states.get(team).get(contestant);
+    }
+    
+    public synchronized Set<Integer> getNumberOfContestants(String team){
+        return this.contestants_states.get(team).keySet();
+    }
+    
+    public synchronized int getContestantStrength(String team, int contestant){
+        return this.strengths.get(team).get(contestant);
+    }
 }

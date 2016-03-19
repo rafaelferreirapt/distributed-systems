@@ -14,6 +14,8 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -181,20 +183,67 @@ public class Log {
         return match.getTrials_played();
     }
     
+    public synchronized void initContestantState(ContestantState state, String team, int contestant){
+        this.match.setContestantState(state, team, contestant);
+    }
+    
     public synchronized void setContestantState(ContestantState state, String team, int contestant){
         this.match.setContestantState(state, team, contestant);
+        this.printLine();
+    }
+    
+    public synchronized void initCoachState(String team, CoachState state){
+        this.match.setCoachState(team, state);
     }
     
     public synchronized void setCoachState(String team, CoachState state){
         this.match.setCoachState(team, state);
+        this.printLine();
+    }
+    
+    public synchronized void initRefereeState(RefereeState state){
+        this.match.setRefereeState(state);
     }
     
     public synchronized void setRefereeState(RefereeState state){
         this.match.setRefereeState(state);
+        this.printLine();
     }
     
     public synchronized void setContestantStrength(int strength, String team, int contestant){
         this.match.setContestantStrength(strength, team, contestant);
+    }
+    
+    private void printLine(){
+        pw.print(this.match.getRefereeState());
+        pw.print("  ");
+        pw.print(this.match.getCoachState("A"));
+        pw.print(" ");
+        
+        Set<Integer> contestants = this.match.getNumberOfContestants("A");
+        
+        for(Integer i : contestants){
+            pw.print(this.match.getContestantState("A", i));
+            pw.print("  ");
+            pw.print(this.match.getContestantStrength("A", i));
+            pw.print(" ");
+        }
+            
+        pw.print(" ");
+        pw.print(this.match.getCoachState("B"));
+        pw.print(" ");
+        
+        for(Integer i : contestants){
+            pw.print(this.match.getContestantState("B", i));
+            pw.print("  ");
+            pw.print(this.match.getContestantStrength("B", i));
+            pw.print(" ");
+        }
+        
+        pw.println("- - - . - - - -- --");
+                    
+        pw.flush();
+
     }
     
 }
