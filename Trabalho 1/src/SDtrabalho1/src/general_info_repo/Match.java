@@ -20,10 +20,10 @@ public class Match {
     private final int number_of_games = 1000;
     private final int pontuation[];
     
-    private HashMap<String, Integer> strengths;
-    private HashMap<HashMap<String, Integer>, ContestantState> contestants_states;
-    private HashMap<HashMap<String, Integer>, CoachState> coach_states;
-    private RefereeState referee_states;
+    private HashMap<ContestantTeam, Integer> strengths;
+    private HashMap<ContestantTeam, ContestantState> contestants_states;
+    private HashMap<String, CoachState> coach_states;
+    private RefereeState referee_state;
     
     private int trials_played = 0;
     
@@ -39,6 +39,38 @@ public class Match {
           instance = new Match();
        }
        return instance;
+    }
+    
+    public void setContestantState(ContestantState state, String team, int contestant){
+        ContestantTeam constestant_team = new ContestantTeam(team, contestant);
+        
+        if(this.contestants_states.containsKey(constestant_team)){
+            this.contestants_states.replace(constestant_team, state);
+        }else{
+            this.contestants_states.put(constestant_team, state);
+        }
+    }
+    
+    public void setCoachState(String team, CoachState state){
+        if(this.coach_states.containsKey(team)){
+            this.coach_states.replace(team, state);
+        }else{
+            this.coach_states.put(team, state);
+        }
+    }
+    
+    public void setRefereeState(RefereeState state){
+        this.referee_state = state;
+    }
+    
+    public void setContestantStrength(int strength, String team, int contestant){
+        ContestantTeam constestant_team = new ContestantTeam(team, contestant);
+        
+        if(this.strengths.containsKey(constestant_team)){
+            this.strengths.replace(constestant_team, strength);
+        }else{
+            this.strengths.put(constestant_team, strength);
+        }
     }
     
     public void newGame(){
