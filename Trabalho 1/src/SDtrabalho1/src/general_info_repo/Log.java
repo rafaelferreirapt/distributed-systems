@@ -122,6 +122,7 @@ public class Log {
      */
     public synchronized void newGame(){
         match.newGame();
+        this.newGame(this.match.getNumberOfGames());
     }
     
     /**

@@ -27,6 +27,8 @@ public class Referee extends Thread {
 
         this.setName("Referee");
         state = RefereeState.START_OF_THE_MATCH;
+        
+        this.log.initRefereeState(state);
     }
     
     @Override
@@ -83,6 +85,7 @@ public class Referee extends Thread {
                     }
                     break;
             }
+            this.log.setRefereeState(state);
         }
     }
 }

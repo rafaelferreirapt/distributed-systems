@@ -30,6 +30,8 @@ public class Coach extends Thread {
         
         this.setName("Coach " + id + " of the team " + team);
         state = CoachState.WAIT_FOR_REFEREE_COMMAND;
+        
+        this.log.initCoachState(team, state);
     }
     
     /**
@@ -61,6 +63,7 @@ public class Coach extends Thread {
                     this.state = CoachState.WAIT_FOR_REFEREE_COMMAND;
                     break;
             }
+            this.log.setCoachState(team, state);
         }
     }
 }

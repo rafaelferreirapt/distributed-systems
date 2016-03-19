@@ -18,9 +18,9 @@ public class Contestant  extends Thread {
     private final String team;
     private final Log log;
     
-    private playground.IContestant playground;
-    private bench.IContestant bench;
-    private referee_site.IContestant referee_site;
+    private final playground.IContestant playground;
+    private final bench.IContestant bench;
+    private final referee_site.IContestant referee_site;
     
     private static final int MAX_STRENGTH = 4;
     private static final int MIN_STRENGTH = 1;
@@ -41,6 +41,8 @@ public class Contestant  extends Thread {
         
         this.strength = (int)Math.ceil(Math.random() * MAX_STRENGTH + MIN_STRENGTH);
         state = ContestantState.SEAT_AT_THE_BENCH;
+        
+        this.log.initContestantState(this.state, this.team, this.strength);
     }
     
     public String getTeam(){
@@ -95,6 +97,7 @@ public class Contestant  extends Thread {
                     this.state = ContestantState.DO_YOUR_BEST;
                     break;
             }
+            this.log.setContestantState(state, team, this.id);
         }
     }
 }
