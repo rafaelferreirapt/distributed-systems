@@ -5,6 +5,9 @@
 package general_info_repo;
 
 import com.sun.javafx.binding.Logging;
+import entities.CoachState;
+import entities.ContestantState;
+import entities.RefereeState;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -176,6 +179,22 @@ public class Log {
     
     public synchronized int getTrials_played() {
         return match.getTrials_played();
+    }
+    
+    public synchronized void setContestantState(ContestantState state, String team, int contestant){
+        this.match.setContestantState(state, team, contestant);
+    }
+    
+    public synchronized void setCoachState(String team, CoachState state){
+        this.match.setCoachState(team, state);
+    }
+    
+    public synchronized void setRefereeState(RefereeState state){
+        this.match.setRefereeState(state);
+    }
+    
+    public synchronized void setContestantStrength(int strength, String team, int contestant){
+        this.match.setContestantStrength(strength, team, contestant);
     }
     
 }

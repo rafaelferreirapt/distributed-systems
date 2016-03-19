@@ -41,7 +41,7 @@ public class Match {
        return instance;
     }
     
-    public void setContestantState(ContestantState state, String team, int contestant){
+    public synchronized void setContestantState(ContestantState state, String team, int contestant){
         ContestantTeam constestant_team = new ContestantTeam(team, contestant);
         
         if(this.contestants_states.containsKey(constestant_team)){
@@ -51,7 +51,7 @@ public class Match {
         }
     }
     
-    public void setCoachState(String team, CoachState state){
+    public synchronized void setCoachState(String team, CoachState state){
         if(this.coach_states.containsKey(team)){
             this.coach_states.replace(team, state);
         }else{
@@ -59,11 +59,11 @@ public class Match {
         }
     }
     
-    public void setRefereeState(RefereeState state){
+    public synchronized void setRefereeState(RefereeState state){
         this.referee_state = state;
     }
     
-    public void setContestantStrength(int strength, String team, int contestant){
+    public synchronized void setContestantStrength(int strength, String team, int contestant){
         ContestantTeam constestant_team = new ContestantTeam(team, contestant);
         
         if(this.strengths.containsKey(constestant_team)){
