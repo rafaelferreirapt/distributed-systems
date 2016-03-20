@@ -21,6 +21,8 @@ public class Match {
     private final int number_of_games = 1000;
     private final int pontuation[];
     
+    private int pos_center_rope_init = 0;
+    
     private final HashMap<String, HashMap<Integer, Integer>> strengths;
     private final HashMap<String, HashMap<Integer, ContestantState>> contestants_states;
     private final HashMap<String, CoachState> coach_states;
@@ -39,6 +41,7 @@ public class Match {
         this.pontuation = new int[2];   
         this.pontuation[0] = this.pontuation[1] = 0;
     }
+    
     public static Match getInstance() {
        if(instance == null) {
           instance = new Match();
@@ -93,6 +96,7 @@ public class Match {
     }
     
     public void newTrial(int centre_of_the_rope){
+        this.pos_center_rope_init = centre_of_the_rope;
         this.games[(game-1)].newTrial(centre_of_the_rope);
         
     }
@@ -166,5 +170,9 @@ public class Match {
     
     public synchronized int getContestantStrength(String team, int contestant){
         return this.strengths.get(team).get(contestant);
+    }
+
+    public int getPos_center_rope_init() {
+        return pos_center_rope_init;
     }
 }

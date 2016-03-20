@@ -246,7 +246,7 @@ public class Log {
             pw.print(" ");
         }
         
-        pw.printf("- - - . - - - %2d --\n", this.match.gameNumberOfTrials());
+        pw.printf("- - - . - - - %2d %2d\n", this.match.gameNumberOfTrials(), this.match.getPos_center_rope_init());
                     
         pw.flush();
 
