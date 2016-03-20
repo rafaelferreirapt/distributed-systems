@@ -46,12 +46,10 @@ public class Main{
         lg = Log.getInstance();
 
         ref =  new Referee((playground.IReferee) playground, (bench.IReferee) bench, (referee_site.IReferee) referee_site);
-        ref.start();
         
         coachs =  new Coach [nCoaches];
         for(int i = 0; i<nCoaches; i++){
             coachs[i] = new Coach((bench.ICoach) bench,(referee_site.ICoach) referee_site, i, teams[i]);
-            coachs[i].start();
         }
         
         contestants = new Contestant[nContestants];
@@ -62,9 +60,21 @@ public class Main{
             }else{
                 contestants[i] = new Contestant((playground.IContestant) playground,(bench.IContestant) bench, (referee_site.IContestant) referee_site, i-4, teams[1]);
             }
+        }
+        
+        /* now start */
+        ref.start();
+        
+        for(int i = 0; i<nCoaches; i++){
+            coachs[i].start();
+        }
+        
+        for(int i = 0; i<nContestants; i++){
             contestants[i].start();
         }
-            
+        
+        /* now join */
+        
         for(int i = 0; i<nCoaches; i++){
             try {
                 coachs[i].join();

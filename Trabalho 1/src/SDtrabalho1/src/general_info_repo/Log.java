@@ -184,8 +184,9 @@ public class Log {
         return match.getTrials_played();
     }
     
-    public synchronized void initContestantState(ContestantState state, String team, int contestant){
+    public synchronized void initContestant(ContestantState state, int strength, String team, int contestant){
         this.match.setContestantState(state, team, contestant);
+        this.match.setContestantStrength(strength, team, contestant);
     }
     
     public synchronized void setContestantState(ContestantState state, String team, int contestant){

@@ -42,7 +42,7 @@ public class Contestant  extends Thread {
         this.strength = (int)Math.ceil(Math.random() * MAX_STRENGTH + MIN_STRENGTH);
         state = ContestantState.SEAT_AT_THE_BENCH;
         
-        this.log.initContestantState(this.state, this.team, this.strength);
+        this.log.initContestant(this.state, this.strength, this.team, this.id);
     }
     
     public String getTeam(){
