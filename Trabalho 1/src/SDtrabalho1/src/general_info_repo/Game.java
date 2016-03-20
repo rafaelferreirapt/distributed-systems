@@ -16,6 +16,7 @@ public class Game {
     private Trial[] trials;
     private int trial_idx = 0;
     private int[] pontuation;
+    private int centre_of_the_rope = 0;
     
     public Game(int id){
         this.trials = new Trial[6];
@@ -25,10 +26,12 @@ public class Game {
         this.pontuation[1] = 0;
     }
     
-    public void newTrial(int centre_of_the_rope){
+    public void newTrial(){
         assert trial_idx < this.trials.length;
-        
-        this.trials[trial_idx] = new Trial(trial_idx++, centre_of_the_rope);
+        if(trial_idx!=0){
+            this.centre_of_the_rope = this.trials[trial_idx-1].getRope();
+        }
+        this.trials[trial_idx] = new Trial(trial_idx++, getCentre_of_the_rope());
     }
     
     public void updateRope(String team, int strength){
@@ -68,7 +71,7 @@ public class Game {
             }
             return 0;
         }else{
-            this.newTrial(0);
+            this.newTrial();
             return 1;
         }
     }
@@ -79,5 +82,9 @@ public class Game {
     
     public int gameNumberOfTrials(){
         return this.trial_idx;
+    }
+
+    public int getCentre_of_the_rope() {
+        return centre_of_the_rope;
     }
 }

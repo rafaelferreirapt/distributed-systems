@@ -129,7 +129,7 @@ public class Log {
      * 
      */
     public synchronized void newTrial(){
-        match.newTrial(0);
+        match.newTrial();
     }
     
     /**
@@ -246,7 +246,7 @@ public class Log {
             pw.print(" ");
         }
         
-        pw.printf("- - - . - - - %2d %2d\n", this.match.gameNumberOfTrials(), this.match.getPos_center_rope_init());
+        pw.printf("- - - . - - - %2d %2d\n", this.match.gameNumberOfTrials(), this.match.getCentre_of_the_rope());
                     
         pw.flush();
 

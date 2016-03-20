@@ -95,9 +95,8 @@ public class Match {
         this.games[game] = new Game(game++);
     }
     
-    public void newTrial(int centre_of_the_rope){
-        this.pos_center_rope_init = centre_of_the_rope;
-        this.games[(game-1)].newTrial(centre_of_the_rope);
+    public void newTrial(){
+        this.games[(game-1)].newTrial();
         
     }
     
@@ -172,7 +171,7 @@ public class Match {
         return this.strengths.get(team).get(contestant);
     }
 
-    public int getPos_center_rope_init() {
-        return pos_center_rope_init;
+    public int getCentre_of_the_rope() {
+        return this.games[(game-1)].getCentre_of_the_rope();
     }
 }
