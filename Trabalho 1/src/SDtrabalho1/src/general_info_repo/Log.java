@@ -246,7 +246,7 @@ public class Log {
             pw.print(" ");
         }
         
-        pw.println("- - - . - - - -- --");
+        pw.printf("- - - . - - - %2d --\n", this.match.gameNumberOfTrials());
                     
         pw.flush();
 

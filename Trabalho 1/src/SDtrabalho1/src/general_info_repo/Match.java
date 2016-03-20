@@ -147,7 +147,7 @@ public class Match {
     public int getTrials_played() {
         return trials_played;
     }
-
+    
     public synchronized RefereeState getRefereeState() {
         return referee_state;
     }
