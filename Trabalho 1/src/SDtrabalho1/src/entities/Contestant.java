@@ -22,8 +22,8 @@ public class Contestant  extends Thread {
     private final bench.IContestant bench;
     private final referee_site.IContestant referee_site;
     
-    private static final int MAX_STRENGTH = 4;
-    private static final int MIN_STRENGTH = 1;
+    private static final int MAX_STRENGTH = 29;
+    private static final int MIN_STRENGTH = 20;
     private int strength;
     
     private int lastTrial = 0, gamesInBench = 0;
@@ -39,7 +39,7 @@ public class Contestant  extends Thread {
         
         this.setName("Contestant " + id + " of the team " + team);
         
-        this.strength = (int)Math.ceil(Math.random() * MAX_STRENGTH + MIN_STRENGTH);
+        this.strength = MIN_STRENGTH + (int)Math.ceil(Math.random() * (MAX_STRENGTH - MIN_STRENGTH) + 1);
         state = ContestantState.SEAT_AT_THE_BENCH;
         
         this.log.initContestant(this.state, this.strength, this.team, this.id);
@@ -54,10 +54,10 @@ public class Contestant  extends Thread {
     }
     
     public void setStrength(int newStrength){
-        if(newStrength > 5){
-            this.strength = 5;
-        }else if(newStrength < 1){
-            this.strength = 1;
+        if(newStrength > 30){
+            this.strength = 30;
+        }else if(newStrength < 20){
+            this.strength = 20;
         }else{
             this.strength = newStrength;
         }

@@ -230,7 +230,7 @@ public class Log {
         
         for(Integer i : contestants){
             pw.print(this.match.getContestantState("A", i));
-            pw.print("  ");
+            pw.print(" ");
             pw.print(this.match.getContestantStrength("A", i));
             pw.print(" ");
         }
@@ -241,7 +241,7 @@ public class Log {
         
         for(Integer i : contestants){
             pw.print(this.match.getContestantState("B", i));
-            pw.print("  ");
+            pw.print(" ");
             pw.print(this.match.getContestantStrength("B", i));
             pw.print(" ");
         }
