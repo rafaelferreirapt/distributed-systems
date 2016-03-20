@@ -5,12 +5,17 @@
 package general_info_repo;
 
 import com.sun.javafx.binding.Logging;
+import entities.CoachState;
+import entities.ContestantState;
+import entities.RefereeState;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,23 +24,15 @@ import java.util.logging.Logger;
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Log {
+    
+    private final Match match = Match.getInstance();
+    
     /**
      *  File where the log will be saved
      */
     private final File log;
     
-    /**
-     * Name of the file where the log will be saved
-     */
-    private final String filename;
-    
     private static PrintWriter pw;
-    
-    /**
-     * Blocking variable, when this variable is true, 
-     * no more instances of this class can be instantiated
-     */
-    private static boolean canBeInstantiated = true;
     
     /**
      * This will be a singleton
@@ -44,38 +41,29 @@ public class Log {
     
     /**
      * This will instantiate the log Class
+     * Name of the file where the log will be saved
      * @param filename 
      */
     private Log(String filename){
         if(filename.length()==0){
             Date today = Calendar.getInstance().getTime();
             SimpleDateFormat date = new SimpleDateFormat("yyyyMMddhhmmss");
-            this.filename = "GameOfTheRope_" + date.format(today) + ".log";
-        }else{
-            this.filename = filename;
+            filename = "GameOfTheRope_" + date.format(today) + ".log";
         }
-        this.log = new File(this.filename);
+        this.log = new File(filename);
     }
     
     /**
-     * This method is used to init the log file, this is a singleton and we 
+     * This static constructor is used to init the log file, this is a singleton and we 
      * need to specify what is the filename, so we created this method that
      * will allow to instantiate the singleton.
-     * @param filename
-     * @return the unique  Log instance
-     * @throws Exception 
      */
-    public static Log init(String filename) throws Exception{
-        if(!canBeInstantiated){
-            throw new Exception("The log was already been instantiated!");
-        }
-        instance = new Log(filename);
-        canBeInstantiated = false;
+    static{
+        instance = new Log("");
         instance.writeInit();
-        return instance;
     }
     
-    public static Log getInstance(){
+    public synchronized static Log getInstance(){
         return instance;
     }
     
@@ -88,7 +76,6 @@ public class Log {
             pw.println("                               Game of the Rope - Description of the internal state");
             pw.println("Ref Coa 1 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Coa 2 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5       Trial");
             pw.println("Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS");
-            pw.println("###  #### ### ## ### ## ### ## ### ## ### ##  #### ### ## ### ## ### ## ### ## ### ## - - - . - - - -- --");
             pw.flush();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Logging.class.getName()).log(Level.SEVERE, null, ex);
@@ -99,7 +86,7 @@ public class Log {
      *  to be done... 
      * @param line 
      */
-    public void writeLine(String line){
+    public synchronized void writeLine(String line){
         
     }
     
@@ -107,7 +94,7 @@ public class Log {
      * This method will be called every time that one game is started
      * @param gameNumber 
      */
-    public void newGame(int gameNumber){
+    public synchronized void newGame(int gameNumber){
         pw.println("Game " + gameNumber);
         pw.println("Ref Coa 1 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Coa 2 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5       Trial");
         pw.println("Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS");
@@ -117,7 +104,7 @@ public class Log {
     /**
      * This method will be called to finish write the logging file
      */
-    public void writeEnd(){
+    public synchronized void writeEnd(){
         pw.println("\nLegend:");
         pw.println("Ref Sta    – state of the referee");
         pw.println("Coa # Stat - state of the coach of team # (# - 1 .. 2)");
@@ -129,4 +116,140 @@ public class Log {
         pw.flush();
         pw.close();
     }
+    
+    /**
+     * 
+     */
+    public synchronized void newGame(){
+        match.newGame();
+        this.newGame(this.match.getNumberOfGames());
+    }
+    
+    /**
+     * 
+     */
+    public synchronized void newTrial(){
+        match.newTrial();
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public synchronized int gameNumberOfTrials(){
+        return match.gameNumberOfTrials();
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public synchronized int getNumberOfGames(){
+        return match.getNumberOfGames();
+    }
+    
+    /**
+     * 
+     */
+    public synchronized void declareMatchWinner(){
+        match.declareMatchWinner();
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public synchronized int getTotalNumberOfGames(){
+        return match.getTotalNumberOfGames();
+    }
+    
+    /**
+     * 
+     * @param team
+     * @param strength
+     */
+    public synchronized void updateRope(String team, int strength){
+        this.match.updateRope(team, strength);
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public synchronized int assertTrialDecision(){
+        return this.match.assertTrialDecision();
+    }
+    
+    public synchronized int getTrials_played() {
+        return match.getTrials_played();
+    }
+    
+    public synchronized void initContestant(ContestantState state, int strength, String team, int contestant){
+        this.match.setContestantState(state, team, contestant);
+        this.match.setContestantStrength(strength, team, contestant);
+    }
+    
+    public synchronized void setContestantState(ContestantState state, String team, int contestant){
+        this.match.setContestantState(state, team, contestant);
+        this.printLine();
+    }
+    
+    public synchronized void initCoachState(String team, CoachState state){
+        this.match.setCoachState(team, state);
+    }
+    
+    public synchronized void setCoachState(String team, CoachState state){
+        this.match.setCoachState(team, state);
+        this.printLine();
+    }
+    
+    public synchronized void initRefereeState(RefereeState state){
+        this.match.setRefereeState(state);
+    }
+    
+    public synchronized void setRefereeState(RefereeState state){
+        this.match.setRefereeState(state);
+        this.printLine();
+    }
+    
+    public synchronized void setContestantStrength(int strength, String team, int contestant){
+        this.match.setContestantStrength(strength, team, contestant);
+    }
+    
+    private void printLine(){
+        if(this.match.getNumberOfGames()==0){
+            return;
+        }
+        
+        pw.print(this.match.getRefereeState());
+        pw.print("  ");
+        pw.print(this.match.getCoachState("A"));
+        pw.print(" ");
+        
+        Set<Integer> contestants = this.match.getNumberOfContestants("A");
+        
+        for(Integer i : contestants){
+            pw.print(this.match.getContestantState("A", i));
+            pw.print("  ");
+            pw.print(this.match.getContestantStrength("A", i));
+            pw.print(" ");
+        }
+            
+        pw.print(" ");
+        pw.print(this.match.getCoachState("B"));
+        pw.print(" ");
+        
+        for(Integer i : contestants){
+            pw.print(this.match.getContestantState("B", i));
+            pw.print("  ");
+            pw.print(this.match.getContestantStrength("B", i));
+            pw.print(" ");
+        }
+        
+        pw.printf("- - - . - - - %2d %2d\n", this.match.gameNumberOfTrials(), this.match.getCentre_of_the_rope());
+                    
+        pw.flush();
+
+    }
+    
 }

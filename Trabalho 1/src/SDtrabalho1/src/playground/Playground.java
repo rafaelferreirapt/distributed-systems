@@ -4,6 +4,7 @@
  */
 package playground;
 
+import general_info_repo.Log;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,13 +14,13 @@ import java.util.logging.Logger;
  */
 public class Playground implements IReferee, IContestant{
     
+    private final Log log;
     private static boolean trialDecisionTaken = false, startTrialTaken = false;
     private int contestantsIn = 0;
     private int contestantsAlerted = 0;
-    private Match match = Match.getInstance();
     
     public Playground(){
-    
+        this.log = Log.getInstance();
     }
     
     /**
@@ -92,7 +93,7 @@ public class Playground implements IReferee, IContestant{
             Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
         }
         */
-        match.updateRope(team, strength);
+        log.updateRope(team, strength);
     }
     
 }

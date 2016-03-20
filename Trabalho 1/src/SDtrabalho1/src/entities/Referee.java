@@ -5,7 +5,6 @@
 package entities;
 
 import general_info_repo.Log;
-import playground.Match;
 
 /**
  *
@@ -16,21 +15,20 @@ public class Referee extends Thread {
     private RefereeState state;
     
     private final Log log;
-    private playground.IReferee playground;
-    private bench.IReferee bench;
-    private referee_site.IReferee referee_site;
+    private final playground.IReferee playground;
+    private final bench.IReferee bench;
+    private final referee_site.IReferee referee_site;
     
-    private Match match;
-    
-    public Referee(playground.IReferee p, bench.IReferee b, referee_site.IReferee r, Log log){
+    public Referee(playground.IReferee p, bench.IReferee b, referee_site.IReferee r){
         this.playground = p;
         this.bench = b;
         this.referee_site = r;
-        this.log = log;
-        this.match = Match.getInstance();
+        this.log = Log.getInstance();
 
         this.setName("Referee");
         state = RefereeState.START_OF_THE_MATCH;
+        
+        this.log.initRefereeState(state);
     }
     
     @Override
@@ -42,8 +40,8 @@ public class Referee extends Thread {
                     this.state = RefereeState.START_OF_A_GAME;
                     break;
                 case START_OF_A_GAME:
-                    this.match.newGame();
-                    this.match.newTrial(0);
+                    this.log.newGame();
+                    this.log.newTrial();
                     //System.err.println("New Trial");
                     this.bench.callTrial(); // vai acordar os treinadores <= esperar que os jogadores estejam todos sentados
                     this.state = RefereeState.TEAMS_READY;
@@ -58,7 +56,7 @@ public class Referee extends Thread {
                     this.bench.assertTrialDecision();
                     this.playground.assertTrialDecision();
                     
-                    switch(this.match.assertTrialDecision()){
+                    switch(this.log.assertTrialDecision()){
                         case -2:
                         case 2:
                         case 0:
@@ -73,13 +71,13 @@ public class Referee extends Thread {
                     
                     break;
                 case END_OF_A_GAME:
-                    System.out.println("Ended game: " + this.match.getNumberOfGames());
+                    System.out.println("Ended game: " + this.log.getNumberOfGames());
 
-                    if(this.match.getNumberOfGames() < this.match.getTotalNumberOfGames()){
+                    if(this.log.getNumberOfGames() < this.log.getTotalNumberOfGames()){
                         this.referee_site.annouceNewGame();
                         this.state = RefereeState.START_OF_A_GAME;
                     }else{
-                        this.match.declareMatchWinner();
+                        this.log.declareMatchWinner();
                         this.referee_site.declareMatchWinner();
                         this.bench.wakeUp();
                         this.state = RefereeState.END_OF_THE_MATCH;
@@ -87,6 +85,7 @@ public class Referee extends Thread {
                     }
                     break;
             }
+            this.log.setRefereeState(state);
         }
     }
 }

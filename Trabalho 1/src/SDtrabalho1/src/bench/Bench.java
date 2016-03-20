@@ -6,7 +6,7 @@ package bench;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import playground.Match;
+import general_info_repo.Match;
 
 /**
  *
@@ -26,7 +26,6 @@ public class Bench implements IReferee, ICoach, IContestant{
     private boolean endMatch = false, selectedA = false, selectedB = false;
     private int lastContestantUpA = 0;
     private int lastContestantUpB = 0;
-    private Match match = Match.getInstance();
     
     private boolean trialDecisionTaken = false;
     private boolean callTrialTaken = false;

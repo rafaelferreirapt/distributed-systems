@@ -5,7 +5,6 @@
 package entities;
 
 import general_info_repo.Log;
-import playground.Match;
 
 /**
  *
@@ -19,10 +18,9 @@ public class Contestant  extends Thread {
     private final String team;
     private final Log log;
     
-    private playground.IContestant playground;
-    private bench.IContestant bench;
-    private referee_site.IContestant referee_site;
-    private Match match;
+    private final playground.IContestant playground;
+    private final bench.IContestant bench;
+    private final referee_site.IContestant referee_site;
     
     private static final int MAX_STRENGTH = 4;
     private static final int MIN_STRENGTH = 1;
@@ -30,19 +28,21 @@ public class Contestant  extends Thread {
     
     private int lastTrial = 0, gamesInBench = 0;
     
-    public Contestant(playground.IContestant p, bench.IContestant b, referee_site.IContestant r, int id, String team, Log log){
+    public Contestant(playground.IContestant p, bench.IContestant b, referee_site.IContestant r, int id, String team){
         this.playground = p;
         this.bench = b;
         this.referee_site = r;
-        this.log = log;
+        this.log = Log.getInstance();
         
         this.team = team;
         this.id = id;
         
         this.setName("Contestant " + id + " of the team " + team);
-        this.match = Match.getInstance();
+        
         this.strength = (int)Math.ceil(Math.random() * MAX_STRENGTH + MIN_STRENGTH);
         state = ContestantState.SEAT_AT_THE_BENCH;
+        
+        this.log.initContestant(this.state, this.strength, this.team, this.id);
     }
     
     public String getTeam(){
@@ -58,7 +58,7 @@ public class Contestant  extends Thread {
         while(!referee_site.endOfMatch()){
             switch(this.state){
                 case DO_YOUR_BEST:
-                    this.gamesInBench = this.match.trials_played - this.lastTrial;
+                    this.gamesInBench = this.log.getTrials_played() - this.lastTrial;
                     if(this.gamesInBench > 0){
                         this.strength = this.strength + this.gamesInBench;
                     }
@@ -69,12 +69,14 @@ public class Contestant  extends Thread {
                         this.strength = 1;
                     }
                     
+                    this.log.setContestantStrength(this.strength, this.team, this.id);
+                    
                     this.playground.pullTheRope(this.strength, this.team);
                     if(this.strength > 1){
                         this.strength -= 1;
                     }
 
-                    this.lastTrial = this.match.trials_played + 1;
+                    this.lastTrial = this.log.getTrials_played() + 1;
                     this.referee_site.amDone();
 
                     this.playground.waitForAssertTrialDecision();
@@ -97,6 +99,7 @@ public class Contestant  extends Thread {
                     this.state = ContestantState.DO_YOUR_BEST;
                     break;
             }
+            this.log.setContestantState(state, team, this.id);
         }
     }
 }
