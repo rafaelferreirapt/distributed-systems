@@ -69,6 +69,8 @@ public class Contestant  extends Thread {
                         this.strength = 1;
                     }
                     
+                    this.log.setContestantStrength(this.strength, this.team, this.id);
+                    
                     this.playground.pullTheRope(this.strength, this.team);
                     if(this.strength > 1){
                         this.strength -= 1;
