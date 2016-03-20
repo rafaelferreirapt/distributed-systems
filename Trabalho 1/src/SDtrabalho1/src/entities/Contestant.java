@@ -53,12 +53,30 @@ public class Contestant  extends Thread {
         return this.id;
     }
     
+    public void setStrength(int newStrength){
+        if(newStrength > 5){
+            this.strength = 5;
+        }else if(newStrength < 1){
+            this.strength = 1;
+        }else{
+            this.strength = newStrength;
+        }
+    }
+    
+    public int getStrength(){
+        return this.strength;
+    }
+    
+    public int getLastTrial(){
+        return this.lastTrial;
+    }
+    
     @Override
     public void run(){
         while(!referee_site.endOfMatch()){
             switch(this.state){
                 case DO_YOUR_BEST:
-                    this.gamesInBench = this.log.getTrials_played() - this.lastTrial;
+                    /*this.gamesInBench = this.log.getTrials_played() - this.lastTrial;
                     if(this.gamesInBench > 0){
                         this.strength = this.strength + this.gamesInBench;
                     }
@@ -70,23 +88,25 @@ public class Contestant  extends Thread {
                     }
                     
                     this.log.setContestantStrength(this.strength, this.team, this.id);
-                    
+                    */
+
                     this.playground.pullTheRope(this.strength, this.team);
-                    if(this.strength > 1){
+                    /*if(this.strength > 1){
                         this.strength -= 1;
                     }
-
+*/
                     this.lastTrial = this.log.getTrials_played() + 1;
                     this.referee_site.amDone();
 
                     this.playground.waitForAssertTrialDecision();
                     this.bench.seatDown(this.team);
                     this.state = ContestantState.SEAT_AT_THE_BENCH;
+
                     break;
                 case SEAT_AT_THE_BENCH:
-
-                    this.bench.waitForCallContestants(this.team, this.id); // espera que o treinador o chame
                     
+                    this.bench.waitForCallContestants(this.team, this.id); // espera que o treinador o chame
+
                     if(this.referee_site.endOfMatch()){
                         break;
                     }
@@ -95,6 +115,7 @@ public class Contestant  extends Thread {
                     this.state = ContestantState.STAND_IN_POSITION;
                     break;
                 case STAND_IN_POSITION:
+
                     this.playground.waitForStartTrial();
                     this.state = ContestantState.DO_YOUR_BEST;
                     break;

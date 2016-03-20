@@ -47,11 +47,6 @@ public class Main{
 
         ref =  new Referee((playground.IReferee) playground, (bench.IReferee) bench, (referee_site.IReferee) referee_site);
         
-        coachs =  new Coach [nCoaches];
-        for(int i = 0; i<nCoaches; i++){
-            coachs[i] = new Coach((bench.ICoach) bench,(referee_site.ICoach) referee_site, i, teams[i]);
-        }
-        
         contestants = new Contestant[nContestants];
         
         for(int i = 0; i<nContestants; i++){
@@ -59,6 +54,26 @@ public class Main{
                 contestants[i] = new Contestant((playground.IContestant) playground,(bench.IContestant) bench, (referee_site.IContestant) referee_site, i+1, teams[0]);
             }else{
                 contestants[i] = new Contestant((playground.IContestant) playground,(bench.IContestant) bench, (referee_site.IContestant) referee_site, i-4, teams[1]);
+            }
+        }
+        Contestant[] contestantsA = new Contestant[nContestants/2];
+        Contestant[] contestantsB = new Contestant[nContestants/2];
+
+        for(int i = 0; i<nContestants; i++){
+            if(contestants[i].getTeam().equals("A")){
+                contestantsA[i] = contestants[i];
+            }
+            else if(contestants[i].getTeam().equals("B")){
+                contestantsB[i-5] = contestants[i];
+            }
+        }
+        
+        coachs =  new Coach [nCoaches];
+        for(int i = 0; i<nCoaches; i++){
+            if(i == 0){
+                coachs[i] = new Coach((bench.ICoach) bench,(referee_site.ICoach) referee_site, i, teams[i], contestantsA);
+            }else{
+                coachs[i] = new Coach((bench.ICoach) bench,(referee_site.ICoach) referee_site, i, teams[i], contestantsB);
             }
         }
         

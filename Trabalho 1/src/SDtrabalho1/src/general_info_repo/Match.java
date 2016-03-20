@@ -18,7 +18,7 @@ public class Match {
     
     private final Game[] games;
     private int game = 0;
-    private final int number_of_games = 1000;
+    private final int number_of_games = 3;
     private final int pontuation[];
     
     private int pos_center_rope_init = 0;
