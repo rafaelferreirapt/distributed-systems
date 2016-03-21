@@ -53,7 +53,7 @@ public class Match {
     }
     
     /**
-     *
+     * The match is a singleton.
      * @return
      */
     public static Match getInstance() {
@@ -64,7 +64,7 @@ public class Match {
     }
     
     /**
-     *
+     * Update the contestant state.
      * @param state
      * @param team
      * @param contestant
@@ -83,7 +83,7 @@ public class Match {
     }
     
     /**
-     *
+     * Set coach state.
      * @param team
      * @param state
      */
@@ -96,7 +96,7 @@ public class Match {
     }
     
     /**
-     *
+     * Set the referee state.
      * @param state
      */
     public synchronized void setRefereeState(RefereeState state){
@@ -104,7 +104,7 @@ public class Match {
     }
     
     /**
-     *
+     * Set position, we only need the team and the contestant id.
      * @param team
      * @param contestant
      */
@@ -119,7 +119,7 @@ public class Match {
     }
     
     /**
-     *
+     * Remove position of the player.
      * @param team
      * @param position
      */
@@ -139,7 +139,7 @@ public class Match {
     }
     
     /**
-     *
+     * Positions A.
      * @return
      */
     public synchronized HashMap getPositionsA(){
@@ -147,7 +147,7 @@ public class Match {
     }
     
     /**
-     *
+     * Positions B.
      * @return
      */
     public synchronized HashMap getPositionsB(){
@@ -155,7 +155,7 @@ public class Match {
     }
     
     /**
-     *
+     * Set contestant strength.
      * @param strength
      * @param team
      * @param contestant
@@ -182,7 +182,7 @@ public class Match {
     }
     
     /**
-     *
+     * New game and print line with the game.
      */
     public void newGame(){
         assert game < this.games.length;
@@ -193,7 +193,7 @@ public class Match {
     }
     
     /**
-     *
+     * New trial with the game.
      */
     public void newTrial(){
         this.games[(game-1)].newTrial();
@@ -201,7 +201,7 @@ public class Match {
     }
     
     /**
-     *
+     * Game number of trials played.
      * @return
      */
     public int gameNumberOfTrials(){
@@ -209,7 +209,7 @@ public class Match {
     }
     
     /**
-     *
+     * Number of games played.
      * @return
      */
     public int getNumberOfGames(){
@@ -217,7 +217,7 @@ public class Match {
     }
     
     /**
-     *
+     * Declare match winner.
      * @return
      */
     public String declareMatchWinner(){
@@ -236,7 +236,7 @@ public class Match {
     }
     
     /**
-     *
+     * Total number of games.
      * @return
      */
     public int getTotalNumberOfGames(){
@@ -244,7 +244,8 @@ public class Match {
     }
     
     /**
-     *
+     * Update the rope only needs the team and contestant because the match has
+     * the strengths of each contestant.
      * @param team
      * @param strength
      */
@@ -253,7 +254,7 @@ public class Match {
     }
     
     /**
-     *
+     * Assert trial decision.
      * @return
      */
     public int assertTrialDecision(){
@@ -273,7 +274,7 @@ public class Match {
     }
 
     /**
-     *
+     * Number of trials played.
      * @return
      */
     public int getTrials_played() {
@@ -281,7 +282,7 @@ public class Match {
     }
     
     /**
-     *
+     * Get referee state.
      * @return
      */
     public synchronized RefereeState getRefereeState() {
@@ -289,7 +290,7 @@ public class Match {
     }
     
     /**
-     *
+     * Get coach state.
      * @param team
      * @return
      */
@@ -298,7 +299,7 @@ public class Match {
     }
     
     /**
-     *
+     * Get contestant state.
      * @param team
      * @param contestant
      * @return
@@ -308,7 +309,7 @@ public class Match {
     }
     
     /**
-     *
+     * Get number of contestants.
      * @param team
      * @return
      */
@@ -317,7 +318,7 @@ public class Match {
     }
     
     /**
-     *
+     * Get contestant strength.
      * @param team
      * @param contestant
      * @return
@@ -327,7 +328,7 @@ public class Match {
     }
 
     /**
-     *
+     * Get centre of the rope.
      * @return
      */
     public int getCentre_of_the_rope() {
@@ -335,7 +336,7 @@ public class Match {
     }
     
     /**
-     *
+     * Get contestant last trial.
      * @param team
      * @param contestant
      * @return
@@ -348,7 +349,7 @@ public class Match {
     }
     
     /**
-     *
+     * Get winner.
      * @return
      */
     public String getWinner(){
@@ -356,7 +357,7 @@ public class Match {
     }
     
     /**
-     *
+     * Refresh strengths.
      * @param team
      */
     public synchronized void refreshStrengths(String team){
@@ -374,7 +375,7 @@ public class Match {
     }
     
     /**
-     *
+     * Set contestant last trial.
      * @param team
      * @param contestant
      */

@@ -10,16 +10,16 @@ package general_info_repo;
  */
 public class Game {
     
-    private int id;
+    private final int id;
     private String winner;
     private char winner_short;
-    private Trial[] trials;
+    private final Trial[] trials;
     private int trial_idx = 0;
-    private int[] pontuation;
+    private final int[] pontuation;
     private int centre_of_the_rope = 0;
     
     /**
-     *
+     * The game id, is the number of game of the match.
      * @param id
      */
     public Game(int id){
@@ -31,7 +31,7 @@ public class Game {
     }
     
     /**
-     *
+     * New trial of the game.
      */
     public void newTrial(){
         assert trial_idx < this.trials.length;
@@ -42,7 +42,7 @@ public class Game {
     }
     
     /**
-     *
+     * Update the center of the rope with the strength and team.
      * @param team
      * @param strength
      */
@@ -51,7 +51,8 @@ public class Game {
     }
     
     /**
-     *
+     * This method will determine if one game is wonned by team A or B or if
+     * is a draw.
      * @return
      */
     public int assertTrialDecision(){
@@ -93,7 +94,7 @@ public class Game {
     }
     
     /**
-     *
+     * Winner of the game.
      * @return
      */
     public char getWinner(){
@@ -101,7 +102,7 @@ public class Game {
     }
     
     /**
-     *
+     * Get the log winner String.
      * @return
      */
     public String getWinnerString(){
@@ -109,7 +110,7 @@ public class Game {
     }
     
     /**
-     *
+     * Number of trials played in the game.
      * @return
      */
     public int gameNumberOfTrials(){
@@ -117,7 +118,7 @@ public class Game {
     }
 
     /**
-     *
+     * Get the centre of the rope in that game.
      * @return
      */
     public int getCentre_of_the_rope() {

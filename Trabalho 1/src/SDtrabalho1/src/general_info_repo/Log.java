@@ -64,7 +64,7 @@ public class Log {
     }
     
     /**
-     *
+     * This is a singleton, this is important to return the Log instance.
      * @return
      */
     public synchronized static Log getInstance(){
@@ -72,7 +72,7 @@ public class Log {
     }
     
     /**
-     * This method writes the head of the logging file
+     * This method writes the head of the logging file.
      */
     private void writeInit(){
         try{
@@ -87,14 +87,6 @@ public class Log {
     }
     
     /**
-     *  to be done... 
-     * @param line 
-     */
-    public synchronized void writeLine(String line){
-        
-    }
-    
-    /**
      * This method will be called every time that one game is started
      * @param gameNumber 
      */
@@ -106,7 +98,7 @@ public class Log {
     }
     
     /**
-     * This method will be called to finish write the logging file
+     * This method will be called to finish write the logging file.
      */
     public synchronized void writeEnd(){
         pw.println("\nLegend:");
@@ -122,7 +114,7 @@ public class Log {
     }
     
     /**
-     * 
+     * New game and print line with the game.
      */
     public synchronized void newGame(){
         match.newGame();
@@ -130,14 +122,14 @@ public class Log {
     }
     
     /**
-     * 
+     * New trial with the game.
      */
     public synchronized void newTrial(){
         match.newTrial();
     }
     
     /**
-     * 
+     * Game number of trials played.
      * @return 
      */
     public synchronized int gameNumberOfTrials(){
@@ -145,7 +137,7 @@ public class Log {
     }
     
     /**
-     * 
+     * Number of games played.
      * @return 
      */
     public synchronized int getNumberOfGames(){
@@ -153,14 +145,14 @@ public class Log {
     }
     
     /**
-     * 
+     * Declare match winner.
      */
     public synchronized void declareMatchWinner(){
         pw.println(match.declareMatchWinner());
     }
     
     /**
-     * 
+     * Total number of games.
      * @return 
      */
     public synchronized int getTotalNumberOfGames(){
@@ -168,7 +160,8 @@ public class Log {
     }
     
     /**
-     * 
+     * Update the rope only needs the team and contestant because the match has
+     * the strengths of each contestant.
      * @param team
      * @param contestant
      */
@@ -177,25 +170,15 @@ public class Log {
     }
     
     /**
-     * 
+     * Assert trial decision.
      * @return 
      */
     public synchronized int assertTrialDecision(){
-        int decision = this.match.assertTrialDecision();
-        
-        /*switch(decision){
-            case 2:
-            case -2:
-            case 0:
-                pw.println(this.match.getWinner());
-                break;
-        }*/
-        
-        return decision;
+        return this.match.assertTrialDecision();
     }
     
     /**
-     *
+     * Number of trials played.
      * @return
      */
     public synchronized int getTrials_played() {
@@ -203,7 +186,7 @@ public class Log {
     }
     
     /**
-     *
+     * Init the contestant with the initial state, team and contestant.
      * @param state
      * @param team
      * @param contestant
@@ -214,7 +197,7 @@ public class Log {
     }
     
     /**
-     *
+     * Update the contestant state.
      * @param state
      * @param team
      * @param contestant
@@ -225,7 +208,7 @@ public class Log {
     }
     
     /**
-     *
+     * Init coach.
      * @param team
      * @param state
      */
@@ -234,7 +217,7 @@ public class Log {
     }
     
     /**
-     *
+     * Set coach state.
      * @param team
      * @param state
      */
@@ -244,7 +227,7 @@ public class Log {
     }
     
     /**
-     *
+     * Init the referee state.
      * @param state
      */
     public synchronized void initRefereeState(RefereeState state){
@@ -252,7 +235,7 @@ public class Log {
     }
     
     /**
-     *
+     * Set the referee state.
      * @param state
      */
     public synchronized void setRefereeState(RefereeState state){
@@ -261,7 +244,7 @@ public class Log {
     }
     
     /**
-     *
+     * Get the contestant last trial, we only need the team and the contestant id.
      * @param team
      * @param contestant
      * @return
@@ -271,7 +254,7 @@ public class Log {
     }
     
     /**
-     *
+     * Set the contestant last trial, we only need the team and the contestant id.
      * @param team
      * @param contestant
      */
@@ -280,7 +263,7 @@ public class Log {
     }
     
     /**
-     *
+     * Refresh strengths of the team, the coach calls this method.
      * @param team
      */
     public synchronized void refreshStrengths(String team){
@@ -288,7 +271,7 @@ public class Log {
     }
     
     /**
-     *
+     * Set position, we only need the team and the contestant id.
      * @param team
      * @param contestant
      */
@@ -297,7 +280,7 @@ public class Log {
     }
     
     /**
-     *
+     * Remove position of the player.
      * @param team
      * @param contestant
      */
@@ -377,7 +360,7 @@ public class Log {
     }
     
     /**
-     *
+     * Print game winner.
      */
     public synchronized void printGameWinner(){
         if(this.match.getNumberOfGames() > 0){
@@ -386,7 +369,7 @@ public class Log {
     }
     
     /**
-     *
+     * Print match winner.
      */
     public synchronized void printMatchWinner(){
         
