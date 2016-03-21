@@ -22,9 +22,9 @@ public class Referee extends Thread {
     /**
      * It will be passed to the Referee the methods of the bench and referee site
      * that the coach have acess. 
-     * @param p
-     * @param b
-     * @param r
+     * @param p Instance that implements playground referee methods.
+     * @param b Instance that implements bench referee methods.
+     * @param r Instance that implements referee site referee methods.
      */
     public Referee(playground.IReferee p, bench.IReferee b, referee_site.IReferee r){
         this.playground = p;

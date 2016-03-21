@@ -14,8 +14,8 @@ public interface IContestant {
      * The coaches are waken up in operation followCoachAdvice by the last of 
      * their selected contestants to stand in position.
      * In Contestants life cycle, transition between "seat at the bench" and "stand in position"
-     * @param team
-     * @param idC
+     * @param team Team identifier, can be A or B.
+     * @param idC The contestant ID.
      */
     public void followCoachAdvice(String team, int idC);
     
@@ -23,7 +23,7 @@ public interface IContestant {
      * In Contestants life cycle, transition between "doYourBest" and "seat at the bench"
      * SEAT_AT_THE_BENCH – blocking state the contestants are waken up in operation 
      * callContestants by their coaches if they are selected to join the next trial
-     * @param team
+     * @param team Team identifier, can be A or B.
      */
     public void seatDown(String team);
     
@@ -35,8 +35,8 @@ public interface IContestant {
      * conunts how many contestants there is in the bench. One more important thing,
      * we need the ID of the last contestant that is up to then inform the coach that
      * all the contestants are ready to go.
-     * @param team the team identifier
-     * @param idC the contestant ID
+     * @param team Team identifier, can be A or B.
+     * @param idC The contestant ID.
      */
     public void waitForCallContestants(String team, int idC);
     

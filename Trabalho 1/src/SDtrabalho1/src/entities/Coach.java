@@ -23,9 +23,9 @@ public class Coach extends Thread {
      * It will be passed to the Coach the methods of the bench and referee site
      * that the coach have acess. The team is the coach team, very important to know
      * the identity of the coach.
-     * @param b
-     * @param r
-     * @param team
+     * @param b Instance that implements bench coach methods.
+     * @param r Instance that implements referee site coach methods.
+     * @param team Team identifier, can be A or B.
      */
     public Coach(bench.ICoach b, referee_site.ICoach r, String team){
         this.bench = b;
@@ -43,7 +43,6 @@ public class Coach extends Thread {
     /**
      * This function represents the life cycle of Coach.
      */
-    
     @Override
     public void run(){
         while(!referee_site.endOfMatch()){

@@ -26,11 +26,11 @@ public class Contestant  extends Thread {
      * It will be passed to the Contestant the methods of the bench and referee site
      * that the contestant have acess. The team is the contestant team and the ID
      * is very important to know the identity of the contestant.
-     * @param p
-     * @param b
-     * @param r
-     * @param id
-     * @param team
+     * @param p Instance that implements playground contestant methods.
+     * @param b Instance that implements bench contestant methods.
+     * @param r Instance that implements referee site contestant methods.
+     * @param id Contestant identifier.
+     * @param team Team identifier, can be A or B.
      */
     public Contestant(playground.IContestant p, bench.IContestant b, referee_site.IContestant r, int id, String team){
         this.playground = p;
@@ -50,7 +50,7 @@ public class Contestant  extends Thread {
     
     /**
      * Get contestant team
-     * @return
+     * @return team, can be "A" or "B"
      */
     public String getTeam(){
         return this.team;
@@ -58,7 +58,7 @@ public class Contestant  extends Thread {
     
     /**
      * Get contestant ID
-     * @return
+     * @return contestant ID.
      */
     public int getID(){
         return this.id;

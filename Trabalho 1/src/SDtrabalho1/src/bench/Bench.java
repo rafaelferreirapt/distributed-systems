@@ -32,8 +32,8 @@ public class Bench implements IReferee, ICoach, IContestant{
     /**
      * We need to know how many contestants there are in the bench,
      * for that we pass how many contestants there are in the team A or B
-     * @param nContestantsTeamA
-     * @param nContestantsTeamB
+     * @param nContestantsTeamA number of contestants of the team A
+     * @param nContestantsTeamB number of contestants of the team B
      */
     public Bench(int nContestantsTeamA, int nContestantsTeamB){
         this.nContestantsInBench = nContestantsTeamA + nContestantsTeamB;
@@ -124,7 +124,7 @@ public class Bench implements IReferee, ICoach, IContestant{
     /**
      * In coach life cycle, transition between "watch trial" and "wait for referee command".
      * The coach will wait until 10 contestants are in the bench and then will continue.
-     * @param team
+     * @param team Team identifier, can be A or B.
      */
     @Override
     public synchronized void reviewNotes(String team) {
@@ -142,7 +142,7 @@ public class Bench implements IReferee, ICoach, IContestant{
      * The coach will select randomly the contestants, this will be the strategy, select random
      * the contestants. The contestants will make one "pool" to see if they are in the array of
      * the players selected.
-     * @param team
+     * @param team Team identifier, can be A or B.
      */
     @Override
     public synchronized void callContestants(String team) {
@@ -200,8 +200,8 @@ public class Bench implements IReferee, ICoach, IContestant{
      * conunts how many contestants there is in the bench. One more important thing,
      * we need the ID of the last contestant that is up to then inform the coach that
      * all the contestants are ready to go.
-     * @param team the team identifier
-     * @param idC the contestant ID
+     * @param team Team identifier, can be A or B.
+     * @param idC The contestant ID.
      */
     @Override
     public synchronized void waitForCallContestants(String team, int idC){
@@ -251,8 +251,8 @@ public class Bench implements IReferee, ICoach, IContestant{
      * The coaches are waken up in operation followCoachAdvice by the last of 
      * their selected contestants to stand in position.
      * In Contestants life cycle, transition between "seat at the bench" and "stand in position"
-     * @param team
-     * @param idC
+     * @param team Team identifier, can be A or B.
+     * @param idC The contestant ID.
      */
     @Override
     public synchronized void followCoachAdvice(String team, int idC) {
@@ -273,7 +273,7 @@ public class Bench implements IReferee, ICoach, IContestant{
     /**
      * The coach will wait until the last contestant stand in position to then 
      * follow the coach advice. The flags will be resetted.
-     * @param team
+     * @param team Team identifier, can be A or B.
      */
     @Override
     public synchronized void waitForFollowCoachAdvice(String team){
@@ -312,7 +312,7 @@ public class Bench implements IReferee, ICoach, IContestant{
      * In Contestants life cycle, transition between "doYourBest" and "seat at the bench"
      * SEAT_AT_THE_BENCH – blocking state the contestants are waken up in operation 
      * callContestants by their coaches if they are selected to join the next trial
-     * @param team
+     * @param team Team identifier, can be A or B.
      */
     @Override
     public synchronized void seatDown(String team){

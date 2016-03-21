@@ -20,7 +20,7 @@ public class Game {
     
     /**
      * The game id, is the number of game of the match.
-     * @param id
+     * @param id game identifier, game number in the match.
      */
     public Game(int id){
         this.trials = new Trial[6];
@@ -43,8 +43,8 @@ public class Game {
     
     /**
      * Update the center of the rope with the strength and team.
-     * @param team
-     * @param strength
+     * @param team can be "A" or "B"
+     * @param strength will be used to push the rope.
      */
     public void updateRope(String team, int strength){
         this.trials[trial_idx-1].updateRope(team, strength);
@@ -53,7 +53,8 @@ public class Game {
     /**
      * This method will determine if one game is wonned by team A or B or if
      * is a draw.
-     * @return
+     * @return decision, can be 2 (B), -2 (A) for knock outs; 0 for game finished with win or draw
+     * or 1 for new trial.
      */
     public int assertTrialDecision(){
         int rope = this.trials[trial_idx-1].getRope();
@@ -95,7 +96,7 @@ public class Game {
     
     /**
      * Winner of the game.
-     * @return
+     * @return game winner.
      */
     public char getWinner(){
         return this.winner_short;
@@ -103,7 +104,7 @@ public class Game {
     
     /**
      * Get the log winner String.
-     * @return
+     * @return log winner string.
      */
     public String getWinnerString(){
         return this.winner;
@@ -111,7 +112,7 @@ public class Game {
     
     /**
      * Number of trials played in the game.
-     * @return
+     * @return game number of trials.
      */
     public int gameNumberOfTrials(){
         return this.trial_idx;
@@ -119,7 +120,7 @@ public class Game {
 
     /**
      * Get the centre of the rope in that game.
-     * @return
+     * @return centre of the rope in that game.
      */
     public int getCentre_of_the_rope() {
         return centre_of_the_rope;

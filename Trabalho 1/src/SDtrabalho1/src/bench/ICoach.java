@@ -13,7 +13,7 @@ public interface ICoach {
     /**
      * In coach life cycle, transition between "watch trial" and "wait for referee command".
      * The coach will wait until 10 contestants are in the bench and then will continue.
-     * @param team
+     * @param team Team identifier, can be A or B.
      */
     public void reviewNotes(String team);
 
@@ -22,7 +22,7 @@ public interface ICoach {
      * The coach will select randomly the contestants, this will be the strategy, select random
      * the contestants. The contestants will make one "pool" to see if they are in the array of
      * the players selected.
-     * @param team
+     * @param team Team identifier, can be A or B.
      */
     public void callContestants(String team);
     
@@ -41,7 +41,7 @@ public interface ICoach {
    /**
      * The coach will wait until the last contestant stand in position to then 
      * follow the coach advice. The flags will be resetted.
-     * @param team
+     * @param team Team identifier, can be A or B.
      */
     public void waitForFollowCoachAdvice(String team);
 }

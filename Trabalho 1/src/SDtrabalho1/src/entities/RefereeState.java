@@ -12,7 +12,7 @@ package entities;
 public enum RefereeState {
 
     /**
-     * START_OF_THE_MATCH => SOM
+     * START_OF_THE_MATCH = SOM
      */
     START_OF_THE_MATCH{
         @Override
@@ -22,7 +22,7 @@ public enum RefereeState {
     },
 
     /**
-     * START_OF_A_GAME => SOF
+     * START_OF_A_GAME = SOF
      */
     START_OF_A_GAME{
         @Override
@@ -32,7 +32,7 @@ public enum RefereeState {
     },
 
     /**
-     * TEAMS_READY => TRY
+     * TEAMS_READY = TRY
      */
     TEAMS_READY{
         @Override
@@ -42,7 +42,7 @@ public enum RefereeState {
     },
 
     /**
-     * WAIT_FOR_TRIAL_CONCLUSION => WTC
+     * WAIT_FOR_TRIAL_CONCLUSION = WTC
      */
     WAIT_FOR_TRIAL_CONCLUSION{
         @Override
@@ -52,7 +52,7 @@ public enum RefereeState {
     },
 
     /**
-     * END_OF_A_GAME => EOG
+     * END_OF_A_GAME = EOG
      */
     END_OF_A_GAME{
         @Override
@@ -62,7 +62,7 @@ public enum RefereeState {
     },
 
     /**
-     * END_OF_THE_MATCH => EOM
+     * END_OF_THE_MATCH = EOM
      */
     END_OF_THE_MATCH{
         @Override
