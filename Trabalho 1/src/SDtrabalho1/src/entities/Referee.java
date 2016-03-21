@@ -20,7 +20,8 @@ public class Referee extends Thread {
     private final referee_site.IReferee referee_site;
     
     /**
-     *
+     * It will be passed to the Referee the methods of the bench and referee site
+     * that the coach have acess. 
      * @param p
      * @param b
      * @param r

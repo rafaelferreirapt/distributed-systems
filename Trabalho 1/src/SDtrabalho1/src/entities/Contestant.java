@@ -23,7 +23,9 @@ public class Contestant  extends Thread {
     private final referee_site.IContestant referee_site;
     
     /**
-     *
+     * It will be passed to the Contestant the methods of the bench and referee site
+     * that the contestant have acess. The team is the contestant team and the ID
+     * is very important to know the identity of the contestant.
      * @param p
      * @param b
      * @param r
@@ -47,7 +49,7 @@ public class Contestant  extends Thread {
     }
     
     /**
-     *
+     * Get contestant team
      * @return
      */
     public String getTeam(){
@@ -55,7 +57,7 @@ public class Contestant  extends Thread {
     }
     
     /**
-     *
+     * Get contestant ID
      * @return
      */
     public int getID(){

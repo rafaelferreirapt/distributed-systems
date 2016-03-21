@@ -12,7 +12,7 @@ package entities;
 public enum ContestantState {
 
     /**
-     *
+     * SEAT_AT_THE_BENCH => SAB
      */
     SEAT_AT_THE_BENCH{
         @Override
@@ -22,7 +22,7 @@ public enum ContestantState {
     },
 
     /**
-     *
+     * STAND_IN_POSITION => SIP
      */
     STAND_IN_POSITION{
         @Override
@@ -32,7 +32,7 @@ public enum ContestantState {
     },
 
     /**
-     *
+     * DO_YOUR_BEST => DYB
      */
     DO_YOUR_BEST{
          @Override

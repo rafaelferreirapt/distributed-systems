@@ -7,7 +7,7 @@ package entities;
 public enum CoachState {
 
     /**
-     *
+     * WAIT_FOR_REFEREE_COMMAND => WFRC
      */
     WAIT_FOR_REFEREE_COMMAND{
         @Override
@@ -17,7 +17,7 @@ public enum CoachState {
     },
 
     /**
-     *
+     * ASSEMBLE_TEAM => ASTM
      */
     ASSEMBLE_TEAM{
         @Override
@@ -27,7 +27,7 @@ public enum CoachState {
     },
 
     /**
-     *
+     * WATCH_TRIAL => WCTL
      */
     WATCH_TRIAL{
         @Override

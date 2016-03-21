@@ -9,8 +9,6 @@ import entities.Coach;
 import entities.Contestant;
 import entities.Referee;
 import general_info_repo.Log;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import playground.Playground;
 import referee_site.RefereeSite;
 
@@ -49,7 +47,7 @@ public class Main{
         
         coachs =  new Coach [nCoaches];
         for(int i = 0; i<nCoaches; i++){
-            coachs[i] = new Coach((bench.ICoach) bench,(referee_site.ICoach) referee_site, i, teams[i]);
+            coachs[i] = new Coach((bench.ICoach) bench,(referee_site.ICoach) referee_site, teams[i]);
         }
         
         contestants = new Contestant[nContestants];

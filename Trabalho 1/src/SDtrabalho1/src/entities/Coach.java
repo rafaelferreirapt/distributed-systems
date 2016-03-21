@@ -14,28 +14,27 @@ public class Coach extends Thread {
     
     private CoachState state;
     
-    private final int id;
     private final Log log;
     private final String team;
     private final bench.ICoach bench;
     private final referee_site.ICoach referee_site;
     
     /**
-     *
+     * It will be passed to the Coach the methods of the bench and referee site
+     * that the coach have acess. The team is the coach team, very important to know
+     * the identity of the coach.
      * @param b
      * @param r
-     * @param id
      * @param team
      */
-    public Coach(bench.ICoach b, referee_site.ICoach r, int id, String team){
+    public Coach(bench.ICoach b, referee_site.ICoach r, String team){
         this.bench = b;
         this.referee_site = r;
         this.log = Log.getInstance();
         
         this.team = team;
-        this.id = id;
         
-        this.setName("Coach " + id + " of the team " + team);
+        this.setName("Coach of the team " + team);
         state = CoachState.WAIT_FOR_REFEREE_COMMAND;
         
         this.log.initCoachState(team, state);
