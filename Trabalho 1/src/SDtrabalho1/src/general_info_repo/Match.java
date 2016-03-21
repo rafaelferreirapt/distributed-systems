@@ -120,18 +120,18 @@ public class Match {
         return this.game;
     }
     
-    public void declareMatchWinner(){
+    public String declareMatchWinner(){
         this.updatePontuation();
 
         if(this.pontuation[0] > this.pontuation[1]){
             //A
-            System.err.println("Match was won by team A ("+this.pontuation[0]+"-"+this.pontuation[1]+").");
+            return "Match was won by team A ("+this.pontuation[0]+"-"+this.pontuation[1]+").";
         }else if(this.pontuation[0] < this.pontuation[1]){
             // B
-            System.err.println("Match was won by team B ("+this.pontuation[0]+"-"+this.pontuation[1]+").");
+            return "Match was won by team B ("+this.pontuation[0]+"-"+this.pontuation[1]+").";
         }else{
             // Draw
-            System.err.println("Match was a draw.");
+            return "Match was a draw.";
         }
     }
     
@@ -192,6 +192,10 @@ public class Match {
             return 0;
         }
         return this.contestant_last_trial.get(team).get(contestant);
+    }
+    
+    public String getWinner(){
+        return this.games[(game-1)].getWinnerString();
     }
     
     public synchronized void refreshStrengths(String team){

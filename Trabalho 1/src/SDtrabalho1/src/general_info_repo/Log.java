@@ -14,7 +14,6 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -152,7 +151,7 @@ public class Log {
      * 
      */
     public synchronized void declareMatchWinner(){
-        match.declareMatchWinner();
+        pw.println(match.declareMatchWinner());
     }
     
     /**
@@ -177,7 +176,17 @@ public class Log {
      * @return 
      */
     public synchronized int assertTrialDecision(){
-        return this.match.assertTrialDecision();
+        int decision = this.match.assertTrialDecision();
+        
+        switch(decision){
+            case 2:
+            case -2:
+            case 0:
+                pw.println(this.match.getWinner());
+                break;
+        }
+        
+        return decision;
     }
     
     public synchronized int getTrials_played() {

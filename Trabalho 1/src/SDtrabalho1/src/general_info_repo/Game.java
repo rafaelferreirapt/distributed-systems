@@ -42,11 +42,11 @@ public class Game {
         int rope = this.trials[trial_idx-1].getRope();
         
         if(rope >= 4){
-            this.winner = "was won by team B by knock out in " + trial_idx + " trials.";
+            this.winner = "Game "+this.id+" was won by team B by knock out in " + trial_idx + " trials.";
             this.winner_short = 'B';
             return 2;
         }else if(rope <= -4){
-            this.winner = "was won by team A by knock out in " + trial_idx + " trials.";
+            this.winner = "Game "+this.id+" was won by team A by knock out in " + trial_idx + " trials.";
             this.winner_short = 'A';
             return -2;
         }else if(rope > 0){
@@ -58,15 +58,15 @@ public class Game {
         if(trial_idx >= 6){
             if(this.pontuation[0] > this.pontuation[1]){
                 // A
-                this.winner = "was won by team A by points.";
+                this.winner = "Game "+this.id+" was won by team A by points.";
                 this.winner_short = 'A';
             }else if(this.pontuation[0] < this.pontuation[1]){
                 // B
-                this.winner = "was won by team B by points.";
+                this.winner = "Game "+this.id+" was won by team B by points.";
                 this.winner_short = 'B';
             }else{
                 // draw
-                this.winner = "was a draw.";
+                this.winner = "Game "+this.id+" was a draw.";
                 this.winner_short = 'D';
             }
             return 0;
@@ -78,6 +78,10 @@ public class Game {
     
     public char getWinner(){
         return this.winner_short;
+    }
+    
+    public String getWinnerString(){
+        return this.winner;
     }
     
     public int gameNumberOfTrials(){
