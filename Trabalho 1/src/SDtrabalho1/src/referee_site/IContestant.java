@@ -19,4 +19,8 @@ public interface IContestant {
     public void amDone();
 
     public boolean endOfMatch();
+    
+    public void positioned();
+    
+
 }

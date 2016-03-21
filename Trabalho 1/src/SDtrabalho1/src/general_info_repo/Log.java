@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -233,6 +234,32 @@ public class Log {
         this.match.refreshStrengths(team);
     }
     
+    public synchronized void setPosition(String team, int contestant){
+        this.match.setPosition(team, contestant);
+    }
+    
+    public synchronized void removePosition(String team, int contestant){
+        if(team.equals("A")){
+            HashMap<Integer, Integer> tmpA = this.match.getPositionsA();
+            for(int i = 1; i<=3; i++){
+                if(tmpA.containsKey(i)){
+                    if(tmpA.get(i) == contestant){
+                        this.match.removePosition(team, i);
+                    }
+                }
+            }
+        }else if(team.equals("B")){
+            HashMap<Integer, Integer> tmpB = this.match.getPositionsB();
+            for(int i = 1; i<=3; i++){
+                if(tmpB.containsKey(i)){
+                    if(tmpB.get(i) == contestant){
+                        this.match.removePosition(team, i);
+                    }
+                }
+            }
+        }
+    }
+    
     private void printLine(){
         if(this.match.getNumberOfGames()==0){
             return;
@@ -262,8 +289,26 @@ public class Log {
             pw.print(this.match.getContestantStrength("B", i));
             pw.print(" ");
         }
+        HashMap<Integer, Integer> positionsA = this.match.getPositionsA();
+        HashMap<Integer, Integer> positionsB = this.match.getPositionsB();
         
-        pw.printf("- - - . - - - %2d %2d\n", this.match.gameNumberOfTrials(), this.match.getCentre_of_the_rope());
+        String posA = "";
+        String posB = " ";
+        for(int i = 3; i>=1; i--){
+            if(positionsA.containsKey(i)){
+                posA += positionsA.get(i) + " ";
+            }else{
+                posA += "- ";
+            }
+        }
+        for(int i = 1; i<=3; i++){
+            if(positionsB.containsKey(i)){
+                posB += positionsB.get(i) + " ";
+            }else{
+                posB += "- ";
+            }
+        }
+        pw.printf(posA + "." + posB + "%2d %2d\n", this.match.gameNumberOfTrials(), this.match.getCentre_of_the_rope());
                     
         pw.flush();
     }

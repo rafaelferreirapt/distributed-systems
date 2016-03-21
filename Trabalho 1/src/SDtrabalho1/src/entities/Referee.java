@@ -37,11 +37,12 @@ public class Referee extends Thread {
             switch(this.state){
                 case START_OF_THE_MATCH:
                     this.referee_site.annouceNewGame();
+                    this.log.newGame();
+
                     this.state = RefereeState.START_OF_A_GAME;
                     break;
                 case START_OF_A_GAME:
-                    this.log.printGameWinner();
-                    this.log.newGame();
+                    
                     this.log.newTrial();
                     //System.err.println("New Trial");
                     this.bench.callTrial(); // vai acordar os treinadores <= esperar que os jogadores estejam todos sentados
@@ -49,6 +50,8 @@ public class Referee extends Thread {
                     break;
                 case TEAMS_READY:
                     this.referee_site.waitForInformReferee(); // esperar que o treinador o informe
+                    this.referee_site.waitAllPositioned();
+
                     this.playground.startTrial();
                     this.state = RefereeState.WAIT_FOR_TRIAL_CONCLUSION;
                     break;
@@ -56,7 +59,7 @@ public class Referee extends Thread {
                     this.referee_site.waitForAmDone(); // ultimo jogador tem de avisar o arbitro
                     this.bench.assertTrialDecision();
                     this.playground.assertTrialDecision();
-                    
+
                     switch(this.log.assertTrialDecision()){
                         case -2:
                         case 2:
@@ -72,10 +75,14 @@ public class Referee extends Thread {
                     
                     break;
                 case END_OF_A_GAME:
+
                     System.out.println("Ended game: " + this.log.getNumberOfGames());
 
                     if(this.log.getNumberOfGames() < this.log.getTotalNumberOfGames()){
+
                         this.referee_site.annouceNewGame();
+                        this.log.printGameWinner();
+                        this.log.newGame();
                         this.state = RefereeState.START_OF_A_GAME;
                     }else{
                         //this.log.declareMatchWinner();
@@ -84,6 +91,8 @@ public class Referee extends Thread {
                         this.state = RefereeState.END_OF_THE_MATCH;
                         System.out.println("END MATCH");
                     }
+
+
                     break;
             }
             this.log.setRefereeState(state);

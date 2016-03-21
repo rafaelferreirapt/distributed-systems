@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 public class RefereeSite implements ICoach, IContestant, IReferee{
     
     private boolean informRefereeA = false, informRefereeB = false;
-    private int amDoneCounter = 0;
-    private boolean matchEnds = false, amDoneCondition = false;
+    private int amDoneCounter = 0, positionedCounter = 0;
+    private boolean matchEnds = false, amDoneCondition = false, positionedCondition = false;
     public RefereeSite(){
     
     }
@@ -108,6 +108,28 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
         this.amDoneCounter = 0;
         this.amDoneCondition = false;
     }
+    
+    @Override
+    public synchronized void positioned() {
+        if(++this.positionedCounter == 6){
+            this.positionedCondition = true;
+            notifyAll();
+        }
+    }
+    
+    @Override
+    public synchronized void waitAllPositioned() {
+        while(!this.positionedCondition){
+            try {
+                wait();
+                
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        this.positionedCounter = 0;
+        this.positionedCondition = false;
+    }    
     
     @Override
     public synchronized boolean endOfMatch(){

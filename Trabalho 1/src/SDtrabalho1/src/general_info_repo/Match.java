@@ -21,11 +21,15 @@ public class Match {
     private int game = 0;
     private final int number_of_games = 100;
     private final int pontuation[];
+    private int positionA = 0;
+    private int positionB = 0;
     
     private static final int MAX_STRENGTH = 29;
     private static final int MIN_STRENGTH = 20;
     
     private final HashMap<String, HashMap<Integer, Integer>> strengths;
+    private final HashMap<Integer, Integer> positionsA;
+    private final HashMap<Integer, Integer> positionsB;
     private final HashMap<String, HashMap<Integer, Integer>> contestant_last_trial;
     private final HashMap<String, HashMap<Integer, ContestantState>> contestants_states;
     private final HashMap<String, CoachState> coach_states;
@@ -37,6 +41,8 @@ public class Match {
     
     private Match() {
         this.strengths = new HashMap<>();
+        this.positionsA = new HashMap<>();
+        this.positionsB = new HashMap<>();
         this.contestants_states = new HashMap<>();
         this.contestant_last_trial = new HashMap<>();
         this.coach_states = new HashMap<>();
@@ -76,6 +82,39 @@ public class Match {
     
     public synchronized void setRefereeState(RefereeState state){
         this.referee_state = state;
+    }
+    
+    public synchronized void setPosition(String team, int contestant){
+        if(team.equals("A")){
+            this.positionA++;
+            this.positionsA.put(this.positionA, contestant);
+        }else if(team.equals("B")){
+            this.positionB++;
+            this.positionsB.put(this.positionB, contestant);
+        }
+    }
+    
+    public synchronized void removePosition(String team, int position){
+        if(team.equals("A")){
+            if(this.positionsA.containsKey(position)){
+                this.positionsA.remove(position);
+                this.positionA--;
+            }
+            
+        }else if(team.equals("B")){
+            if(this.positionsB.containsKey(position)){
+                this.positionsB.remove(position);
+                this.positionB--;
+            }
+        }
+    }
+    
+    public synchronized HashMap getPositionsA(){
+        return this.positionsA;
+    }
+    
+    public synchronized HashMap getPositionsB(){
+        return this.positionsB;
     }
     
     public synchronized void setContestantStrength(int strength, String team, int contestant){

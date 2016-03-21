@@ -58,12 +58,15 @@ public class Contestant  extends Thread {
                     this.referee_site.amDone();
 
                     this.playground.waitForAssertTrialDecision();
+                    this.log.removePosition(this.team, this.id);
+                    
                     this.bench.seatDown(this.team);
+
                     this.state = ContestantState.SEAT_AT_THE_BENCH;
 
                     break;
                 case SEAT_AT_THE_BENCH:
-                    
+
                     this.bench.waitForCallContestants(this.team, this.id); // espera que o treinador o chame
 
                     if(this.referee_site.endOfMatch()){
@@ -71,10 +74,12 @@ public class Contestant  extends Thread {
                     }
                     
                     this.bench.followCoachAdvice(this.team, this.id); // o ultimo informa o utilizador
+                    this.log.setPosition(this.team, this.id);
+
                     this.state = ContestantState.STAND_IN_POSITION;
                     break;
                 case STAND_IN_POSITION:
-
+                    this.referee_site.positioned();
                     this.playground.waitForStartTrial();
                     this.state = ContestantState.DO_YOUR_BEST;
                     break;
