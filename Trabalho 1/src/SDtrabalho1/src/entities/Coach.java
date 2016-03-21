@@ -66,7 +66,9 @@ public class Coach extends Thread {
                     this.state = CoachState.WAIT_FOR_REFEREE_COMMAND;
                     break;
             }
-            this.log.setCoachState(team, state);
+            if(!referee_site.endOfMatch()){
+                this.log.setCoachState(team, state);
+            }
         }
     }
 }

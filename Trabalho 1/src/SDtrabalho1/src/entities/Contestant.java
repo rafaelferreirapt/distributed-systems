@@ -79,7 +79,9 @@ public class Contestant  extends Thread {
                     this.state = ContestantState.DO_YOUR_BEST;
                     break;
             }
-            this.log.setContestantState(state, team, this.id);
+            if(!referee_site.endOfMatch()){
+                this.log.setContestantState(state, team, this.id);
+            }
         }
     }
 }

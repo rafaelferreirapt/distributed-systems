@@ -178,13 +178,13 @@ public class Log {
     public synchronized int assertTrialDecision(){
         int decision = this.match.assertTrialDecision();
         
-        switch(decision){
+        /*switch(decision){
             case 2:
             case -2:
             case 0:
                 pw.println(this.match.getWinner());
                 break;
-        }
+        }*/
         
         return decision;
     }
@@ -266,6 +266,16 @@ public class Log {
         pw.printf("- - - . - - - %2d %2d\n", this.match.gameNumberOfTrials(), this.match.getCentre_of_the_rope());
                     
         pw.flush();
+    }
+    
+    public synchronized void printGameWinner(){
+        if(this.match.getNumberOfGames() > 0){
+            pw.println(this.match.getWinner());
+        }
+    }
+    
+    public synchronized void printMatchWinner(){
+        
     }
     
 }

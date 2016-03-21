@@ -40,6 +40,7 @@ public class Referee extends Thread {
                     this.state = RefereeState.START_OF_A_GAME;
                     break;
                 case START_OF_A_GAME:
+                    this.log.printGameWinner();
                     this.log.newGame();
                     this.log.newTrial();
                     //System.err.println("New Trial");
@@ -77,7 +78,7 @@ public class Referee extends Thread {
                         this.referee_site.annouceNewGame();
                         this.state = RefereeState.START_OF_A_GAME;
                     }else{
-                        this.log.declareMatchWinner();
+                        //this.log.declareMatchWinner();
                         this.referee_site.declareMatchWinner();
                         this.bench.wakeUp();
                         this.state = RefereeState.END_OF_THE_MATCH;
@@ -87,5 +88,7 @@ public class Referee extends Thread {
             }
             this.log.setRefereeState(state);
         }
+        this.log.printGameWinner();
+        this.log.declareMatchWinner();
     }
 }
