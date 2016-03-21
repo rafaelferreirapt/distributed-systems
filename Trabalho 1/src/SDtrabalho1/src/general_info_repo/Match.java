@@ -8,6 +8,7 @@ import entities.CoachState;
 import entities.ContestantState;
 import entities.RefereeState;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -21,9 +22,11 @@ public class Match {
     private final int number_of_games = 3;
     private final int pontuation[];
     
-    private int pos_center_rope_init = 0;
+    private static final int MAX_STRENGTH = 29;
+    private static final int MIN_STRENGTH = 20;
     
     private final HashMap<String, HashMap<Integer, Integer>> strengths;
+    private final HashMap<String, HashMap<Integer, Integer>> contestant_last_trial;
     private final HashMap<String, HashMap<Integer, ContestantState>> contestants_states;
     private final HashMap<String, CoachState> coach_states;
     private RefereeState referee_state;
@@ -35,6 +38,7 @@ public class Match {
     private Match() {
         this.strengths = new HashMap<>();
         this.contestants_states = new HashMap<>();
+        this.contestant_last_trial = new HashMap<>();
         this.coach_states = new HashMap<>();
         
         this.games = new Game[number_of_games];
@@ -75,6 +79,14 @@ public class Match {
     }
     
     public synchronized void setContestantStrength(int strength, String team, int contestant){
+        if(strength > 30){
+            strength = 30;
+        }else if(strength == 0){
+            strength = MIN_STRENGTH + (int)Math.ceil(Math.random() * (MAX_STRENGTH - MIN_STRENGTH) + 1);
+        }else if(strength < 20){
+            strength = 20;
+        }
+        
         if(this.strengths.containsKey(team)){
             if(this.strengths.get(team).containsKey(contestant)){
                 this.strengths.get(team).replace(contestant, strength);
@@ -173,5 +185,41 @@ public class Match {
 
     public int getCentre_of_the_rope() {
         return this.games[(game-1)].getCentre_of_the_rope();
+    }
+    
+    public synchronized int getContestantLastTrial(String team, int contestant){
+        if(!this.contestant_last_trial.get(team).containsKey(contestant)){
+            return 0;
+        }
+        return this.contestant_last_trial.get(team).get(contestant);
+    }
+    
+    public synchronized void refreshStrengths(String team){
+        for(Entry<Integer, Integer> entry : this.strengths.get(team).entrySet()) {
+            int strength = entry.getValue();
+            
+            if(this.getContestantLastTrial(team, entry.getValue()) == this.trials_played){
+                strength--;
+            }else{
+                strength++;
+            }
+            
+            this.setContestantStrength(strength, team, entry.getKey());
+        }
+    }
+    
+    public synchronized void setContestantLastTrial(String team, int contestant){
+        int last_trial = this.getTrials_played() + 1;
+        
+        if(this.contestant_last_trial.containsKey(team)){
+            if(this.contestant_last_trial.get(team).containsKey(contestant)){
+                this.contestant_last_trial.get(team).replace(contestant, last_trial);
+            }else{
+                this.contestant_last_trial.get(team).put(contestant, last_trial);
+            }
+        }else{
+            this.contestant_last_trial.put(team, new HashMap<>());
+            this.contestant_last_trial.get(team).put(contestant, last_trial);
+        }
     }
 }

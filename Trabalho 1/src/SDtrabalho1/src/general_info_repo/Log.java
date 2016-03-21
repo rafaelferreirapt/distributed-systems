@@ -166,10 +166,10 @@ public class Log {
     /**
      * 
      * @param team
-     * @param strength
+     * @param contestant
      */
-    public synchronized void updateRope(String team, int strength){
-        this.match.updateRope(team, strength);
+    public synchronized void updateRope(String team, int contestant){
+        this.match.updateRope(team, this.match.getContestantStrength(team, contestant));
     }
     
     /**
@@ -184,9 +184,9 @@ public class Log {
         return match.getTrials_played();
     }
     
-    public synchronized void initContestant(ContestantState state, int strength, String team, int contestant){
+    public synchronized void initContestant(ContestantState state, String team, int contestant){
         this.match.setContestantState(state, team, contestant);
-        this.match.setContestantStrength(strength, team, contestant);
+        this.match.setContestantStrength(0, team, contestant);
     }
     
     public synchronized void setContestantState(ContestantState state, String team, int contestant){
@@ -212,8 +212,16 @@ public class Log {
         this.printLine();
     }
     
-    public synchronized void setContestantStrength(int strength, String team, int contestant){
-        this.match.setContestantStrength(strength, team, contestant);
+    public synchronized int getContestantLastTrial(String team, int contestant){
+        return this.match.getContestantLastTrial(team, contestant);
+    }
+    
+    public synchronized void setContestantLastTrial(String team, int contestant){
+        this.match.setContestantLastTrial(team, contestant);
+    }
+    
+    public synchronized void refreshStrengths(String team){
+        this.match.refreshStrengths(team);
     }
     
     private void printLine(){
@@ -249,7 +257,6 @@ public class Log {
         pw.printf("- - - . - - - %2d %2d\n", this.match.gameNumberOfTrials(), this.match.getCentre_of_the_rope());
                     
         pw.flush();
-
     }
     
 }

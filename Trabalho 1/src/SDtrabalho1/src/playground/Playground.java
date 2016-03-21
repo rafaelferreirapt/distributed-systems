@@ -84,7 +84,7 @@ public class Playground implements IReferee, IContestant{
      * Random time interval in the simulation 
      */
     @Override
-    public void pullTheRope(int strength, String team) {
+    public void pullTheRope(int id, String team) {
         /*
         // meter configurável
         try {
@@ -93,7 +93,7 @@ public class Playground implements IReferee, IContestant{
             Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
         }
         */
-        log.updateRope(team, strength);
+        log.updateRope(team, id);
     }
     
 }

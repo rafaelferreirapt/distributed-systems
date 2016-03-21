@@ -22,12 +22,6 @@ public class Contestant  extends Thread {
     private final bench.IContestant bench;
     private final referee_site.IContestant referee_site;
     
-    private static final int MAX_STRENGTH = 29;
-    private static final int MIN_STRENGTH = 20;
-    private int strength;
-    
-    private int lastTrial = 0, gamesInBench = 0;
-    
     public Contestant(playground.IContestant p, bench.IContestant b, referee_site.IContestant r, int id, String team){
         this.playground = p;
         this.bench = b;
@@ -38,11 +32,10 @@ public class Contestant  extends Thread {
         this.id = id;
         
         this.setName("Contestant " + id + " of the team " + team);
-        
-        this.strength = MIN_STRENGTH + (int)Math.ceil(Math.random() * (MAX_STRENGTH - MIN_STRENGTH) + 1);
+    
         state = ContestantState.SEAT_AT_THE_BENCH;
         
-        this.log.initContestant(this.state, this.strength, this.team, this.id);
+        this.log.initContestant(this.state,this.team, this.id);
     }
     
     public String getTeam(){
@@ -53,49 +46,15 @@ public class Contestant  extends Thread {
         return this.id;
     }
     
-    public void setStrength(int newStrength){
-        if(newStrength > 30){
-            this.strength = 30;
-        }else if(newStrength < 20){
-            this.strength = 20;
-        }else{
-            this.strength = newStrength;
-        }
-    }
-    
-    public int getStrength(){
-        return this.strength;
-    }
-    
-    public int getLastTrial(){
-        return this.lastTrial;
-    }
-    
     @Override
     public void run(){
         while(!referee_site.endOfMatch()){
             switch(this.state){
                 case DO_YOUR_BEST:
-                    /*this.gamesInBench = this.log.getTrials_played() - this.lastTrial;
-                    if(this.gamesInBench > 0){
-                        this.strength = this.strength + this.gamesInBench;
-                    }
+                    this.playground.pullTheRope(this.id, this.team);
                     
-                    if(this.strength > 5){
-                        this.strength = 5;
-                    }else if(this.strength < 1){
-                        this.strength = 1;
-                    }
+                    this.log.setContestantLastTrial(this.team, this.id);
                     
-                    this.log.setContestantStrength(this.strength, this.team, this.id);
-                    */
-
-                    this.playground.pullTheRope(this.strength, this.team);
-                    /*if(this.strength > 1){
-                        this.strength -= 1;
-                    }
-*/
-                    this.lastTrial = this.log.getTrials_played() + 1;
                     this.referee_site.amDone();
 
                     this.playground.waitForAssertTrialDecision();
