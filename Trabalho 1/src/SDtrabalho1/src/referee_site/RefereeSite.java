@@ -19,7 +19,7 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     
     /**
     * In referee life cycle, transition between "start of the match" and "start of a game" or 
-    * between "end of a game" and "start of a game"
+    * between "end of a game" and "start of a game".
     */
     @Override
     public void annouceNewGame() {
@@ -27,7 +27,7 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     }
 
     /**
-    * In referee life cycle, transition between "wait for trial conclusion" and "end of a game" 
+    * In referee life cycle, transition between "wait for trial conclusion" and "end of a game".
     */
     @Override
     public void declareGameWinner() {
@@ -35,7 +35,7 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     }
 
     /**
-    * In referee life cycle, transition between "end of a game" and "end of the match" 
+    * In referee life cycle, transition between "end of a game" and "end of the match".
     */
     @Override
     public void declareMatchWinner() {
@@ -43,8 +43,8 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     }
     
      /**
-     *the referee is waken up by the last of the coaches in operation 
-     *"informReferee" when the teams are ready to proceed
+     * The referee is waken up by the last of the coaches in operation 
+     * "informReferee" when the teams are ready to proceed. Coach method.
      * @param team
      */
     @Override
@@ -59,7 +59,7 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     }
     
     /**
-     *
+     * The referee waits to be informed by the team A and B.
      */
     @Override
     public synchronized void waitForInformReferee(){
@@ -75,8 +75,8 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     }
     
      /**
-     *the referee is waken up by the last of the contestants in operation amDone
-     *when the trial has come to an end
+     * The referee is waken up by the last of the contestants in operation amDone
+     * when the trial has come to an end.
      */
     @Override
     public synchronized void amDone() {
@@ -87,7 +87,8 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     }
     
     /**
-     *
+     * The referee will wait fot the last contestant in operation amDone
+     * when the trial has come to an end.
      */
     @Override
     public synchronized void waitForAmDone(){
@@ -103,7 +104,7 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     }
     
     /**
-     *
+     * The contestant notify the referee that is positioned.
      */
     @Override
     public synchronized void positioned() {
@@ -114,7 +115,7 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     }
     
     /**
-     *
+     * The referee waits for the contestant to be positioned.
      */
     @Override
     public synchronized void waitAllPositioned() {
@@ -131,7 +132,7 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     }    
     
     /**
-     *
+     * End of the match.
      * @return
      */
     @Override

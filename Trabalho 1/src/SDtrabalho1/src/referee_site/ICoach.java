@@ -10,17 +10,15 @@ package referee_site;
  */
 public interface ICoach {
     
-    /* COACH METHODS */
-
     /**
-     *the referee is waken up by the last of the coaches in operation 
-     *"informReferee" when the teams are ready to proceed
+     * The referee is waken up by the last of the coaches in operation 
+     * "informReferee" when the teams are ready to proceed
      * @param team
      */
     public void informReferee(String team);
 
     /**
-     *
+     * End of the match.
      * @return
      */
     public boolean endOfMatch();
