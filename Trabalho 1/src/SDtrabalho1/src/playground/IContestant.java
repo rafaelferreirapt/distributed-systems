@@ -12,11 +12,19 @@ public interface IContestant {
     
     /**
      * In Contestants life cycle, transition between "doYourBest" and "doYourBest"
+     * @param id
+     * @param team
      */
     public void pullTheRope(int id, String team);
     
+    /**
+     *
+     */
     public void waitForStartTrial();
     
+    /**
+     *
+     */
     public void waitForAssertTrialDecision();
     
 }

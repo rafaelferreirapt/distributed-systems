@@ -16,6 +16,10 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     private boolean informRefereeA = false, informRefereeB = false;
     private int amDoneCounter = 0, positionedCounter = 0;
     private boolean matchEnds = false, amDoneCondition = false, positionedCondition = false;
+
+    /**
+     *
+     */
     public RefereeSite(){
     
     }
@@ -56,6 +60,7 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
      /**
      *the referee is waken up by the last of the coaches in operation 
      *"informReferee" when the teams are ready to proceed
+     * @param team
      */
     @Override
     public synchronized void informReferee(String team) {
@@ -68,6 +73,9 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
 
     }
     
+    /**
+     *
+     */
     @Override
     public synchronized void waitForInformReferee(){
         while(!this.informRefereeA || !this.informRefereeB){
@@ -95,6 +103,9 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
         }
     }
     
+    /**
+     *
+     */
     @Override
     public synchronized void waitForAmDone(){
         while(!this.amDoneCondition){
@@ -109,6 +120,9 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
         this.amDoneCondition = false;
     }
     
+    /**
+     *
+     */
     @Override
     public synchronized void positioned() {
         if(++this.positionedCounter == 6){
@@ -117,6 +131,9 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
         }
     }
     
+    /**
+     *
+     */
     @Override
     public synchronized void waitAllPositioned() {
         while(!this.positionedCondition){
@@ -131,6 +148,10 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
         this.positionedCondition = false;
     }    
     
+    /**
+     *
+     * @return
+     */
     @Override
     public synchronized boolean endOfMatch(){
         return this.matchEnds;

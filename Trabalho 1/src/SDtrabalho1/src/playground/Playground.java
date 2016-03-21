@@ -19,6 +19,9 @@ public class Playground implements IReferee, IContestant{
     private int contestantsIn = 0;
     private int contestantsAlerted = 0;
     
+    /**
+     *
+     */
     public Playground(){
         this.log = Log.getInstance();
     }
@@ -37,6 +40,9 @@ public class Playground implements IReferee, IContestant{
         notifyAll();
     }
 
+    /**
+     *
+     */
     @Override
     public synchronized void waitForStartTrial(){
         while(!startTrialTaken){
@@ -61,6 +67,9 @@ public class Playground implements IReferee, IContestant{
         notifyAll();
     }
     
+    /**
+     *
+     */
     @Override
     public synchronized void waitForAssertTrialDecision(){
         while(!trialDecisionTaken){
@@ -82,6 +91,8 @@ public class Playground implements IReferee, IContestant{
     /**
      * In Contestants life cycle, transition between "doYourBest" and "doYourBest"
      * Random time interval in the simulation 
+     * @param id
+     * @param team
      */
     @Override
     public void pullTheRope(int id, String team) {

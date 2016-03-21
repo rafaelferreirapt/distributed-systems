@@ -20,6 +20,13 @@ public class Coach extends Thread {
     private final bench.ICoach bench;
     private final referee_site.ICoach referee_site;
     
+    /**
+     *
+     * @param b
+     * @param r
+     * @param id
+     * @param team
+     */
     public Coach(bench.ICoach b, referee_site.ICoach r, int id, String team){
         this.bench = b;
         this.referee_site = r;

@@ -52,6 +52,10 @@ public class Match {
         this.pontuation[0] = this.pontuation[1] = 0;
     }
     
+    /**
+     *
+     * @return
+     */
     public static Match getInstance() {
        if(instance == null) {
           instance = new Match();
@@ -59,6 +63,12 @@ public class Match {
        return instance;
     }
     
+    /**
+     *
+     * @param state
+     * @param team
+     * @param contestant
+     */
     public synchronized void setContestantState(ContestantState state, String team, int contestant){
         if(this.contestants_states.containsKey(team)){
             if(this.contestants_states.get(team).containsKey(contestant)){
@@ -72,6 +82,11 @@ public class Match {
         }
     }
     
+    /**
+     *
+     * @param team
+     * @param state
+     */
     public synchronized void setCoachState(String team, CoachState state){
         if(this.coach_states.containsKey(team)){
             this.coach_states.replace(team, state);
@@ -80,10 +95,19 @@ public class Match {
         }
     }
     
+    /**
+     *
+     * @param state
+     */
     public synchronized void setRefereeState(RefereeState state){
         this.referee_state = state;
     }
     
+    /**
+     *
+     * @param team
+     * @param contestant
+     */
     public synchronized void setPosition(String team, int contestant){
         if(team.equals("A")){
             this.positionA++;
@@ -94,6 +118,11 @@ public class Match {
         }
     }
     
+    /**
+     *
+     * @param team
+     * @param position
+     */
     public synchronized void removePosition(String team, int position){
         if(team.equals("A")){
             if(this.positionsA.containsKey(position)){
@@ -109,14 +138,28 @@ public class Match {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public synchronized HashMap getPositionsA(){
         return this.positionsA;
     }
     
+    /**
+     *
+     * @return
+     */
     public synchronized HashMap getPositionsB(){
         return this.positionsB;
     }
     
+    /**
+     *
+     * @param strength
+     * @param team
+     * @param contestant
+     */
     public synchronized void setContestantStrength(int strength, String team, int contestant){
         if(strength > 30){
             strength = 30;
@@ -138,6 +181,9 @@ public class Match {
         }
     }
     
+    /**
+     *
+     */
     public void newGame(){
         assert game < this.games.length;
         
@@ -146,19 +192,34 @@ public class Match {
         this.games[game] = new Game(game++);
     }
     
+    /**
+     *
+     */
     public void newTrial(){
         this.games[(game-1)].newTrial();
         
     }
     
+    /**
+     *
+     * @return
+     */
     public int gameNumberOfTrials(){
         return this.games[(game-1)].gameNumberOfTrials();
     }
     
+    /**
+     *
+     * @return
+     */
     public int getNumberOfGames(){
         return this.game;
     }
     
+    /**
+     *
+     * @return
+     */
     public String declareMatchWinner(){
         this.updatePontuation();
 
@@ -174,14 +235,27 @@ public class Match {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public int getTotalNumberOfGames(){
         return this.number_of_games;
     }
     
+    /**
+     *
+     * @param team
+     * @param strength
+     */
     public void updateRope(String team, int strength){
         this.games[(game-1)].updateRope(team, strength);
     }
     
+    /**
+     *
+     * @return
+     */
     public int assertTrialDecision(){
         this.trials_played++;
         return this.games[(game-1)].assertTrialDecision();
@@ -198,34 +272,74 @@ public class Match {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTrials_played() {
         return trials_played;
     }
     
+    /**
+     *
+     * @return
+     */
     public synchronized RefereeState getRefereeState() {
         return referee_state;
     }
     
+    /**
+     *
+     * @param team
+     * @return
+     */
     public synchronized CoachState getCoachState(String team){
         return this.coach_states.get(team);
     }
     
+    /**
+     *
+     * @param team
+     * @param contestant
+     * @return
+     */
     public synchronized ContestantState getContestantState(String team, int contestant){
         return this.contestants_states.get(team).get(contestant);
     }
     
+    /**
+     *
+     * @param team
+     * @return
+     */
     public synchronized Set<Integer> getNumberOfContestants(String team){
         return this.contestants_states.get(team).keySet();
     }
     
+    /**
+     *
+     * @param team
+     * @param contestant
+     * @return
+     */
     public synchronized int getContestantStrength(String team, int contestant){
         return this.strengths.get(team).get(contestant);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getCentre_of_the_rope() {
         return this.games[(game-1)].getCentre_of_the_rope();
     }
     
+    /**
+     *
+     * @param team
+     * @param contestant
+     * @return
+     */
     public synchronized int getContestantLastTrial(String team, int contestant){
         if(!this.contestant_last_trial.get(team).containsKey(contestant)){
             return 0;
@@ -233,10 +347,18 @@ public class Match {
         return this.contestant_last_trial.get(team).get(contestant);
     }
     
+    /**
+     *
+     * @return
+     */
     public String getWinner(){
         return this.games[(game-1)].getWinnerString();
     }
     
+    /**
+     *
+     * @param team
+     */
     public synchronized void refreshStrengths(String team){
         for(Entry<Integer, Integer> entry : this.strengths.get(team).entrySet()) {
             int strength = entry.getValue();
@@ -251,6 +373,11 @@ public class Match {
         }
     }
     
+    /**
+     *
+     * @param team
+     * @param contestant
+     */
     public synchronized void setContestantLastTrial(String team, int contestant){
         int last_trial = this.getTrials_played() + 1;
         

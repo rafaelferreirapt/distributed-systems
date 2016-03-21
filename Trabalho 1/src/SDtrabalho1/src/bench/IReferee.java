@@ -23,5 +23,8 @@ public interface IReferee {
      */
     public void assertTrialDecision();
     
+    /**
+     *
+     */
     public void wakeUp();
 }

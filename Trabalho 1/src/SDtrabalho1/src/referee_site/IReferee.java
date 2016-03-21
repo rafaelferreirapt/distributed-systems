@@ -28,11 +28,28 @@ public interface IReferee {
     */
     public void declareMatchWinner();
     
+    /**
+     *
+     * @return
+     */
     public boolean endOfMatch();
     
     /* */
+
+    /**
+     *
+     */
+
     public void waitForInformReferee();
+
+    /**
+     *
+     */
     public void waitForAmDone();
+
+    /**
+     *
+     */
     public void waitAllPositioned();
 
 }

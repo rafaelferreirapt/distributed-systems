@@ -63,6 +63,10 @@ public class Log {
         instance.writeInit();
     }
     
+    /**
+     *
+     * @return
+     */
     public synchronized static Log getInstance(){
         return instance;
     }
@@ -190,54 +194,113 @@ public class Log {
         return decision;
     }
     
+    /**
+     *
+     * @return
+     */
     public synchronized int getTrials_played() {
         return match.getTrials_played();
     }
     
+    /**
+     *
+     * @param state
+     * @param team
+     * @param contestant
+     */
     public synchronized void initContestant(ContestantState state, String team, int contestant){
         this.match.setContestantState(state, team, contestant);
         this.match.setContestantStrength(0, team, contestant);
     }
     
+    /**
+     *
+     * @param state
+     * @param team
+     * @param contestant
+     */
     public synchronized void setContestantState(ContestantState state, String team, int contestant){
         this.match.setContestantState(state, team, contestant);
         this.printLine();
     }
     
+    /**
+     *
+     * @param team
+     * @param state
+     */
     public synchronized void initCoachState(String team, CoachState state){
         this.match.setCoachState(team, state);
     }
     
+    /**
+     *
+     * @param team
+     * @param state
+     */
     public synchronized void setCoachState(String team, CoachState state){
         this.match.setCoachState(team, state);
         this.printLine();
     }
     
+    /**
+     *
+     * @param state
+     */
     public synchronized void initRefereeState(RefereeState state){
         this.match.setRefereeState(state);
     }
     
+    /**
+     *
+     * @param state
+     */
     public synchronized void setRefereeState(RefereeState state){
         this.match.setRefereeState(state);
         this.printLine();
     }
     
+    /**
+     *
+     * @param team
+     * @param contestant
+     * @return
+     */
     public synchronized int getContestantLastTrial(String team, int contestant){
         return this.match.getContestantLastTrial(team, contestant);
     }
     
+    /**
+     *
+     * @param team
+     * @param contestant
+     */
     public synchronized void setContestantLastTrial(String team, int contestant){
         this.match.setContestantLastTrial(team, contestant);
     }
     
+    /**
+     *
+     * @param team
+     */
     public synchronized void refreshStrengths(String team){
         this.match.refreshStrengths(team);
     }
     
+    /**
+     *
+     * @param team
+     * @param contestant
+     */
     public synchronized void setPosition(String team, int contestant){
         this.match.setPosition(team, contestant);
     }
     
+    /**
+     *
+     * @param team
+     * @param contestant
+     */
     public synchronized void removePosition(String team, int contestant){
         if(team.equals("A")){
             HashMap<Integer, Integer> tmpA = this.match.getPositionsA();
@@ -313,12 +376,18 @@ public class Log {
         pw.flush();
     }
     
+    /**
+     *
+     */
     public synchronized void printGameWinner(){
         if(this.match.getNumberOfGames() > 0){
             pw.println(this.match.getWinner());
         }
     }
     
+    /**
+     *
+     */
     public synchronized void printMatchWinner(){
         
     }

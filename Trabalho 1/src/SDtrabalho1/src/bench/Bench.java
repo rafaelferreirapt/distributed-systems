@@ -30,6 +30,11 @@ public class Bench implements IReferee, ICoach, IContestant{
     private boolean trialDecisionTaken = false;
     private boolean callTrialTaken = false;
             
+    /**
+     *
+     * @param nContestantsTeamA
+     * @param nContestantsTeamB
+     */
     public Bench(int nContestantsTeamA, int nContestantsTeamB){
         this.nContestantsInBench = nContestantsTeamA + nContestantsTeamB;
     }
@@ -180,6 +185,11 @@ public class Bench implements IReferee, ICoach, IContestant{
         return false;
     }
     
+    /**
+     *
+     * @param team
+     * @param idC
+     */
     @Override
     public synchronized void waitForCallContestants(String team, int idC){
         if(team.equals("A")){
@@ -249,6 +259,10 @@ public class Bench implements IReferee, ICoach, IContestant{
         notifyAll();
     }
     
+    /**
+     *
+     * @param team
+     */
     @Override
     public synchronized void waitForFollowCoachAdvice(String team){
         if(team.equals("A")){
@@ -295,6 +309,9 @@ public class Bench implements IReferee, ICoach, IContestant{
         }
     }
     
+    /**
+     *
+     */
     @Override
     public synchronized void wakeUp(){
         this.endMatch = true;

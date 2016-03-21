@@ -22,6 +22,14 @@ public class Contestant  extends Thread {
     private final bench.IContestant bench;
     private final referee_site.IContestant referee_site;
     
+    /**
+     *
+     * @param p
+     * @param b
+     * @param r
+     * @param id
+     * @param team
+     */
     public Contestant(playground.IContestant p, bench.IContestant b, referee_site.IContestant r, int id, String team){
         this.playground = p;
         this.bench = b;
@@ -38,10 +46,18 @@ public class Contestant  extends Thread {
         this.log.initContestant(this.state,this.team, this.id);
     }
     
+    /**
+     *
+     * @return
+     */
     public String getTeam(){
         return this.team;
     }
     
+    /**
+     *
+     * @return
+     */
     public int getID(){
         return this.id;
     }

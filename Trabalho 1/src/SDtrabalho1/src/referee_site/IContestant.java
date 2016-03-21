@@ -18,8 +18,15 @@ public interface IContestant {
      */
     public void amDone();
 
+    /**
+     *
+     * @return
+     */
     public boolean endOfMatch();
     
+    /**
+     *
+     */
     public void positioned();
     
 

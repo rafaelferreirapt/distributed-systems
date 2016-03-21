@@ -18,6 +18,10 @@ public class Game {
     private int[] pontuation;
     private int centre_of_the_rope = 0;
     
+    /**
+     *
+     * @param id
+     */
     public Game(int id){
         this.trials = new Trial[6];
         this.id = id;
@@ -26,6 +30,9 @@ public class Game {
         this.pontuation[1] = 0;
     }
     
+    /**
+     *
+     */
     public void newTrial(){
         assert trial_idx < this.trials.length;
         if(trial_idx!=0){
@@ -34,10 +41,19 @@ public class Game {
         this.trials[trial_idx] = new Trial(trial_idx++, getCentre_of_the_rope());
     }
     
+    /**
+     *
+     * @param team
+     * @param strength
+     */
     public void updateRope(String team, int strength){
         this.trials[trial_idx-1].updateRope(team, strength);
     }
     
+    /**
+     *
+     * @return
+     */
     public int assertTrialDecision(){
         int rope = this.trials[trial_idx-1].getRope();
         
@@ -76,18 +92,34 @@ public class Game {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public char getWinner(){
         return this.winner_short;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getWinnerString(){
         return this.winner;
     }
     
+    /**
+     *
+     * @return
+     */
     public int gameNumberOfTrials(){
         return this.trial_idx;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getCentre_of_the_rope() {
         return centre_of_the_rope;
     }

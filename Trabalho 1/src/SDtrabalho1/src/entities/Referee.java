@@ -19,6 +19,12 @@ public class Referee extends Thread {
     private final bench.IReferee bench;
     private final referee_site.IReferee referee_site;
     
+    /**
+     *
+     * @param p
+     * @param b
+     * @param r
+     */
     public Referee(playground.IReferee p, bench.IReferee b, referee_site.IReferee r){
         this.playground = p;
         this.bench = b;
