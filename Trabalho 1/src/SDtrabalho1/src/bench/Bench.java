@@ -6,7 +6,6 @@ package bench;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import general_info_repo.Match;
 
 /**
  *
@@ -19,7 +18,7 @@ public class Bench implements IReferee, ICoach, IContestant{
     private int nContestantsSelectedA = 0, nContestantsSelectedB = 0;
     private boolean followCoachA = false;
     private boolean followCoachB = false;
-    private boolean canCallTrial = true;
+    
     private int coachesWaitCallTrial = 0;
     private int[] selectedContestantsA = new int[3];
     private int[] selectedContestantsB = new int[3];
@@ -31,7 +30,8 @@ public class Bench implements IReferee, ICoach, IContestant{
     private boolean callTrialTaken = false;
             
     /**
-     *
+     * We need to know how many contestants there are in the bench,
+     * for that we pass how many contestants there are in the team A or B
      * @param nContestantsTeamA
      * @param nContestantsTeamB
      */
@@ -40,9 +40,12 @@ public class Bench implements IReferee, ICoach, IContestant{
     }
       
     /**
-     * the referee must wait that all the coaches are waiting for the call trial
+     * The referee must wait that all the coaches are waiting for the call trial
      * and all the contestants are in the bench, then the referee can continue 
-     * the trial
+     * the trial, it will reset all the flags, the flag to the contestants selected
+     * in the Team A or B and set the coaches wait for call trial to zero. The
+     * coachs are sleeping and need the flag callTrialTaken true to procede. In the
+     * final there is a notifyAll() to wake up all the entities in the Bench.
      */
     @Override
     public synchronized void callTrial() {
@@ -66,7 +69,7 @@ public class Bench implements IReferee, ICoach, IContestant{
     
     /**
      * The coaches are sleeping in this method waiting that the referee inform  
-     * and can select the next team
+     * and can select the next team.
      */
     @Override
     public synchronized void waitForCallTrial(){
@@ -89,7 +92,8 @@ public class Bench implements IReferee, ICoach, IContestant{
     }
 
     /**
-     * the coaches are waken up in operation assertTrialDecision by the referee
+     * The referee will waken up the coaches with the trialDecisionTaken = true and 
+     * with the notifyAll().
      */
     @Override
     public synchronized void assertTrialDecision() {
@@ -98,7 +102,8 @@ public class Bench implements IReferee, ICoach, IContestant{
     }
 
     /**
-     * the coaches are waken up in operation assertTrialDecision by the referee
+     * The coaches will wait until the referee make the decision of notify the
+     * referees in the assertTrialDecision.
      */
     @Override
     public synchronized void waitForAssertTrialDecision(){
@@ -116,10 +121,9 @@ public class Bench implements IReferee, ICoach, IContestant{
         }
     }
     
-    /* COACH METHODS */
-
     /**
-     * In coach life cycle, transition between "watch trial" and "wait for referee command"
+     * In coach life cycle, transition between "watch trial" and "wait for referee command".
+     * The coach will wait until 10 contestants are in the bench and then will continue.
      * @param team
      */
     @Override
@@ -134,7 +138,10 @@ public class Bench implements IReferee, ICoach, IContestant{
     }
 
     /**
-     * In coach life cycle, transition between "wait for referee command" and "assemble team"
+     * In coach life cycle, transition between "wait for referee command" and "assemble team".
+     * The coach will select randomly the contestants, this will be the strategy, select random
+     * the contestants. The contestants will make one "pool" to see if they are in the array of
+     * the players selected.
      * @param team
      */
     @Override
@@ -186,9 +193,15 @@ public class Bench implements IReferee, ICoach, IContestant{
     }
     
     /**
-     *
-     * @param team
-     * @param idC
+     * The contestants will wait here to be called to the trial in the bench.
+     * If the the team YXZ is select, then the contestant will verify if there is
+     * in the array of selected contestants to do the best in the rope game.
+     * When the contestant leaves the bench then is decremented one variable that
+     * conunts how many contestants there is in the bench. One more important thing,
+     * we need the ID of the last contestant that is up to then inform the coach that
+     * all the contestants are ready to go.
+     * @param team the team identifier
+     * @param idC the contestant ID
      */
     @Override
     public synchronized void waitForCallContestants(String team, int idC){
@@ -234,11 +247,9 @@ public class Bench implements IReferee, ICoach, IContestant{
         }
     }
     
-    /* PLAYERS METHODS */
-
     /**
-     * the coaches are waken up in operation followCoachAdvice by the last of 
-     * their selected contestants to stand in position
+     * The coaches are waken up in operation followCoachAdvice by the last of 
+     * their selected contestants to stand in position.
      * In Contestants life cycle, transition between "seat at the bench" and "stand in position"
      * @param team
      * @param idC
@@ -260,7 +271,8 @@ public class Bench implements IReferee, ICoach, IContestant{
     }
     
     /**
-     *
+     * The coach will wait until the last contestant stand in position to then 
+     * follow the coach advice. The flags will be resetted.
      * @param team
      */
     @Override
@@ -310,7 +322,8 @@ public class Bench implements IReferee, ICoach, IContestant{
     }
     
     /**
-     *
+     * This method will wakeup all the entities in the bench and declare that
+     * the match was ended.
      */
     @Override
     public synchronized void wakeUp(){
