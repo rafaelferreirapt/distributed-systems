@@ -18,12 +18,12 @@ public interface IContestant {
     public void pullTheRope(int id, String team);
     
     /**
-     *
+     * Wait for start trial. Contestant method.
      */
     public void waitForStartTrial();
     
     /**
-     *
+     * Wait for assert trial decision. Contestant method.
      */
     public void waitForAssertTrialDecision();
     

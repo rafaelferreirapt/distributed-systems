@@ -16,19 +16,6 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     private boolean informRefereeA = false, informRefereeB = false;
     private int amDoneCounter = 0, positionedCounter = 0;
     private boolean matchEnds = false, amDoneCondition = false, positionedCondition = false;
-
-    /**
-     *
-     */
-    public RefereeSite(){
-    
-    }
-    
-    /**
-     *
-     */
-    
-    /* REFEREE METHODS */
     
     /**
     * In referee life cycle, transition between "start of the match" and "start of a game" or 
@@ -54,8 +41,6 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     public void declareMatchWinner() {
         this.matchEnds = true;
     }
-    
-    /* COACH METHODS */
     
      /**
      *the referee is waken up by the last of the coaches in operation 
@@ -89,8 +74,6 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
         this.informRefereeB = false;
     }
     
-    /* PLAYERS METHODS */
-    
      /**
      *the referee is waken up by the last of the contestants in operation amDone
      *when the trial has come to an end
@@ -111,7 +94,6 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
         while(!this.amDoneCondition){
             try {
                 wait();
-                
             } catch (InterruptedException ex) {
                 Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, ex);
             }
