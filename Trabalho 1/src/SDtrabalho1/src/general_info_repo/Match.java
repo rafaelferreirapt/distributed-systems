@@ -198,7 +198,7 @@ public class Match {
         for(Entry<Integer, Integer> entry : this.strengths.get(team).entrySet()) {
             int strength = entry.getValue();
             
-            if(this.getContestantLastTrial(team, entry.getValue()) == this.trials_played){
+            if(this.getContestantLastTrial(team, entry.getKey()) == this.trials_played){
                 strength--;
             }else{
                 strength++;
