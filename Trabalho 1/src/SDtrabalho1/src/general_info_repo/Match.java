@@ -20,7 +20,7 @@ public class Match {
     
     private final Game[] games;
     private int game = 0;
-    private final int number_of_games = 100;
+    private final int number_of_games = 3;
     private final int pontuation[];
     private int positionA = 0;
     private int positionB = 0;
