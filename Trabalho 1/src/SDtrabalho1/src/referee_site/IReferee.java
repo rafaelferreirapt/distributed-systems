@@ -5,7 +5,7 @@
 package referee_site;
 
 /**
- *
+ * Referee interface of Referee Site instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public interface IReferee {
@@ -28,7 +28,7 @@ public interface IReferee {
     
     /**
      * End of the match. 
-     * @return
+     * @return if has endeed or not
      */
     public boolean endOfMatch();
     

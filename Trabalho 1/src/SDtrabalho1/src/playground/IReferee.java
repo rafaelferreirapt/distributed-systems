@@ -5,7 +5,7 @@
 package playground;
 
 /**
- *
+ * Referee interface of Playground instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public interface IReferee {

@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Referee Site instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class RefereeSite implements ICoach, IContestant, IReferee{
@@ -45,7 +45,7 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
      /**
      * The referee is waken up by the last of the coaches in operation 
      * "informReferee" when the teams are ready to proceed. Coach method.
-     * @param team
+     * @param team "A" or "B"
      */
     @Override
     public synchronized void informReferee(String team) {
@@ -133,7 +133,7 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     
     /**
      * End of the match.
-     * @return
+     * @return if has endeed or not.
      */
     @Override
     public synchronized boolean endOfMatch(){

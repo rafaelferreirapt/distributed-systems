@@ -5,15 +5,15 @@
 package playground;
 
 /**
- *
+ * Contestant interface of Playground instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public interface IContestant {
     
     /**
      * In Contestants life cycle, transition between "doYourBest" and "doYourBest"
-     * @param id
-     * @param team
+     * @param id contestant identifier
+     * @param team "A" or "B"
      */
     public void pullTheRope(int id, String team);
     

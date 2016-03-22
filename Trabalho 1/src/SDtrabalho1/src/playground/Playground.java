@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Playground instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Playground implements IReferee, IContestant{
@@ -84,8 +84,8 @@ public class Playground implements IReferee, IContestant{
     /**
      * In Contestants life cycle, transition between "doYourBest" and "doYourBest"
      * Random time interval in the simulation 
-     * @param id
-     * @param team
+     * @param id contestant identifier
+     * @param team "A" or "B"
      */
     @Override
     public void pullTheRope(int id, String team) {

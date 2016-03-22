@@ -5,7 +5,7 @@
 package referee_site;
 
 /**
- *
+ * Contestant interface of Referee Site instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public interface IContestant {
