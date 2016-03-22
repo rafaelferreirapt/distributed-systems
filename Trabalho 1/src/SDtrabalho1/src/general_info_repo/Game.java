@@ -38,7 +38,7 @@ public class Game {
         if(trial_idx!=0){
             this.centre_of_the_rope = this.trials[trial_idx-1].getRope();
         }
-        this.trials[trial_idx] = new Trial(trial_idx++, getCentre_of_the_rope());
+        this.trials[trial_idx++] = new Trial(getCentre_of_the_rope());
     }
     
     /**

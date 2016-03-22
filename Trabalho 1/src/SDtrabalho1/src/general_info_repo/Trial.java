@@ -10,21 +10,19 @@ package general_info_repo;
  */
 public class Trial {
     
-    private int number;
     private int centre_of_the_rope;
     
     /**
-     *
-     * @param number
-     * @param centre_of_the_rope
+     * Trial constructor.
+     * @param centre_of_the_rope the center.
      */
-    public Trial(int number, int centre_of_the_rope){
-        this.number = number;    
+    public Trial(int centre_of_the_rope){
         this.centre_of_the_rope = centre_of_the_rope;
     }
     
     /**
-     *
+     * Update the center of the rope with the strength given by the team contestant
+     * If is "A" it makes -strength, if is "B" it makes +strength.
      * @param team
      * @param strength
      */
@@ -37,7 +35,7 @@ public class Trial {
     }
     
     /**
-     *
+     * Rope position.
      * @return
      */
     public int getRope(){

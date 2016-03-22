@@ -42,7 +42,7 @@ public class Log {
     /**
      * This will instantiate the log Class
      * Name of the file where the log will be saved
-     * @param filename 
+     * @param filename where the log will be saved.
      */
     private Log(String filename){
         if(filename.length()==0){
@@ -65,7 +65,7 @@ public class Log {
     
     /**
      * This is a singleton, this is important to return the Log instance.
-     * @return
+     * @return log intance, this is a singleton.
      */
     public synchronized static Log getInstance(){
         return instance;
@@ -88,7 +88,7 @@ public class Log {
     
     /**
      * This method will be called every time that one game is started
-     * @param gameNumber 
+     * @param gameNumber the atual game number.
      */
     public synchronized void newGame(int gameNumber){
         pw.println("Game " + gameNumber);
@@ -130,7 +130,7 @@ public class Log {
     
     /**
      * Game number of trials played.
-     * @return 
+     * @return game number of trials played.
      */
     public synchronized int gameNumberOfTrials(){
         return match.gameNumberOfTrials();
@@ -138,7 +138,7 @@ public class Log {
     
     /**
      * Number of games played.
-     * @return 
+     * @return number of games played.
      */
     public synchronized int getNumberOfGames(){
         return match.getNumberOfGames();
@@ -153,7 +153,7 @@ public class Log {
     
     /**
      * Total number of games.
-     * @return 
+     * @return total number of games played.
      */
     public synchronized int getTotalNumberOfGames(){
         return match.getTotalNumberOfGames();
@@ -162,8 +162,8 @@ public class Log {
     /**
      * Update the rope only needs the team and contestant because the match has
      * the strengths of each contestant.
-     * @param team
-     * @param contestant
+     * @param team Team identifier, can be A or B.
+     * @param contestant The contestant ID.
      */
     public synchronized void updateRope(String team, int contestant){
         this.match.updateRope(team, this.match.getContestantStrength(team, contestant));
@@ -171,7 +171,8 @@ public class Log {
     
     /**
      * Assert trial decision.
-     * @return 
+     * @return decision, can be 2 (B), -2 (A) for knock outs; 0 for game finished with win or draw
+     * or 1 for new trial.
      */
     public synchronized int assertTrialDecision(){
         return this.match.assertTrialDecision();
@@ -179,7 +180,7 @@ public class Log {
     
     /**
      * Number of trials played.
-     * @return
+     * @return number of trials played
      */
     public synchronized int getTrials_played() {
         return match.getTrials_played();
@@ -187,9 +188,9 @@ public class Log {
     
     /**
      * Init the contestant with the initial state, team and contestant.
-     * @param state
-     * @param team
-     * @param contestant
+     * @param state contestant state.
+     * @param team Team identifier, can be A or B.
+     * @param contestant The contestant ID.
      */
     public synchronized void initContestant(ContestantState state, String team, int contestant){
         this.match.setContestantState(state, team, contestant);
@@ -198,9 +199,9 @@ public class Log {
     
     /**
      * Update the contestant state.
-     * @param state
-     * @param team
-     * @param contestant
+     * @param state contestant state.
+     * @param team Team identifier, can be A or B.
+     * @param contestant The contestant ID.
      */
     public synchronized void setContestantState(ContestantState state, String team, int contestant){
         this.match.setContestantState(state, team, contestant);
@@ -209,8 +210,8 @@ public class Log {
     
     /**
      * Init coach.
-     * @param team
-     * @param state
+     * @param team Team identifier, can be A or B.
+     * @param state coach state.
      */
     public synchronized void initCoachState(String team, CoachState state){
         this.match.setCoachState(team, state);
@@ -218,8 +219,8 @@ public class Log {
     
     /**
      * Set coach state.
-     * @param team
-     * @param state
+     * @param team Team identifier, can be A or B.
+     * @param state coach state.
      */
     public synchronized void setCoachState(String team, CoachState state){
         this.match.setCoachState(team, state);
@@ -228,7 +229,7 @@ public class Log {
     
     /**
      * Init the referee state.
-     * @param state
+     * @param state referee state.
      */
     public synchronized void initRefereeState(RefereeState state){
         this.match.setRefereeState(state);
@@ -236,7 +237,7 @@ public class Log {
     
     /**
      * Set the referee state.
-     * @param state
+     * @param state referee state.
      */
     public synchronized void setRefereeState(RefereeState state){
         this.match.setRefereeState(state);
@@ -245,8 +246,8 @@ public class Log {
     
     /**
      * Get the contestant last trial, we only need the team and the contestant id.
-     * @param team
-     * @param contestant
+     * @param team Team identifier, can be A or B.
+     * @param contestant The contestant ID.
      * @return
      */
     public synchronized int getContestantLastTrial(String team, int contestant){
@@ -255,8 +256,8 @@ public class Log {
     
     /**
      * Set the contestant last trial, we only need the team and the contestant id.
-     * @param team
-     * @param contestant
+     * @param team Team identifier, can be A or B.
+     * @param contestant The contestant ID.
      */
     public synchronized void setContestantLastTrial(String team, int contestant){
         this.match.setContestantLastTrial(team, contestant);
@@ -264,7 +265,7 @@ public class Log {
     
     /**
      * Refresh strengths of the team, the coach calls this method.
-     * @param team
+     * @param team Team identifier, can be A or B.
      */
     public synchronized void refreshStrengths(String team){
         this.match.refreshStrengths(team);
@@ -272,8 +273,8 @@ public class Log {
     
     /**
      * Set position, we only need the team and the contestant id.
-     * @param team
-     * @param contestant
+     * @param team Team identifier, can be A or B.
+     * @param contestant The contestant ID.
      */
     public synchronized void setPosition(String team, int contestant){
         this.match.setPosition(team, contestant);
@@ -281,8 +282,8 @@ public class Log {
     
     /**
      * Remove position of the player.
-     * @param team
-     * @param contestant
+     * @param team Team identifier, can be A or B.
+     * @param contestant The contestant ID.
      */
     public synchronized void removePosition(String team, int contestant){
         if(team.equals("A")){
@@ -366,13 +367,6 @@ public class Log {
         if(this.match.getNumberOfGames() > 0){
             pw.println(this.match.getWinner());
         }
-    }
-    
-    /**
-     * Print match winner.
-     */
-    public synchronized void printMatchWinner(){
-        
     }
     
 }

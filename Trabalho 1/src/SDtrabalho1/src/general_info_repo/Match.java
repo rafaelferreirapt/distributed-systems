@@ -54,7 +54,7 @@ public class Match {
     
     /**
      * The match is a singleton.
-     * @return
+     * @return Match instance, is a singleton.
      */
     public static Match getInstance() {
        if(instance == null) {
@@ -65,9 +65,9 @@ public class Match {
     
     /**
      * Update the contestant state.
-     * @param state
-     * @param team
-     * @param contestant
+     * @param state contestant state.
+     * @param team Team identifier, can be A or B.
+     * @param contestant The contestant ID.
      */
     public synchronized void setContestantState(ContestantState state, String team, int contestant){
         if(this.contestants_states.containsKey(team)){
@@ -84,8 +84,8 @@ public class Match {
     
     /**
      * Set coach state.
-     * @param team
-     * @param state
+     * @param team Team identifier, can be A or B.
+     * @param state contestant state.
      */
     public synchronized void setCoachState(String team, CoachState state){
         if(this.coach_states.containsKey(team)){
@@ -97,7 +97,7 @@ public class Match {
     
     /**
      * Set the referee state.
-     * @param state
+     * @param state contestant state.
      */
     public synchronized void setRefereeState(RefereeState state){
         this.referee_state = state;
@@ -105,8 +105,8 @@ public class Match {
     
     /**
      * Set position, we only need the team and the contestant id.
-     * @param team
-     * @param contestant
+     * @param team Team identifier, can be A or B.
+     * @param contestant The contestant ID.
      */
     public synchronized void setPosition(String team, int contestant){
         if(team.equals("A")){
@@ -120,8 +120,8 @@ public class Match {
     
     /**
      * Remove position of the player.
-     * @param team
-     * @param position
+     * @param team Team identifier, can be A or B.
+     * @param position The position index.
      */
     public synchronized void removePosition(String team, int position){
         if(team.equals("A")){
@@ -140,7 +140,7 @@ public class Match {
     
     /**
      * Positions A.
-     * @return
+     * @return HashMap with team A positions.
      */
     public synchronized HashMap getPositionsA(){
         return this.positionsA;
@@ -148,7 +148,7 @@ public class Match {
     
     /**
      * Positions B.
-     * @return
+     * @return HashMap with team B positions.
      */
     public synchronized HashMap getPositionsB(){
         return this.positionsB;
@@ -156,9 +156,9 @@ public class Match {
     
     /**
      * Set contestant strength.
-     * @param strength
-     * @param team
-     * @param contestant
+     * @param strength contestant strength.
+     * @param team "A" or "B"
+     * @param contestant ID.
      */
     public synchronized void setContestantStrength(int strength, String team, int contestant){
         if(strength > 30){
@@ -202,7 +202,7 @@ public class Match {
     
     /**
      * Game number of trials played.
-     * @return
+     * @return number of trials.
      */
     public int gameNumberOfTrials(){
         return this.games[(game-1)].gameNumberOfTrials();
@@ -210,7 +210,7 @@ public class Match {
     
     /**
      * Number of games played.
-     * @return
+     * @return number of games.
      */
     public int getNumberOfGames(){
         return this.game;
@@ -218,7 +218,7 @@ public class Match {
     
     /**
      * Declare match winner.
-     * @return
+     * @return match winner.
      */
     public String declareMatchWinner(){
         this.updatePontuation();
@@ -237,7 +237,7 @@ public class Match {
     
     /**
      * Total number of games.
-     * @return
+     * @return total number of games.
      */
     public int getTotalNumberOfGames(){
         return this.number_of_games;
@@ -255,7 +255,7 @@ public class Match {
     
     /**
      * Assert trial decision.
-     * @return
+     * @return trial decision.
      */
     public int assertTrialDecision(){
         this.trials_played++;
@@ -275,7 +275,7 @@ public class Match {
 
     /**
      * Number of trials played.
-     * @return
+     * @return trials played.
      */
     public int getTrials_played() {
         return trials_played;
@@ -283,7 +283,7 @@ public class Match {
     
     /**
      * Get referee state.
-     * @return
+     * @return referee state.
      */
     public synchronized RefereeState getRefereeState() {
         return referee_state;
@@ -291,8 +291,8 @@ public class Match {
     
     /**
      * Get coach state.
-     * @param team
-     * @return
+     * @param team "A" or "B"
+     * @return coach state
      */
     public synchronized CoachState getCoachState(String team){
         return this.coach_states.get(team);
@@ -300,9 +300,9 @@ public class Match {
     
     /**
      * Get contestant state.
-     * @param team
-     * @param contestant
-     * @return
+     * @param team "A" or "B"
+     * @param contestant ID
+     * @return contestant state
      */
     public synchronized ContestantState getContestantState(String team, int contestant){
         return this.contestants_states.get(team).get(contestant);
@@ -310,8 +310,8 @@ public class Match {
     
     /**
      * Get number of contestants.
-     * @param team
-     * @return
+     * @param team "A" or "B"
+     * @return number of contestants
      */
     public synchronized Set<Integer> getNumberOfContestants(String team){
         return this.contestants_states.get(team).keySet();
@@ -319,9 +319,9 @@ public class Match {
     
     /**
      * Get contestant strength.
-     * @param team
-     * @param contestant
-     * @return
+     * @param team "A" or "B"
+     * @param contestant ID
+     * @return strength of contestant
      */
     public synchronized int getContestantStrength(String team, int contestant){
         return this.strengths.get(team).get(contestant);
@@ -329,7 +329,7 @@ public class Match {
 
     /**
      * Get centre of the rope.
-     * @return
+     * @return centre of the rope.
      */
     public int getCentre_of_the_rope() {
         return this.games[(game-1)].getCentre_of_the_rope();
@@ -337,9 +337,9 @@ public class Match {
     
     /**
      * Get contestant last trial.
-     * @param team
-     * @param contestant
-     * @return
+     * @param team "A" or "B"
+     * @param contestant ID
+     * @return last trial of the contestant.
      */
     public synchronized int getContestantLastTrial(String team, int contestant){
         if(!this.contestant_last_trial.get(team).containsKey(contestant)){
@@ -350,7 +350,7 @@ public class Match {
     
     /**
      * Get winner.
-     * @return
+     * @return game winner.
      */
     public String getWinner(){
         return this.games[(game-1)].getWinnerString();
@@ -358,7 +358,7 @@ public class Match {
     
     /**
      * Refresh strengths.
-     * @param team
+     * @param team "A" or "B"
      */
     public synchronized void refreshStrengths(String team){
         for(Entry<Integer, Integer> entry : this.strengths.get(team).entrySet()) {
@@ -376,8 +376,8 @@ public class Match {
     
     /**
      * Set contestant last trial.
-     * @param team
-     * @param contestant
+     * @param team "A" or "B"
+     * @param contestant ID
      */
     public synchronized void setContestantLastTrial(String team, int contestant){
         int last_trial = this.getTrials_played() + 1;
