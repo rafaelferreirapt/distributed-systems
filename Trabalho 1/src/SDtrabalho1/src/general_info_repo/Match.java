@@ -12,7 +12,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 /**
- *
+ * The match singleton will have games, positions, strengths, contestants last trials,
+ * contestant states, coach states, referee state, number of trials played.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Match {

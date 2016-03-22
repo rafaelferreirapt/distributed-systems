@@ -1,7 +1,7 @@
 package entities;
 
 /**
- *
+ * Coach state for the Coach.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public enum CoachState {

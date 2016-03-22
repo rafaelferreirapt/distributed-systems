@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Bench instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Bench implements IReferee, ICoach, IContestant{

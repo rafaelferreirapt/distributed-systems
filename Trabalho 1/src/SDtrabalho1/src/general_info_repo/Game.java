@@ -4,8 +4,10 @@
  */
 package general_info_repo;
 
-/**-
- *
+/**
+ * This class pretends to be the Game objets and will represent one match game,
+ * it will have trials, pontuation of the game by team, centre of the rope by game,
+ * and winners.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Game {

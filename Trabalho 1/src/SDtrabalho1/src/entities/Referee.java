@@ -7,7 +7,7 @@ package entities;
 import general_info_repo.Log;
 
 /**
- *
+ * Referee instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Referee extends Thread {

@@ -5,7 +5,7 @@
 package general_info_repo;
 
 /**
- *
+ * Trial instance, only will have the centre of the rope.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Trial {

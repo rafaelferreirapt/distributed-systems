@@ -13,7 +13,7 @@ import playground.Playground;
 import referee_site.RefereeSite;
 
 /**
- * FXML Controller class
+ * Game of the Rope main!
  *
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */

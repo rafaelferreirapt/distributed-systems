@@ -6,7 +6,7 @@
 package entities;
 
 /**
- *
+ * Referee state for the Referee.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public enum RefereeState {
