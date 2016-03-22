@@ -7,7 +7,7 @@ package entities;
 import general_info_repo.Log;
 
 /**
- *
+ * Contestant instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Contestant  extends Thread {
@@ -22,6 +22,16 @@ public class Contestant  extends Thread {
     private final bench.IContestant bench;
     private final referee_site.IContestant referee_site;
     
+    /**
+     * It will be passed to the Contestant the methods of the bench and referee site
+     * that the contestant have acess. The team is the contestant team and the ID
+     * is very important to know the identity of the contestant.
+     * @param p Instance that implements playground contestant methods.
+     * @param b Instance that implements bench contestant methods.
+     * @param r Instance that implements referee site contestant methods.
+     * @param id Contestant identifier.
+     * @param team Team identifier, can be A or B.
+     */
     public Contestant(playground.IContestant p, bench.IContestant b, referee_site.IContestant r, int id, String team){
         this.playground = p;
         this.bench = b;
@@ -38,10 +48,18 @@ public class Contestant  extends Thread {
         this.log.initContestant(this.state,this.team, this.id);
     }
     
+    /**
+     * Get contestant team
+     * @return team, can be "A" or "B"
+     */
     public String getTeam(){
         return this.team;
     }
     
+    /**
+     * Get contestant ID
+     * @return contestant ID.
+     */
     public int getID(){
         return this.id;
     }

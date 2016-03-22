@@ -7,28 +7,34 @@ package entities;
 import general_info_repo.Log;
 
 /**
- *
+ * Coach instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Coach extends Thread {
     
     private CoachState state;
     
-    private final int id;
     private final Log log;
     private final String team;
     private final bench.ICoach bench;
     private final referee_site.ICoach referee_site;
     
-    public Coach(bench.ICoach b, referee_site.ICoach r, int id, String team){
+    /**
+     * It will be passed to the Coach the methods of the bench and referee site
+     * that the coach have acess. The team is the coach team, very important to know
+     * the identity of the coach.
+     * @param b Instance that implements bench coach methods.
+     * @param r Instance that implements referee site coach methods.
+     * @param team Team identifier, can be A or B.
+     */
+    public Coach(bench.ICoach b, referee_site.ICoach r, String team){
         this.bench = b;
         this.referee_site = r;
         this.log = Log.getInstance();
         
         this.team = team;
-        this.id = id;
         
-        this.setName("Coach " + id + " of the team " + team);
+        this.setName("Coach of the team " + team);
         state = CoachState.WAIT_FOR_REFEREE_COMMAND;
         
         this.log.initCoachState(team, state);
@@ -37,7 +43,6 @@ public class Coach extends Thread {
     /**
      * This function represents the life cycle of Coach.
      */
-    
     @Override
     public void run(){
         while(!referee_site.endOfMatch()){

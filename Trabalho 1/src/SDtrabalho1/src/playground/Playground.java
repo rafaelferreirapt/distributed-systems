@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Playground instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Playground implements IReferee, IContestant{
@@ -19,17 +19,15 @@ public class Playground implements IReferee, IContestant{
     private int contestantsIn = 0;
     private int contestantsAlerted = 0;
     
+    /**
+     * Log is a singleton, it needs the getInstance method.
+     */
     public Playground(){
         this.log = Log.getInstance();
     }
     
     /**
-     *
-     */
-    /* REFEREE METHODS */
-    
-    /**
-     * In Referee life cycle, transition between "teams ready" and "wait for trial conclusion"
+     * In Referee life cycle, transition between "teams ready" and "wait for trial conclusion".
      */
     @Override
     public synchronized void startTrial() {
@@ -37,6 +35,9 @@ public class Playground implements IReferee, IContestant{
         notifyAll();
     }
 
+    /**
+     * Wait for start trial. Contestant method.
+     */
     @Override
     public synchronized void waitForStartTrial(){
         while(!startTrialTaken){
@@ -53,7 +54,7 @@ public class Playground implements IReferee, IContestant{
     }
     
     /**
-     * In Referee life cycle, transition between "wait for trial conclusion" and "wait for trial conclusion"
+     * In Referee life cycle, transition between "wait for trial conclusion" and "wait for trial conclusion".
      */
     @Override
     public synchronized void assertTrialDecision() {
@@ -61,6 +62,9 @@ public class Playground implements IReferee, IContestant{
         notifyAll();
     }
     
+    /**
+     * Wait for assert trial decision. Contestant method.
+     */
     @Override
     public synchronized void waitForAssertTrialDecision(){
         while(!trialDecisionTaken){
@@ -77,11 +81,11 @@ public class Playground implements IReferee, IContestant{
         }
     }
     
-    /* CONTESTANT METHODS */
-    
     /**
      * In Contestants life cycle, transition between "doYourBest" and "doYourBest"
      * Random time interval in the simulation 
+     * @param id contestant identifier
+     * @param team "A" or "B"
      */
     @Override
     public void pullTheRope(int id, String team) {

@@ -7,7 +7,7 @@ package entities;
 import general_info_repo.Log;
 
 /**
- *
+ * Referee instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Referee extends Thread {
@@ -19,6 +19,13 @@ public class Referee extends Thread {
     private final bench.IReferee bench;
     private final referee_site.IReferee referee_site;
     
+    /**
+     * It will be passed to the Referee the methods of the bench and referee site
+     * that the coach have acess. 
+     * @param p Instance that implements playground referee methods.
+     * @param b Instance that implements bench referee methods.
+     * @param r Instance that implements referee site referee methods.
+     */
     public Referee(playground.IReferee p, bench.IReferee b, referee_site.IReferee r){
         this.playground = p;
         this.bench = b;
