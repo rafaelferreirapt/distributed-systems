@@ -162,12 +162,12 @@ public class Match {
      * @param contestant ID.
      */
     public synchronized void setContestantStrength(int strength, String team, int contestant){
-        if(strength > 30){
-            strength = 30;
+        if(strength > MAX_STRENGTH+1){
+            strength = MAX_STRENGTH+1;
         }else if(strength == 0){
             strength = MIN_STRENGTH + (int)Math.ceil(Math.random() * (MAX_STRENGTH - MIN_STRENGTH) + 1);
-        }else if(strength < 20){
-            strength = 20;
+        }else if(strength < MIN_STRENGTH){
+            strength = MIN_STRENGTH;
         }
         
         if(this.strengths.containsKey(team)){
