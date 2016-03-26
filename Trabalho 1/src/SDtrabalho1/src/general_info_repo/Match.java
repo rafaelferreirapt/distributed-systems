@@ -25,7 +25,7 @@ public class Match {
     private int positionA = 0;
     private int positionB = 0;
     
-    private static final int MAX_STRENGTH = 29;
+    private static final int MAX_STRENGTH = 24;
     private static final int MIN_STRENGTH = 20;
     
     private final HashMap<String, HashMap<Integer, Integer>> strengths;
