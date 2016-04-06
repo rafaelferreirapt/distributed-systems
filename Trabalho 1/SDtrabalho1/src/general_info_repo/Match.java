@@ -25,10 +25,10 @@ public class Match {
     private int positionB = 0;
     
     private final int number_of_games = 3;
-    public static final int N_CONTESTANTS = 100;
+    public static final int N_CONTESTANTS = 20;
     private static final int MAX_STRENGTH = 24;
     private static final int MIN_STRENGTH = 20;
-    public static final int NUMBER_OF_TRIALS = 6;
+    public static final int NUMBER_OF_TRIALS = 7;
     
     private final HashMap<String, HashMap<Integer, Integer>> strengths;
     private final HashMap<Integer, Integer> positionsA;

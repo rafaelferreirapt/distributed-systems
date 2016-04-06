@@ -387,14 +387,20 @@ public class Log {
         String posB = " ";
         for(int i = 3; i>=1; i--){
             if(positionsA.containsKey(i)){
-                posA += positionsA.get(i) + " ";
+                posA += positionsA.get(i).toString() + " ";
+                if(positionsA.get(i).toString().length() < 1){
+                    posA += " ";
+                }
             }else{
                 posA += "- ";
             }
         }
         for(int i = 1; i<=3; i++){
             if(positionsB.containsKey(i)){
-                posB += positionsB.get(i) + " ";
+                posB += positionsB.get(i).toString() + " ";
+                if(positionsB.get(i).toString().length() < 1){
+                    posB += " ";
+                }
             }else{
                 posB += "- ";
             }

@@ -154,7 +154,7 @@ public class Bench implements IReferee, ICoach, IContestant{
             int selected;
 
             do{
-                selected = (int)Math.ceil(Math.random() * 4 + 1);
+                selected = (int)Math.ceil(Math.random() * (Match.N_CONTESTANTS/2 - 1) + 1);
                 repeated = false;
 
                 for(int j=0; j<i; j++){
