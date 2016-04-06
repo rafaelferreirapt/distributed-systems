@@ -25,7 +25,7 @@ public class Game {
      * @param id game identifier, game number in the match.
      */
     public Game(int id){
-        this.trials = new Trial[6];
+        this.trials = new Trial[Match.NUMBER_OF_TRIALS];
         this.id = id;
         this.pontuation = new int[2];
         this.pontuation[0] = 0;
@@ -75,7 +75,7 @@ public class Game {
             this.pontuation[0] += 1;
         }
         
-        if(trial_idx >= 6){
+        if(trial_idx >= Match.NUMBER_OF_TRIALS){
             if(this.pontuation[0] > this.pontuation[1]){
                 // A
                 this.winner = "Game "+(this.id+1)+" was won by team A by points.";
