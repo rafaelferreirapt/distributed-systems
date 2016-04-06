@@ -4,6 +4,7 @@
  */
 package bench;
 
+import general_info_repo.Match;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,7 +50,7 @@ public class Bench implements IReferee, ICoach, IContestant{
      */
     @Override
     public synchronized void callTrial() {
-        while(this.coachesWaitCallTrial != 2 || this.nContestantsInBench != 10){
+        while(this.coachesWaitCallTrial != 2 || this.nContestantsInBench != Match.N_CONTESTANTS){
             try {
                 wait();
             } catch (InterruptedException ex) {
@@ -128,7 +129,7 @@ public class Bench implements IReferee, ICoach, IContestant{
      */
     @Override
     public synchronized void reviewNotes(String team) {
-        while(this.nContestantsInBench < 10){
+        while(this.nContestantsInBench < Match.N_CONTESTANTS){
             try {
                 wait();
             } catch (InterruptedException ex) {
@@ -316,7 +317,7 @@ public class Bench implements IReferee, ICoach, IContestant{
      */
     @Override
     public synchronized void seatDown(String team){
-        if(++this.nContestantsInBench==10){
+        if(++this.nContestantsInBench==Match.N_CONTESTANTS){
             notifyAll();
         }
     }

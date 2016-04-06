@@ -25,6 +25,7 @@ public class Match {
     private int positionA = 0;
     private int positionB = 0;
     
+    public static final int N_CONTESTANTS = 100;
     private static final int MAX_STRENGTH = 24;
     private static final int MIN_STRENGTH = 20;
     

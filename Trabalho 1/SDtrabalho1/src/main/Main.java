@@ -9,6 +9,7 @@ import entities.Coach;
 import entities.Contestant;
 import entities.Referee;
 import general_info_repo.Log;
+import general_info_repo.Match;
 import playground.Playground;
 import referee_site.RefereeSite;
 
@@ -33,7 +34,7 @@ public class Main{
         /* START THE ENTITIES */
         int nCoaches = 2;
         String teams[] = {"A", "B"};
-        int nContestants = 10;
+        int nContestants = Match.N_CONTESTANTS;
         
         assert nCoaches == teams.length;
         
@@ -56,7 +57,7 @@ public class Main{
             if(i < (nContestants/teams.length)){
                 contestants[i] = new Contestant((playground.IContestant) playground,(bench.IContestant) bench, (referee_site.IContestant) referee_site, i+1, teams[0]);
             }else{
-                contestants[i] = new Contestant((playground.IContestant) playground,(bench.IContestant) bench, (referee_site.IContestant) referee_site, i-4, teams[1]);
+                contestants[i] = new Contestant((playground.IContestant) playground,(bench.IContestant) bench, (referee_site.IContestant) referee_site, i-(nContestants/teams.length-1), teams[1]);
             }
         }
         
