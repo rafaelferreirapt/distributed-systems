@@ -3,9 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/rafaelferreira/Development/ect_ua/sd/Trabalho%201/src/SDtrabalho1/src/entities/Contestant.java</file>
-            <file>file:/Users/rafaelferreira/Development/ect_ua/sd/Trabalho%201/src/SDtrabalho1/src/bench/Bench.java</file>
-            <file>file:/Users/rafaelferreira/Development/ect_ua/sd/Trabalho%201/src/SDtrabalho1/src/entities/Coach.java</file>
+            <file>file:/Users/rafaelferreira/Development/ect_ua/sd/Trabalho%202/SDtrabalho2/src/communication/proxy/ClientProxy.java</file>
+            <file>file:/Users/rafaelferreira/Development/ect_ua/sd/Trabalho%202/SDtrabalho2/src/settings/Configuration.java</file>
+            <file>file:/Users/rafaelferreira/Development/ect_ua/sd/Trabalho%202/SDtrabalho2/src/communication/message/Message.java</file>
+            <file>file:/Users/rafaelferreira/Development/ect_ua/sd/Trabalho%202/SDtrabalho2/src/communication/ServerChannel.java</file>
+            <file>file:/Users/rafaelferreira/Development/ect_ua/sd/Trabalho%202/SDtrabalho2/src/communication/ClientChannel.java</file>
         </group>
     </open-files>
 </project-private>
