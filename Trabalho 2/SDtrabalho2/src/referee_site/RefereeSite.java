@@ -19,7 +19,7 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     
     /**
     * In referee life cycle, transition between "start of the match" and "start of a game" or 
-    * between "end of a game" and "start of a game".
+    * between "end of a game" and "start of a gam   e".
     */
     @Override
     public void annouceNewGame() {

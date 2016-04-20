@@ -20,7 +20,7 @@ public class BenchRun {
         /* estabelecimento do servico */
         
         // criação do canal de escuta e sua associação
-        schan = new ServerChannel(NodeSetts.refereeSiteServerPort);    
+        schan = new ServerChannel(NodeSetts.benchServerPort);    
         schan.start();
         
         BenchServer benchServer = new BenchServer(NodeSetts.nContestantsTeam, NodeSetts.nContestantsTeam);

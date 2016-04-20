@@ -15,8 +15,33 @@ public class Message implements Serializable {
     
     private static final long serialVersionUID = 1001L;
     private MessageType type;
+    private String team = null;
+    private int idC = -1;
     
     public Message(MessageType type) {
         this.type = type;
+    }
+    
+    public Message(MessageType type, String team) {
+        this.type = type;
+        this.team = team;
+    }
+    
+    public Message(MessageType type, String team, int idC) {
+        this.type = type;
+        this.team = team;
+        this.idC = idC;
+    }
+    
+    public MessageType getType(){
+        return this.type;
+    }
+    
+    public String getTeam(){
+        return this.team;
+    }
+    
+    public int getIdC(){
+        return this.idC;
     }
 }

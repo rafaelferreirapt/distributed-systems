@@ -6,12 +6,13 @@
 package communication;
 
 import java.io.IOException;
+import java.io.InvalidClassException;
+import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.NoRouteToHostException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
@@ -22,7 +23,7 @@ import java.net.UnknownHostException;
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class ClientChannel {
-    private ServerSocket listenSocket = null;
+    
     private Socket commSocket = null;
     private final int serverPort;
     private final String hostName;
@@ -94,6 +95,72 @@ public class ClientChannel {
         }
 
         return (success);
+    }
+    
+    public void close() {
+        try {
+            request.close();
+        } catch (IOException e) {
+            System.out.println(Thread.currentThread().getName()
+                    + " - não foi possível fechar o canal de entrada do socket!");
+            System.exit(1);
+        }
+
+        try {
+            response.close();
+        } catch (IOException e) {
+            System.out.println(Thread.currentThread().getName()
+                    + " - não foi possível fechar o canal de saída do socket!");
+            System.exit(1);
+        }
+
+        try {
+            commSocket.close();
+        } catch (IOException e) {
+            System.out.println(Thread.currentThread().getName()
+                    + " - não foi possível fechar o socket de comunicação!");
+            System.exit(1);
+        }
+    }
+    
+    public Object readObject() {
+        Object fromServer = null;
+        
+        try {
+            fromServer = request.readObject();
+        } catch (InvalidClassException e) {
+            System.out.println(Thread.currentThread().getName()
+                    + " - o objecto lido não é passível de desserialização!");
+            System.exit(1);
+        } catch (IOException e) {
+            System.out.println(Thread.currentThread().getName()
+                    + " - erro na leitura de um objecto do canal de entrada do socket de comunicação!");
+            System.exit(1);
+        } catch (ClassNotFoundException e) {
+            System.out.println(Thread.currentThread().getName()
+                    + " - o objecto lido corresponde a um tipo de dados desconhecido!");
+            System.exit(1);
+        }
+
+        return fromServer;
+    }
+    
+    public void writeObject(Object toServer) {
+        try {
+            response.writeObject(toServer);
+        } catch (InvalidClassException e) {
+            System.out.println(Thread.currentThread().getName()
+                    + " - o objecto a ser escrito não é passível de serialização!");
+            System.exit(1);
+        } catch (NotSerializableException e) {
+            System.out.println(Thread.currentThread().getName()
+                    + " - o objecto a ser escrito pertence a um tipo de dados não serializável!");
+            System.exit(1);
+        } catch (IOException e) {
+            System.out.println(Thread.currentThread().getName()
+                    + " - erro na escrita de um objecto do canal de saída do socket de comunicação!");
+            System.exit(1);
+        }
     }
     
 }

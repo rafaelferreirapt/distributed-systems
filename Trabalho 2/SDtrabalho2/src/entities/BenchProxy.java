@@ -8,6 +8,12 @@ package entities;
 import bench.ICoach;
 import bench.IContestant;
 import bench.IReferee;
+import communication.message.MessageType;
+import communication.message.WrapperMessage;
+import communication.proxy.ClientProxy;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import settings.NodeSetts;
 
 /**
  *
@@ -17,58 +23,233 @@ public class BenchProxy implements IReferee, ICoach, IContestant{
     
     @Override
     public void callTrial() {
-        ClientProxy cp = new ClientProxy();
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        WrapperMessage result = new WrapperMessage();
+        
+        ClientProxy cp = new ClientProxy(NodeSetts.benchServerName, 
+                NodeSetts.benchServerPort, result, MessageType.callTrial);
+        
+        cp.start();
+        
+        try {
+            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (result.getMessage().getType() != MessageType.ACK) {
+            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
+            System.exit(1);
+        }
     }
 
     @Override
     public void assertTrialDecision() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        WrapperMessage result = new WrapperMessage();
+        
+        ClientProxy cp = new ClientProxy(NodeSetts.benchServerName, 
+                NodeSetts.benchServerPort, result, MessageType.assertTrialDecision);
+        
+        cp.start();
+        
+        try {
+            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (result.getMessage().getType() != MessageType.ACK) {
+            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
+            System.exit(1);
+        }
     }
 
     @Override
     public void wakeUp() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        WrapperMessage result = new WrapperMessage();
+        
+        ClientProxy cp = new ClientProxy(NodeSetts.benchServerName, 
+                NodeSetts.benchServerPort, result, MessageType.wakeUp);
+        
+        cp.start();
+        
+        try {
+            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+        
+        if (result.getMessage().getType() != MessageType.ACK) {
+            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
+            System.exit(1);
+        }
     }
 
     @Override
     public void reviewNotes(String team) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        WrapperMessage result = new WrapperMessage();
+        
+        ClientProxy cp = new ClientProxy(NodeSetts.benchServerName, 
+                NodeSetts.benchServerPort, result, MessageType.reviewNotes, team);
+        
+        cp.start();
+        
+        try {
+            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (result.getMessage().getType() != MessageType.ACK) {
+            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
+            System.exit(1);
+        }
     }
 
     @Override
     public void callContestants(String team) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        WrapperMessage result = new WrapperMessage();
+        
+        ClientProxy cp = new ClientProxy(NodeSetts.benchServerName, 
+                NodeSetts.benchServerPort, result, MessageType.callContestants, team);
+        
+        cp.start();
+        
+        try {
+            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (result.getMessage().getType() != MessageType.ACK) {
+            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
+            System.exit(1);
+        }
     }
 
     @Override
     public void waitForCallTrial() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        WrapperMessage result = new WrapperMessage();
+        
+        ClientProxy cp = new ClientProxy(NodeSetts.benchServerName, 
+                NodeSetts.benchServerPort, result, MessageType.waitForCallTrial);
+        
+        cp.start();
+        
+        try {
+            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (result.getMessage().getType() != MessageType.ACK) {
+            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
+            System.exit(1);
+        }
     }
 
     @Override
     public void waitForAssertTrialDecision() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        WrapperMessage result = new WrapperMessage();
+        
+        ClientProxy cp = new ClientProxy(NodeSetts.benchServerName, 
+                NodeSetts.benchServerPort, result, MessageType.waitForAssertTrialDecision);
+        
+        cp.start();
+        
+        try {
+            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (result.getMessage().getType() != MessageType.ACK) {
+            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
+            System.exit(1);
+        }
     }
 
     @Override
     public void waitForFollowCoachAdvice(String team) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        WrapperMessage result = new WrapperMessage();
+        
+        ClientProxy cp = new ClientProxy(NodeSetts.benchServerName, 
+                NodeSetts.benchServerPort, result, MessageType.waitForFollowCoachAdvice, team);
+        
+        cp.start();
+        
+        try {
+            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (result.getMessage().getType() != MessageType.ACK) {
+            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
+            System.exit(1);
+        }
     }
 
     @Override
     public void followCoachAdvice(String team, int idC) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     WrapperMessage result = new WrapperMessage();
+        
+        ClientProxy cp = new ClientProxy(NodeSetts.benchServerName, 
+                NodeSetts.benchServerPort, result, MessageType.followCoachAdvice, team, idC);
+        
+        cp.start();
+        
+        try {
+            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }   
+        
+        if (result.getMessage().getType() != MessageType.ACK) {
+            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
+            System.exit(1);
+        }
     }
 
     @Override
     public void seatDown(String team) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     WrapperMessage result = new WrapperMessage();
+        
+        ClientProxy cp = new ClientProxy(NodeSetts.benchServerName, 
+                NodeSetts.benchServerPort, result, MessageType.seatDown, team);
+        
+        cp.start();
+        
+        try {
+            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+        
+        if (result.getMessage().getType() != MessageType.ACK) {
+            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
+            System.exit(1);
+        }
     }
 
     @Override
     public void waitForCallContestants(String team, int idC) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     WrapperMessage result = new WrapperMessage();
+        
+        ClientProxy cp = new ClientProxy(NodeSetts.benchServerName, 
+                NodeSetts.benchServerPort, result, MessageType.waitForCallContestants, team, idC);
+        
+        cp.start();
+        
+        try {
+            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+        
+        if (result.getMessage().getType() != MessageType.ACK) {
+            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
+            System.exit(1);
+        }
     }
     
 }

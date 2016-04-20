@@ -5,6 +5,7 @@
 package main;
 
 import bench.Bench;
+import entities.BenchProxy;
 import entities.Coach;
 import entities.Contestant;
 import entities.Referee;
@@ -18,7 +19,7 @@ import referee_site.RefereeSite;
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Main{
-    private static Bench bench;
+    private static BenchProxy bench;
     private static Playground playground;
     private static RefereeSite referee_site;
     private static Log lg;
@@ -37,12 +38,12 @@ public class Main{
         
         assert nCoaches == teams.length;
         
-        bench = new Bench(nContestants/2, nContestants/2);
+        bench = new BenchProxy();
         playground = new Playground();
         referee_site = new RefereeSite();
 
         lg = Log.getInstance();
-
+       
         ref =  new Referee((playground.IReferee) playground, (bench.IReferee) bench, (referee_site.IReferee) referee_site);
         
         coachs =  new Coach [nCoaches];

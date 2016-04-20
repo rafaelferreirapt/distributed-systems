@@ -9,9 +9,15 @@ package communication.message;
  *
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
-public enum MessageType {
-    callTrial, assertTrialDecision, wakeUp, 
-    reviewNotes, callContestants, waitForCallTrial,
-    waitForAssertTrialDecision, waitForFollowCoachAdvice,
-    followCoachAdvice, seatDown, waitForCallContestants, ACK
+public class WrapperMessage {
+    
+    private Message m;
+    
+    public void setMessage(Message m){
+        this.m = m;
+    }
+    
+    public Message getMessage(){
+        return this.m;
+    }
 }
