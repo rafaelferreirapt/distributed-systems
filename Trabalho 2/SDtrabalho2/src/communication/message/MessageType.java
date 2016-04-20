@@ -17,5 +17,5 @@ public enum MessageType {
     annouceNewGame, declareGameWinner, declareMatchWinner,
     endOfMatch, waitForInformReferee, waitForAmDone,
     waitAllPositioned, informReferee, amDone,
-    positioned
+    positioned, startTrial, pullTheRope, waitForStartTrial
 }

@@ -95,7 +95,9 @@ public class Playground implements IReferee, IContestant{
         } catch (InterruptedException ex) {
             Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println("fui ao log!");
         log.updateRope(team, id);
+        System.out.println("Log done!");
     }
     
 }

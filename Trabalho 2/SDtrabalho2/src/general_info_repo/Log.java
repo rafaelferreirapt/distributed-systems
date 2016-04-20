@@ -210,7 +210,7 @@ public class Log {
      * @param contestant The contestant ID.
      */
     public synchronized void updateRope(String team, int contestant){
-        this.match.updateRope(team, this.match.getContestantStrength(team, contestant));
+        match.updateRope(team, match.getContestantStrength(team, contestant));
     }
     
     /**
@@ -219,7 +219,7 @@ public class Log {
      * or 1 for new trial.
      */
     public synchronized int assertTrialDecision(){
-        return this.match.assertTrialDecision();
+        return match.assertTrialDecision();
     }
     
     /**

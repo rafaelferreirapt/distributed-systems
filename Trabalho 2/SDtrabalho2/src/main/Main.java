@@ -7,6 +7,7 @@ package main;
 import entities.BenchProxy;
 import entities.Coach;
 import entities.Contestant;
+import entities.PlaygroundProxy;
 import entities.Referee;
 import entities.RefereeSiteProxy;
 import general_info_repo.Log;
@@ -20,8 +21,8 @@ import settings.NodeSetts;
  */
 public class Main{
     private static BenchProxy bench;
-    private static Playground playground;
     private static RefereeSiteProxy referee_site;
+    private static PlaygroundProxy playground;
     private static Log lg;
     private static Coach [] coachs;
     private static Contestant [] contestants;
@@ -39,8 +40,8 @@ public class Main{
         assert nCoaches == teams.length;
         
         bench = new BenchProxy();
-        playground = new Playground();
-        referee_site = new RefereeSiteProxy();
+		referee_site = new RefereeSiteProxy();
+        playground = new PlaygroundProxy();
 
         lg = Log.getInstance();
        
