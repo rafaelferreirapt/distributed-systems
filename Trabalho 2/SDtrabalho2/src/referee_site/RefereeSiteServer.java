@@ -8,6 +8,7 @@ package referee_site;
 import communication.ServerChannel;
 import communication.message.Message;
 import communication.message.MessageException;
+import communication.message.MessageType;
 import communication.proxy.ServerInterface;
 import java.net.SocketException;
 
@@ -27,7 +28,41 @@ public class RefereeSiteServer extends RefereeSite implements ServerInterface {
     
     @Override
     public Message processAndReply(Message inMessage, ServerChannel scon) throws MessageException, SocketException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean endMatch;
+        switch(inMessage.getType()){
+            case annouceNewGame:
+                super.annouceNewGame();
+                break;
+            case declareGameWinner:
+                super.declareGameWinner();
+                break;
+            case declareMatchWinner:
+                super.declareMatchWinner();
+                break;
+            case endOfMatch:
+                endMatch = super.endOfMatch();
+                return new Message(MessageType.ACK, endMatch);   
+            case waitForInformReferee:
+                super.waitForInformReferee();
+                break;
+            case waitForAmDone:
+                super.waitForAmDone();
+                break;
+            case waitAllPositioned:
+                super.waitAllPositioned();
+                break;
+            case informReferee:
+                super.informReferee(inMessage.getTeam());
+                break;
+            case amDone:
+                super.amDone();
+                break;
+            case positioned:
+                super.positioned();
+                break;
+        }
+        
+        return new Message(MessageType.ACK);   
     }
 
     @Override

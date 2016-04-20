@@ -17,6 +17,7 @@ public class Message implements Serializable {
     private MessageType type;
     private String team = null;
     private int idC = -1;
+    private boolean endOfMatch = false;
     
     public Message(MessageType type) {
         this.type = type;
@@ -33,6 +34,11 @@ public class Message implements Serializable {
         this.idC = idC;
     }
     
+    public Message(MessageType type, boolean endOfMatch) {
+        this.type = type;
+        this.endOfMatch = endOfMatch;
+    }
+    
     public MessageType getType(){
         return this.type;
     }
@@ -43,5 +49,9 @@ public class Message implements Serializable {
     
     public int getIdC(){
         return this.idC;
+    }
+    
+    public boolean getEndOfMatch(){
+        return this.endOfMatch;
     }
 }

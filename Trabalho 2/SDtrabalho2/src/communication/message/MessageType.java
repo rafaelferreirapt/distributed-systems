@@ -13,5 +13,9 @@ public enum MessageType {
     callTrial, assertTrialDecision, wakeUp, 
     reviewNotes, callContestants, waitForCallTrial,
     waitForAssertTrialDecision, waitForFollowCoachAdvice,
-    followCoachAdvice, seatDown, waitForCallContestants, ACK
+    followCoachAdvice, seatDown, waitForCallContestants, ACK,
+    annouceNewGame, declareGameWinner, declareMatchWinner,
+    endOfMatch, waitForInformReferee, waitForAmDone,
+    waitAllPositioned, informReferee, amDone,
+    positioned
 }
