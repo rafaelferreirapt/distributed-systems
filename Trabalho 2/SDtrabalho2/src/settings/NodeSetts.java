@@ -20,10 +20,19 @@ public class NodeSetts {
     public static String playgroundServerName = "127.0.0.1";
     public static String benchServerName = "127.0.0.1";
     
-    public static int nCoachs;
+    public static int nCoachs = 2;
+    
+    public static final int NUMBER_OF_TRIALS = 6;
     
     public static int nContestantsTeam = 5;   
     
     public static String teams[] = {"A", "B"};
     
+    public static final int MAX_STRENGTH = 24;
+    public static final int MIN_STRENGTH = 20;
+    
+    public static final int number_of_games = 3;
+    
+    public static final int delayMin = 0;
+    public static final int delayMax = 0;
 }

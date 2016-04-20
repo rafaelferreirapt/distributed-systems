@@ -25,7 +25,7 @@ public class Game {
      * @param id game identifier, game number in the match.
      */
     public Game(int id){
-        this.trials = new Trial[6];
+        this.trials = new Trial[Match.NUMBER_OF_TRIALS];
         this.id = id;
         this.pontuation = new int[2];
         this.pontuation[0] = 0;

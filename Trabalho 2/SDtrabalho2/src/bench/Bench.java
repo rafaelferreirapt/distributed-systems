@@ -6,6 +6,7 @@ package bench;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import settings.NodeSetts;
 
 /**
  * Bench instance.
@@ -18,6 +19,8 @@ public class Bench implements IReferee, ICoach, IContestant{
     private int nContestantsSelectedA = 0, nContestantsSelectedB = 0;
     private boolean followCoachA = false;
     private boolean followCoachB = false;
+    
+    private static int NUMBER_CONTESTANTS = NodeSetts.nContestantsTeam * NodeSetts.teams.length;
     
     private int coachesWaitCallTrial = 0;
     private int[] selectedContestantsA = new int[3];
@@ -49,7 +52,7 @@ public class Bench implements IReferee, ICoach, IContestant{
      */
     @Override
     public synchronized void callTrial() {
-        while(this.coachesWaitCallTrial != 2 || this.nContestantsInBench != 10){
+            while(this.coachesWaitCallTrial != 2 || this.nContestantsInBench != NUMBER_CONTESTANTS){
             try {
                 wait();
             } catch (InterruptedException ex) {
@@ -128,7 +131,7 @@ public class Bench implements IReferee, ICoach, IContestant{
      */
     @Override
     public synchronized void reviewNotes(String team) {
-        while(this.nContestantsInBench < 10){
+        while(this.nContestantsInBench < NUMBER_CONTESTANTS){
             try {
                 wait();
             } catch (InterruptedException ex) {
@@ -153,7 +156,7 @@ public class Bench implements IReferee, ICoach, IContestant{
             int selected;
 
             do{
-                selected = (int)Math.ceil(Math.random() * 4 + 1);
+                selected = (int)Math.ceil(Math.random() * (NodeSetts.nContestantsTeam - 1) + 1);
                 repeated = false;
 
                 for(int j=0; j<i; j++){
@@ -316,7 +319,7 @@ public class Bench implements IReferee, ICoach, IContestant{
      */
     @Override
     public synchronized void seatDown(String team){
-        if(++this.nContestantsInBench==10){
+        if(++this.nContestantsInBench==NUMBER_CONTESTANTS){
             notifyAll();
         }
     }

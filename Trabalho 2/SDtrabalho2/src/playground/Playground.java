@@ -7,6 +7,7 @@ package playground;
 import general_info_repo.Log;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import settings.NodeSetts;
 
 /**
  * Playground instance.
@@ -90,7 +91,7 @@ public class Playground implements IReferee, IContestant{
     @Override
     public void pullTheRope(int id, String team) {
         try {
-            Thread.sleep(0);//(int)Math.ceil(Math.random() * 2000 + 1000));
+            Thread.sleep((int)Math.ceil(Math.random() * NodeSetts.delayMax + NodeSetts.delayMin));
         } catch (InterruptedException ex) {
             Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
         }

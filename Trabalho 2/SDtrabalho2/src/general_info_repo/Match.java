@@ -10,6 +10,7 @@ import entities.RefereeState;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
+import settings.NodeSetts;
 
 /**
  * The match singleton will have games, positions, strengths, contestants last trials,
@@ -20,13 +21,16 @@ public class Match {
     
     private final Game[] games;
     private int game = 0;
-    private final int number_of_games = 3;
+    private final int number_of_games = NodeSetts.number_of_games;
     private final int pontuation[];
     private int positionA = 0;
     private int positionB = 0;
     
-    private static final int MAX_STRENGTH = 24;
-    private static final int MIN_STRENGTH = 20;
+    private static final int MAX_STRENGTH = NodeSetts.MAX_STRENGTH;
+    private static final int MIN_STRENGTH = NodeSetts.MIN_STRENGTH;
+    
+    public static final int NUMBER_OF_TRIALS = NodeSetts.NUMBER_OF_TRIALS;
+    public static final int N_CONTESTANTS = NodeSetts.nContestantsTeam * NodeSetts.teams.length;
     
     private final HashMap<String, HashMap<Integer, Integer>> strengths;
     private final HashMap<Integer, Integer> positionsA;

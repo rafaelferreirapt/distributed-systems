@@ -76,7 +76,6 @@ public class ClientProxy extends Thread {
             
             con.close();
             
-            System.out.println("aqui");
         } catch (Exception ex) {
             Logger.getLogger(ClientProxy.class.getName()).log(Level.SEVERE, null, ex);
         }

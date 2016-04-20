@@ -80,8 +80,29 @@ public class Log {
         try{
             pw = new PrintWriter(log);
             pw.println("                               Game of the Rope - Description of the internal state");
-            pw.println("Ref Coa 1 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Coa 2 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5       Trial");
-            pw.println("Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS");
+            
+            String head = "Ref  Coa 1";
+            for(int i=1; i<=Match.N_CONTESTANTS/2; i++){
+                head += " Cont " + Integer.toString(i);
+            }
+            head += " Coa 2";
+            for(int i=1; i<=Match.N_CONTESTANTS/2; i++){
+                head += " Cont " + Integer.toString(i);
+            }
+            head += "       Trial";
+            pw.println(head);
+            
+            head = "Sta  Stat";
+            for(int i=1; i<=Match.N_CONTESTANTS/2; i++){
+                head += " Sta SG";
+            }
+            head += "  Stat";
+            for(int i=1; i<=Match.N_CONTESTANTS/2; i++){
+                head += " Sta SG";
+            }
+            head += " 3 2 1 . 1 2 3 NB PS";
+            pw.println(head);
+            
             pw.flush();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Logging.class.getName()).log(Level.SEVERE, null, ex);
@@ -94,8 +115,29 @@ public class Log {
      */
     public synchronized void newGame(int gameNumber){
         pw.println("Game " + gameNumber);
-        pw.println("Ref Coa 1 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5 Coa 2 Cont 1 Cont 2 Cont 3 Cont 4 Cont 5       Trial");
-        pw.println("Sta  Stat Sta SG Sta SG Sta SG Sta SG Sta SG  Stat Sta SG Sta SG Sta SG Sta SG Sta SG 3 2 1 . 1 2 3 NB PS");
+        
+        String head = "Ref  Coa 1";
+        for(int i=1; i<=Match.N_CONTESTANTS/2; i++){
+            head += " Cont " + Integer.toString(i);
+        }
+        head += " Coa 2";
+        for(int i=1; i<=Match.N_CONTESTANTS/2; i++){
+            head += " Cont " + Integer.toString(i);
+        }
+        head += "       Trial";
+        pw.println(head);
+
+        head = "Sta  Stat";
+        for(int i=1; i<=Match.N_CONTESTANTS/2; i++){
+            head += " Sta SG";
+        }
+        head += "  Stat";
+        for(int i=1; i<=Match.N_CONTESTANTS/2; i++){
+            head += " Sta SG";
+        }
+        head += " 3 2 1 . 1 2 3 NB PS";
+        pw.println(head);
+        
         pw.flush();
     }
     
@@ -106,8 +148,8 @@ public class Log {
         pw.println("\nLegend:");
         pw.println("Ref Sta    – state of the referee");
         pw.println("Coa # Stat - state of the coach of team # (# - 1 .. 2)");
-        pw.println("Cont # Sta – state of the contestant # (# - 1 .. 5) of team whose coach was listed to the immediate left");
-        pw.println("Cont # SG  – strength of the contestant # (# - 1 .. 5) of team whose coach was listed to the immediate left");
+        pw.println("Cont # Sta – state of the contestant # (# - 1 .. "+Integer.toString(Match.N_CONTESTANTS/2)+") of team whose coach was listed to the immediate left");
+        pw.println("Cont # SG  – strength of the contestant # (# - 1 .. "+Integer.toString(Match.N_CONTESTANTS/2)+") of team whose coach was listed to the immediate left");
         pw.println("TRIAL – ?  – contestant identification at the position ? at the end of the rope for present trial (? - 1 .. 3)");
         pw.println("TRIAL – NB – trial number");
         pw.println("TRIAL – PS – position of the centre of the rope at the beginning of the trial");
@@ -345,14 +387,20 @@ public class Log {
         String posB = " ";
         for(int i = 3; i>=1; i--){
             if(positionsA.containsKey(i)){
-                posA += positionsA.get(i) + " ";
+                posA += positionsA.get(i).toString() + " ";
+                if(positionsA.get(i).toString().length() < 1){
+                    posA += " ";
+                }
             }else{
                 posA += "- ";
             }
         }
         for(int i = 1; i<=3; i++){
             if(positionsB.containsKey(i)){
-                posB += positionsB.get(i) + " ";
+                posB += positionsB.get(i).toString() + " ";
+                if(positionsB.get(i).toString().length() < 1){
+                    posB += " ";
+                }
             }else{
                 posB += "- ";
             }
