@@ -22,7 +22,7 @@ public class NodeSetts {
     
     public static int nCoachs;
     
-    public static int nContestantsTeam = 10;   
+    public static int nContestantsTeam = 5;   
     
     public static String teams[] = {"A", "B"};
     

@@ -15,13 +15,13 @@ import settings.NodeSetts;
 public class ContestantRun {
     
     public static void main(String [] args) {        
-        ArrayList<Contestant> contestants = new ArrayList<>(NodeSetts.nContestantsTeam);
+        ArrayList<Contestant> contestants = new ArrayList<>(NodeSetts.nContestantsTeam*2);
         BenchProxy bp = new BenchProxy();
         RefereeSiteProxy rsp = new RefereeSiteProxy();
         PlaygroundProxy pp = new PlaygroundProxy();
         
-        for (int i = 0; i < NodeSetts.nContestantsTeam; i++){
-            if(i < (NodeSetts.nContestantsTeam/NodeSetts.teams.length)){
+        for (int i = 0; i < contestants.size(); i++){
+            if(i < NodeSetts.nContestantsTeam){
                 contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i, NodeSetts.teams[0]));
             }else{
                 contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i, NodeSetts.teams[0]));

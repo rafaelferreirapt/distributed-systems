@@ -31,7 +31,9 @@ public class BenchProxy implements IReferee, ICoach, IContestant{
         cp.start();
         
         try {
-            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
+            cp.join(); 
+            // System.out.println("Final Join");
         } catch (InterruptedException ex) {
             Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -52,7 +54,9 @@ public class BenchProxy implements IReferee, ICoach, IContestant{
         cp.start();
         
         try {
-            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
+            cp.join(); 
+            // System.out.println("Final Join");
         } catch (InterruptedException ex) {
             Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -73,7 +77,9 @@ public class BenchProxy implements IReferee, ICoach, IContestant{
         cp.start();
         
         try {
-            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
+            cp.join(); 
+            // System.out.println("Final Join");
         } catch (InterruptedException ex) {
             Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
         }  
@@ -94,7 +100,9 @@ public class BenchProxy implements IReferee, ICoach, IContestant{
         cp.start();
         
         try {
-            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName()));  
+            cp.join(); 
+            // System.out.println("Final Join");
         } catch (InterruptedException ex) {
             Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -115,7 +123,9 @@ public class BenchProxy implements IReferee, ICoach, IContestant{
         cp.start();
         
         try {
-            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
+            cp.join(); 
+            // System.out.println("Final Join");
         } catch (InterruptedException ex) {
             Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -136,7 +146,9 @@ public class BenchProxy implements IReferee, ICoach, IContestant{
         cp.start();
         
         try {
-            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
+            cp.join(); 
+            // System.out.println("Final Join");
         } catch (InterruptedException ex) {
             Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -157,7 +169,9 @@ public class BenchProxy implements IReferee, ICoach, IContestant{
         cp.start();
         
         try {
-            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
+            cp.join(); 
+            // System.out.println("Final Join");
         } catch (InterruptedException ex) {
             Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -178,7 +192,9 @@ public class BenchProxy implements IReferee, ICoach, IContestant{
         cp.start();
         
         try {
-            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName()));  
+            cp.join(); 
+            // System.out.println("Final Join");
         } catch (InterruptedException ex) {
             Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -199,7 +215,9 @@ public class BenchProxy implements IReferee, ICoach, IContestant{
         cp.start();
         
         try {
-            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
+            cp.join(); 
+            // System.out.println("Final Join");
         } catch (InterruptedException ex) {
             Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
         }   
@@ -220,7 +238,9 @@ public class BenchProxy implements IReferee, ICoach, IContestant{
         cp.start();
         
         try {
-            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
+            cp.join(); 
+            // System.out.println("Final Join");
         } catch (InterruptedException ex) {
             Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
         }  
@@ -241,14 +261,16 @@ public class BenchProxy implements IReferee, ICoach, IContestant{
         cp.start();
         
         try {
-            System.out.println("Init Join"); cp.join(); System.out.println("Final Join");
+            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
+            cp.join(); 
+            // System.out.println("Final Join");
         } catch (InterruptedException ex) {
             Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
         }  
         
         if (result.getMessage().getType() != MessageType.ACK) {
             System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
-            System.exit(1);
+                System.exit(1);
         }
     }
     

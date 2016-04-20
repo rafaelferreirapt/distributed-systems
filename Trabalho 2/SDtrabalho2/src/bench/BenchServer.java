@@ -72,5 +72,4 @@ public class BenchServer extends Bench implements ServerInterface {
     public boolean serviceEnded() {
         return serverEnded;
     }
-   
 }
