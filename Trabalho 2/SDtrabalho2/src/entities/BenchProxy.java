@@ -28,56 +28,67 @@ public class BenchProxy implements IReferee, ICoach, IContestant{
     
     @Override
     public void callTrial() {
-        communicate(new Message(MessageType.callTrial));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void assertTrialDecision() {
-        communicate(new Message(MessageType.assertTrialDecision));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void wakeUp() {
-        communicate(new Message(MessageType.wakeUp));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void reviewNotes(String team) {
-        communicate(new Message(MessageType.reviewNotes, team));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, team));
     }
 
     @Override
     public void callContestants(String team) {
-        communicate(new Message(MessageType.callContestants, team));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, team));
     }
 
     @Override
     public void waitForCallTrial() {
-        communicate(new Message(MessageType.waitForCallTrial));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void waitForAssertTrialDecision() {
-        communicate(new Message(MessageType.waitForAssertTrialDecision));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void waitForFollowCoachAdvice(String team) {
-        communicate(new Message(MessageType.waitForFollowCoachAdvice, team));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, team));
     }
 
     @Override
     public void followCoachAdvice(String team, int idC) {
-        communicate(new Message(MessageType.followCoachAdvice, team, idC));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, team, idC));
     }
 
     @Override
     public void seatDown(String team) {
-        communicate(new Message(MessageType.seatDown, team));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, team));
     }
 
     @Override
     public void waitForCallContestants(String team, int idC) {
-        communicate(new Message(MessageType.waitForCallContestants, team, idC));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, team, idC));
     }
 }

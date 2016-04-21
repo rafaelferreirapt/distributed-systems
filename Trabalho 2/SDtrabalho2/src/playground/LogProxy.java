@@ -27,7 +27,8 @@ public class LogProxy implements IPlayground{
     
     @Override
     public void updateRope(String team, int contestant) {
-        communicate(new Message(MessageType.updateRope, team, contestant));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, team, contestant));
     }
     
 }

@@ -27,26 +27,31 @@ public class PlaygroundProxy implements IReferee, IContestant{
     
     @Override
     public void startTrial() {
-        communicate(new Message(MessageType.startTrial));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void assertTrialDecision() {
-        communicate(new Message(MessageType.assertTrialDecision));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void pullTheRope(int id, String team) {
-        communicate(new Message(MessageType.pullTheRope, team, id));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, team, id));
     }
 
     @Override
     public void waitForStartTrial() {
-        communicate(new Message(MessageType.waitForStartTrial));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void waitForAssertTrialDecision() {
-        communicate(new Message(MessageType.waitForAssertTrialDecision));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 }

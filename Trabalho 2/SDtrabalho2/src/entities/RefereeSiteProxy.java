@@ -29,52 +29,62 @@ public class RefereeSiteProxy implements IReferee, ICoach, IContestant{
     
     @Override
     public void annouceNewGame() {
-        communicate(new Message(MessageType.annouceNewGame));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void declareGameWinner() {
-        communicate(new Message(MessageType.declareGameWinner));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void declareMatchWinner() {
-        communicate(new Message(MessageType.declareMatchWinner));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public boolean endOfMatch() {
-        WrapperMessage result = communicate(new Message(MessageType.endOfMatch));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        WrapperMessage result = communicate(new Message(mt));
         return result.getMessage().getBoolean();
     }
 
     @Override
     public void waitForInformReferee() {
-        communicate(new Message(MessageType.waitForInformReferee));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void waitForAmDone() {
-        communicate(new Message(MessageType.waitForAmDone));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void waitAllPositioned() {
-        communicate(new Message(MessageType.waitAllPositioned));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void informReferee(String team) {
-        communicate(new Message(MessageType.informReferee, team));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, team));
     }
 
     @Override
     public void amDone() {
-        communicate(new Message(MessageType.amDone));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void positioned() {
-        communicate(new Message(MessageType.positioned));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 }

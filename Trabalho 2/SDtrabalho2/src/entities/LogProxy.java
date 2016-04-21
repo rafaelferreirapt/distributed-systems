@@ -29,98 +29,117 @@ public class LogProxy implements IReferee, ICoach, IContestant{
     
     @Override
     public void initRefereeState(RefereeState state) {
-        communicate(new Message(MessageType.initRefereeState, state));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, state));
     }
 
     @Override
     public void newGame() {
-        communicate( new Message(MessageType.newGame));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void newTrial() {
-        communicate(new Message(MessageType.newTrial));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public int getNumberOfGames() {
-        WrapperMessage result = communicate(new Message(MessageType.getNumberOfGames));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        WrapperMessage result = communicate(new Message(mt));
         return result.getMessage().getInteger();
     }
 
     @Override
     public int getTotalNumberOfGames() {
-        WrapperMessage result = communicate(new Message(MessageType.getTotalNumberOfGames));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        WrapperMessage result = communicate(new Message(mt));
         return result.getMessage().getInteger();
     }
 
     @Override
     public void printGameWinner() {
-        communicate(new Message(MessageType.printGameWinner));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void newGame(int gameNumber) {
-        communicate(new Message(MessageType.printGameWinner, gameNumber));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, gameNumber));
     }
 
     @Override
     public void setRefereeState(RefereeState state) {
-        communicate(new Message(MessageType.printGameWinner, state));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, state));
     }
 
     @Override
     public void declareMatchWinner() {
-        communicate(new Message(MessageType.declareMatchWinner));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 
     @Override
     public void initCoachState(String team, CoachState state) {
-        communicate(new Message(MessageType.initCoachState, state, team));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, state, team));
     }
 
     @Override
     public void refreshStrengths(String team) {
-        communicate(new Message(MessageType.refreshStrengths, team));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, team));
     }
 
     @Override
     public void setCoachState(String team, CoachState state) {
-        communicate(new Message(MessageType.setCoachState, state, team));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, state, team));
     }
 
     @Override
     public void initContestant(ContestantState state, String team, int contestant) {
-        communicate(new Message(MessageType.initContestant, state, team, contestant));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, state, team, contestant));
     }
 
     @Override
     public void setContestantLastTrial(String team, int contestant) {
-        communicate(new Message(MessageType.setContestantLastTrial, team, contestant));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, team, contestant));
     }
 
     @Override
     public void removePosition(String team, int contestant) {
-        communicate(new Message(MessageType.removePosition, team, contestant));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, team, contestant));
     }
 
     @Override
     public void setPosition(String team, int contestant) {
-        communicate(new Message(MessageType.setPosition, team, contestant));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, team, contestant));
     }
 
     @Override
     public void setContestantState(ContestantState state, String team, int contestant) {
-        communicate(new Message(MessageType.setContestantState, state, team, contestant));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt, state, team, contestant));
     }
 
     @Override
     public int assertTrialDecision() {
-        WrapperMessage result = communicate(new Message(MessageType.assertTrialDecision));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        WrapperMessage result = communicate(new Message(mt));
         return result.getMessage().getInteger();
     }
     
     public void writeEnd(){
-        communicate(new Message(MessageType.writeEnd));
+        MessageType mt = MessageType.valueOf(new Object(){}.getClass().getEnclosingMethod().getName());
+        communicate(new Message(mt));
     }
 }
