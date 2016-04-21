@@ -25,10 +25,10 @@ public class LogServer extends Log implements ServerInterface {
     public Message processAndReply(Message inMessage, ServerChannel scon) throws MessageException, SocketException {
         switch(inMessage.getType()){
             case newGame:
-                if(inMessage.getGameNumber() == -1){
+                if(inMessage.getInteger()== -1){
                     super.newGame();
                 }else{
-                    super.newGame(inMessage.getGameNumber());
+                    super.newGame(inMessage.getInteger());
                 }
                 break;
             case writeEnd:
@@ -45,7 +45,7 @@ public class LogServer extends Log implements ServerInterface {
             case getTotalNumberOfGames:
                 return new Message(MessageType.ACK, super.getTotalNumberOfGames());
             case updateRope:
-                String t = inMessage.getTeam();
+                String t = inMessage.getString();
                 int i = inMessage.getInteger();
                 super.updateRope(t, i);
                 break;

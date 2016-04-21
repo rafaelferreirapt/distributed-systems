@@ -101,17 +101,17 @@ public class LogProxy implements IReferee, ICoach, IContestant{
 
     @Override
     public void removePosition(String team, int contestant) {
-        communicate(new Message(MessageType.setContestantLastTrial, team, contestant));
+        communicate(new Message(MessageType.removePosition, team, contestant));
     }
 
     @Override
     public void setPosition(String team, int contestant) {
-        communicate(new Message(MessageType.setContestantLastTrial, team, contestant));
+        communicate(new Message(MessageType.setPosition, team, contestant));
     }
 
     @Override
     public void setContestantState(ContestantState state, String team, int contestant) {
-        communicate(new Message(MessageType.setContestantState, team, contestant));
+        communicate(new Message(MessageType.setContestantState, state, team, contestant));
     }
 
     @Override

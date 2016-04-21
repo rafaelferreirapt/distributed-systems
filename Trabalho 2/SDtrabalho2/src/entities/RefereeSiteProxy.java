@@ -45,7 +45,7 @@ public class RefereeSiteProxy implements IReferee, ICoach, IContestant{
     @Override
     public boolean endOfMatch() {
         WrapperMessage result = communicate(new Message(MessageType.endOfMatch));
-        return result.getMessage().getEndOfMatch();
+        return result.getMessage().getBoolean();
     }
 
     @Override

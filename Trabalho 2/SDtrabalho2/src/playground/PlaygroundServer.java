@@ -42,7 +42,7 @@ public class PlaygroundServer extends Playground implements ServerInterface {
                 super.waitForAssertTrialDecision();
                 break;
             case pullTheRope:
-                super.pullTheRope(inMessage.getIdC(), inMessage.getTeam());
+                super.pullTheRope(inMessage.getInteger(), inMessage.getString());
                 break;
         }
         

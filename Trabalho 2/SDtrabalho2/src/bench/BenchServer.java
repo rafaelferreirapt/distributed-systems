@@ -40,10 +40,10 @@ public class BenchServer extends Bench implements ServerInterface {
                 super.wakeUp();
                 break;
             case reviewNotes:
-                super.reviewNotes(inMessage.getTeam());
+                super.reviewNotes(inMessage.getString());
                 break;
             case callContestants:
-                super.callContestants(inMessage.getTeam());
+                super.callContestants(inMessage.getString());
                 break;
             case waitForCallTrial:
                 super.waitForCallTrial();
@@ -52,16 +52,16 @@ public class BenchServer extends Bench implements ServerInterface {
                 super.waitForAssertTrialDecision();
                 break;
             case waitForFollowCoachAdvice:
-                super.waitForFollowCoachAdvice(inMessage.getTeam());
+                super.waitForFollowCoachAdvice(inMessage.getString());
                 break;
             case followCoachAdvice:
-                super.followCoachAdvice(inMessage.getTeam(), inMessage.getIdC());
+                super.followCoachAdvice(inMessage.getString(), inMessage.getInteger());
                 break;
             case seatDown:
-                super.seatDown(inMessage.getTeam());
+                super.seatDown(inMessage.getString());
                 break;
             case waitForCallContestants:
-                super.waitForCallContestants(inMessage.getTeam(), inMessage.getIdC());
+                super.waitForCallContestants(inMessage.getString(), inMessage.getInteger());
                 break;
         }
         

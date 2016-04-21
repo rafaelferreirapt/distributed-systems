@@ -4,7 +4,6 @@
  */
 package entities;
 
-import general_info_repo.Log;
 
 /**
  * Contestant instance.

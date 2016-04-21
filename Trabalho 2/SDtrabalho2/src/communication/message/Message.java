@@ -17,11 +17,12 @@ import java.io.Serializable;
 public class Message implements Serializable {
     
     private static final long serialVersionUID = 1001L;
-    private MessageType type;
+    private MessageType type = null;
+    
     private String str = null;
-    private boolean endOfMatch = false;
-    private int gameNumber = -1;
+    private boolean bool = false;
     private int integer = -1;
+    
     private ContestantState contestant_state = null;
     private CoachState coach_state = null;
     private RefereeState referee_state = null;
@@ -31,55 +32,39 @@ public class Message implements Serializable {
     }
     
     public Message(MessageType type, String str) {
-        this.type = type;
+        this(type);
         this.str = str;
     }
     
     
     public Message(MessageType type, int integer) {
-        this.type = type;
+        this(type);
         this.integer = integer;
     }
     
     public Message(MessageType type, String str, int integer) {
-        this.type = type;
-        this.str = str;
+        this(type, str);
         this.integer = integer;
     }
     
-    public Message(MessageType type, boolean endOfMatch) {
-        this.type = type;
-        this.endOfMatch = endOfMatch;
+    public Message(MessageType type, boolean bool) {
+        this(type);
+        this.bool = bool;
     }
     
     public Message(MessageType type, ContestantState contestant_state, String str, int integer){
-        this.type = type;
-        this.integer = integer;
-        this.str = str;
+        this(type, str, integer);
         this.contestant_state = contestant_state;
     }
     
     public Message(MessageType type, CoachState coach_state, String str){
-        this.type = type;
-        this.str = str;
+        this(type, str);
         this.coach_state = coach_state;
     }
     
-    public Message(int gameNumber){
-        this.gameNumber = gameNumber;
-    }
-    
     public Message(MessageType type, RefereeState referee_state){
-        this.type = type;
+        this(type);
         this.referee_state = referee_state;
-    }
-    
-    public int getGameNumber(){
-        return this.gameNumber;
-    }
-    
-    public int getInteger(){
-        return this.integer;
     }
     
     public ContestantState getContestantState(){
@@ -94,24 +79,19 @@ public class Message implements Serializable {
         return this.coach_state;
     }
     
-    
     public MessageType getType(){
         return this.type;
     }
     
-    public String getTeam(){
-        return this.str;
+    public int getInteger(){
+        return this.integer;
     }
     
     public String getString(){
         return this.str;
     }
     
-    public int getIdC(){
-        return this.integer;
-    }
-    
-    public boolean getEndOfMatch(){
-        return this.endOfMatch;
+    public boolean getBoolean(){
+        return this.bool;
     }
 }

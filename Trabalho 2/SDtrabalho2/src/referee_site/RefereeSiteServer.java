@@ -52,7 +52,7 @@ public class RefereeSiteServer extends RefereeSite implements ServerInterface {
                 super.waitAllPositioned();
                 break;
             case informReferee:
-                super.informReferee(inMessage.getTeam());
+                super.informReferee(inMessage.getString());
                 break;
             case amDone:
                 super.amDone();
