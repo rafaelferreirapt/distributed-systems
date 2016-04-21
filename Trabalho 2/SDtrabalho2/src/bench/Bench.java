@@ -20,7 +20,7 @@ public class Bench implements IReferee, ICoach, IContestant{
     private boolean followCoachA = false;
     private boolean followCoachB = false;
     
-    private static int NUMBER_CONTESTANTS = NodeSetts.nContestantsTeam * NodeSetts.teams.length;
+    private static int NUMBER_CONTESTANTS = NodeSetts.N_CONTESTANTS_TEAM * NodeSetts.teams.length;
     
     private int coachesWaitCallTrial = 0;
     private int[] selectedContestantsA = new int[3];
@@ -156,7 +156,7 @@ public class Bench implements IReferee, ICoach, IContestant{
             int selected;
 
             do{
-                selected = (int)Math.ceil(Math.random() * (NodeSetts.nContestantsTeam - 1) + 1);
+                selected = (int)Math.ceil(Math.random() * (NodeSetts.N_CONTESTANTS_TEAM - 1) + 1);
                 repeated = false;
 
                 for(int j=0; j<i; j++){

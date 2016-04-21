@@ -26,9 +26,9 @@ public class ClientProxyWrapper {
         cp.start();
         
         try {
-            System.out.printf("[%s][%d][%s] Init Join\n", logServerName, logServerPort, m.getType().toString()); 
+            // System.out.printf("[%s][%d][%s] Init Join\n", logServerName, logServerPort, m.getType().toString()); 
             cp.join(); 
-            System.out.printf("[%s][%d][%s] Init Join\n", logServerName, logServerPort, m.getType().toString());
+            // System.out.printf("[%s][%d][%s] Init Join\n", logServerName, logServerPort, m.getType().toString());
         } catch (InterruptedException ex) {
             Logger.getLogger(LogProxy.class.getName()).log(Level.SEVERE, null, ex);
         }

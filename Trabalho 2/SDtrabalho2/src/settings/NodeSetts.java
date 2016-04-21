@@ -5,36 +5,41 @@
  */
 package settings;
 
+import java.util.HashMap;
+
 /**
  *
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class NodeSetts {
-    // 22120 - 22129
     
-    public static int refereeSiteServerPort = 22120;
-    public static int playgroundServerPort = 22121;
-    public static int benchServerPort = 22122;
-    public static int logServerPort = 22123;
+    public static final HashMap<String, Integer> SERVER_PORTS;
+    public static final HashMap<String, String> SERVER_HOSTS;
     
-    public static String refereeSiteServerName = "127.0.0.1";
-    public static String playgroundServerName = "127.0.0.1";
-    public static String benchServerName = "127.0.0.1";
-    public static String logServerName = "127.0.0.1";
-    
-    public static int nCoachs = 2;
-    
+    public static final int N_COACHS = 2;
     public static final int NUMBER_OF_TRIALS = 6;
-    
-    public static int nContestantsTeam = 5;   
+    public static final int NUMBER_OF_GAMES = 3;
+    public static final int N_CONTESTANTS_TEAM = 5; 
+    public static final int MAX_STRENGTH = 24;
+    public static final int MIN_STRENGTH = 20;  
     
     public static String teams[] = {"A", "B"};
     
-    public static final int MAX_STRENGTH = 24;
-    public static final int MIN_STRENGTH = 20;
+    public static final int DELAY_MIN = 0;
+    public static final int DELAY_MAX = 0;
     
-    public static final int number_of_games = 3;
-    
-    public static final int delayMin = 0;
-    public static final int delayMax = 0;
+    static{
+        // 22120 - 22129
+        SERVER_PORTS = new HashMap<>();
+        SERVER_PORTS.put("log", 22123);
+        SERVER_PORTS.put("bench", 22122);
+        SERVER_PORTS.put("playground", 22121);
+        SERVER_PORTS.put("refereeSite", 22120);
+        
+        SERVER_HOSTS = new HashMap<>();
+        SERVER_HOSTS.put("log", "127.0.0.1");
+        SERVER_HOSTS.put("bench", "127.0.0.1");
+        SERVER_HOSTS.put("playground", "127.0.0.1");
+        SERVER_HOSTS.put("refereeSite", "127.0.0.1");
+    }
 }

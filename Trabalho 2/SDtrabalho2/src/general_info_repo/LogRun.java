@@ -20,7 +20,7 @@ public class LogRun {
         /* estabelecimento do servico */
         
         // criação do canal de escuta e sua associação
-        schan = new ServerChannel(NodeSetts.logServerPort);    
+        schan = new ServerChannel(NodeSetts.SERVER_PORTS.get("log"));    
         schan.start();
         
         LogServer logServer = new LogServer();

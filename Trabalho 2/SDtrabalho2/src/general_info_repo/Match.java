@@ -21,7 +21,7 @@ public class Match {
     
     private final Game[] games;
     private int game = 0;
-    private final int number_of_games = NodeSetts.number_of_games;
+    private final int number_of_games = NodeSetts.NUMBER_OF_GAMES;
     private final int pontuation[];
     private int positionA = 0;
     private int positionB = 0;
@@ -30,7 +30,7 @@ public class Match {
     private static final int MIN_STRENGTH = NodeSetts.MIN_STRENGTH;
     
     public static final int NUMBER_OF_TRIALS = NodeSetts.NUMBER_OF_TRIALS;
-    public static final int N_CONTESTANTS = NodeSetts.nContestantsTeam * NodeSetts.teams.length;
+    public static final int N_CONTESTANTS = NodeSetts.N_CONTESTANTS_TEAM * NodeSetts.teams.length;
     
     private final HashMap<String, HashMap<Integer, Integer>> strengths;
     private final HashMap<Integer, Integer> positionsA;

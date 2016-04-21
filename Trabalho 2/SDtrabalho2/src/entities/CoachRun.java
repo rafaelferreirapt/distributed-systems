@@ -15,12 +15,12 @@ import settings.NodeSetts;
 public class CoachRun {
     
     public static void main(String [] args) {        
-        ArrayList<Coach> coachs = new ArrayList<>(NodeSetts.nCoachs);
+        ArrayList<Coach> coachs = new ArrayList<>(NodeSetts.N_COACHS);
         BenchProxy bp = new BenchProxy();
         RefereeSiteProxy rsp = new RefereeSiteProxy();
         LogProxy log = new LogProxy();
         
-        for (int i = 0; i < NodeSetts.nCoachs; i++){
+        for (int i = 0; i < NodeSetts.N_COACHS; i++){
             coachs.add(new Coach((bench.ICoach) bp, (referee_site.ICoach) rsp, NodeSetts.teams[i], (general_info_repo.ICoach) log));
         }
         

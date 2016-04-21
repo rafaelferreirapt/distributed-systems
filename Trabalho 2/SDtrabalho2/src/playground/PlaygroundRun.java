@@ -22,7 +22,7 @@ public class PlaygroundRun {
         /* estabelecimento do servico */
         
         // criação do canal de escuta e sua associação
-        schan = new ServerChannel(NodeSetts.playgroundServerPort);    
+        schan = new ServerChannel(NodeSetts.SERVER_PORTS.get("playground"));    
         schan.start();
         
         PlaygroundServer playgroundServer = new PlaygroundServer(log);

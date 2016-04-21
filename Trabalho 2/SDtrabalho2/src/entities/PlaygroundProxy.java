@@ -18,33 +18,35 @@ import settings.NodeSetts;
  */
 public class PlaygroundProxy implements IReferee, IContestant{
     
+    private final String SERVER_HOST = NodeSetts.SERVER_HOSTS.get("playground");
+    private final int SERVER_PORT = NodeSetts.SERVER_PORTS.get("playground");
+    
+    private void communicate(Message m){
+        ClientProxyWrapper.connect(SERVER_HOST,  SERVER_PORT, m);
+    }
+    
     @Override
     public void startTrial() {
-        ClientProxyWrapper.connect(NodeSetts.playgroundServerName, 
-                NodeSetts.playgroundServerPort, new Message(MessageType.startTrial));
+        communicate(new Message(MessageType.startTrial));
     }
 
     @Override
     public void assertTrialDecision() {
-        ClientProxyWrapper.connect(NodeSetts.playgroundServerName, 
-                NodeSetts.playgroundServerPort, new Message(MessageType.assertTrialDecision));
+        communicate(new Message(MessageType.assertTrialDecision));
     }
 
     @Override
     public void pullTheRope(int id, String team) {
-        ClientProxyWrapper.connect(NodeSetts.playgroundServerName, 
-                NodeSetts.playgroundServerPort, new Message(MessageType.pullTheRope, team, id));
+        communicate(new Message(MessageType.pullTheRope, team, id));
     }
 
     @Override
     public void waitForStartTrial() {
-        ClientProxyWrapper.connect(NodeSetts.playgroundServerName, 
-                NodeSetts.playgroundServerPort, new Message(MessageType.waitForStartTrial));
+        communicate(new Message(MessageType.waitForStartTrial));
     }
 
     @Override
     public void waitForAssertTrialDecision() {
-        ClientProxyWrapper.connect(NodeSetts.playgroundServerName, 
-                NodeSetts.playgroundServerPort, new Message(MessageType.waitForAssertTrialDecision));
+        communicate(new Message(MessageType.waitForAssertTrialDecision));
     }
 }

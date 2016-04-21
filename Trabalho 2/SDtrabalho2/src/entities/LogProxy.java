@@ -20,119 +20,107 @@ import settings.NodeSetts;
  */
 public class LogProxy implements IReferee, ICoach, IContestant{
 
+    private final String SERVER_HOST = NodeSetts.SERVER_HOSTS.get("log");
+    private final int SERVER_PORT = NodeSetts.SERVER_PORTS.get("log");
+    
+    private WrapperMessage communicate(Message m){
+        return ClientProxyWrapper.connect(SERVER_HOST,  SERVER_PORT, m);
+    }
+    
     @Override
     public void initRefereeState(RefereeState state) {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.initRefereeState, state));
+        communicate(new Message(MessageType.initRefereeState, state));
     }
 
     @Override
     public void newGame() {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.newGame));
+        communicate( new Message(MessageType.newGame));
     }
 
     @Override
     public void newTrial() {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.newTrial));
+        communicate(new Message(MessageType.newTrial));
     }
 
     @Override
     public int getNumberOfGames() {
-        WrapperMessage result = ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
-                    NodeSetts.refereeSiteServerPort, new Message(MessageType.getNumberOfGames));
+        WrapperMessage result = communicate(new Message(MessageType.getNumberOfGames));
         return result.getMessage().getInteger();
     }
 
     @Override
     public int getTotalNumberOfGames() {
-        WrapperMessage result = ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
-                    NodeSetts.refereeSiteServerPort, new Message(MessageType.getTotalNumberOfGames));
+        WrapperMessage result = communicate(new Message(MessageType.getTotalNumberOfGames));
         return result.getMessage().getInteger();
     }
 
     @Override
     public void printGameWinner() {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.printGameWinner));
+        communicate(new Message(MessageType.printGameWinner));
     }
 
     @Override
     public void newGame(int gameNumber) {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.printGameWinner, gameNumber));
+        communicate(new Message(MessageType.printGameWinner, gameNumber));
     }
 
     @Override
     public void setRefereeState(RefereeState state) {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.printGameWinner, state));
+        communicate(new Message(MessageType.printGameWinner, state));
     }
 
     @Override
     public void declareMatchWinner() {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.declareMatchWinner));
+        communicate(new Message(MessageType.declareMatchWinner));
     }
 
     @Override
     public void initCoachState(String team, CoachState state) {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.initCoachState, state, team));
+        communicate(new Message(MessageType.initCoachState, state, team));
     }
 
     @Override
     public void refreshStrengths(String team) {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.refreshStrengths, team));
+        communicate(new Message(MessageType.refreshStrengths, team));
     }
 
     @Override
     public void setCoachState(String team, CoachState state) {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.setCoachState, state, team));
+        communicate(new Message(MessageType.setCoachState, state, team));
     }
 
     @Override
     public void initContestant(ContestantState state, String team, int contestant) {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.initContestant, state, team, contestant));
+        communicate(new Message(MessageType.initContestant, state, team, contestant));
     }
 
     @Override
     public void setContestantLastTrial(String team, int contestant) {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.setContestantLastTrial, team, contestant));
+        communicate(new Message(MessageType.setContestantLastTrial, team, contestant));
     }
 
     @Override
     public void removePosition(String team, int contestant) {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.setContestantLastTrial, team, contestant));
+        communicate(new Message(MessageType.setContestantLastTrial, team, contestant));
     }
 
     @Override
     public void setPosition(String team, int contestant) {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.setContestantLastTrial, team, contestant));
+        communicate(new Message(MessageType.setContestantLastTrial, team, contestant));
     }
 
     @Override
     public void setContestantState(ContestantState state, String team, int contestant) {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.setContestantState, team, contestant));
+        communicate(new Message(MessageType.setContestantState, team, contestant));
     }
 
     @Override
     public int assertTrialDecision() {
-        WrapperMessage result = ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
-                    NodeSetts.refereeSiteServerPort, new Message(MessageType.assertTrialDecision));
+        WrapperMessage result = communicate(new Message(MessageType.assertTrialDecision));
         return result.getMessage().getInteger();
     }
     
     public void writeEnd(){
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.writeEnd));
+        communicate(new Message(MessageType.writeEnd));
     }
 }

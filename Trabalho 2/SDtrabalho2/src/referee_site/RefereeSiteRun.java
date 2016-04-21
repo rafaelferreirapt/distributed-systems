@@ -20,7 +20,7 @@ public class RefereeSiteRun {
         /* estabelecimento do servico */
         
         // criação do canal de escuta e sua associação
-        schan = new ServerChannel(NodeSetts.refereeSiteServerPort);    
+        schan = new ServerChannel(NodeSetts.SERVER_PORTS.get("refereeSite"));    
         schan.start();
         
         RefereeSiteServer refereeSiteServer = new RefereeSiteServer();

@@ -20,64 +20,61 @@ import settings.NodeSetts;
  */
 public class RefereeSiteProxy implements IReferee, ICoach, IContestant{
 
+    private final String SERVER_HOST = NodeSetts.SERVER_HOSTS.get("refereeSite");
+    private final int SERVER_PORT = NodeSetts.SERVER_PORTS.get("refereeSite");
+    
+    private WrapperMessage communicate(Message m){
+        return ClientProxyWrapper.connect(SERVER_HOST,  SERVER_PORT, m);
+    }
+    
     @Override
     public void annouceNewGame() {
-        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, new Message(MessageType.annouceNewGame));
+        communicate(new Message(MessageType.annouceNewGame));
     }
 
     @Override
     public void declareGameWinner() {
-        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, new Message(MessageType.declareGameWinner));
+        communicate(new Message(MessageType.declareGameWinner));
     }
 
     @Override
     public void declareMatchWinner() {
-        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, new Message(MessageType.declareMatchWinner));
+        communicate(new Message(MessageType.declareMatchWinner));
     }
 
     @Override
     public boolean endOfMatch() {
-        WrapperMessage result = ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
-                    NodeSetts.refereeSiteServerPort, new Message(MessageType.endOfMatch));
+        WrapperMessage result = communicate(new Message(MessageType.endOfMatch));
         return result.getMessage().getEndOfMatch();
     }
 
     @Override
     public void waitForInformReferee() {
-        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, new Message(MessageType.waitForInformReferee));
+        communicate(new Message(MessageType.waitForInformReferee));
     }
 
     @Override
     public void waitForAmDone() {
-        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, new Message(MessageType.waitForAmDone));
+        communicate(new Message(MessageType.waitForAmDone));
     }
 
     @Override
     public void waitAllPositioned() {
-        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, new Message(MessageType.waitAllPositioned));
+        communicate(new Message(MessageType.waitAllPositioned));
     }
 
     @Override
     public void informReferee(String team) {
-        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, new Message(MessageType.informReferee, team));
+        communicate(new Message(MessageType.informReferee, team));
     }
 
     @Override
     public void amDone() {
-        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, new Message(MessageType.amDone));
+        communicate(new Message(MessageType.amDone));
     }
 
     @Override
     public void positioned() {
-        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, new Message(MessageType.positioned));
+        communicate(new Message(MessageType.positioned));
     }
 }

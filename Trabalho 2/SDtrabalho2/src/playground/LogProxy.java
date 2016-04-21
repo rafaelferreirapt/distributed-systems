@@ -8,6 +8,7 @@ package playground;
 import communication.message.Message;
 import general_info_repo.IPlayground;
 import communication.message.MessageType;
+import communication.message.WrapperMessage;
 import communication.proxy.ClientProxyWrapper;
 import settings.NodeSetts;
 
@@ -17,10 +18,16 @@ import settings.NodeSetts;
  */
 public class LogProxy implements IPlayground{
 
+    private final String SERVER_HOST = NodeSetts.SERVER_HOSTS.get("log");
+    private final int SERVER_PORT = NodeSetts.SERVER_PORTS.get("log");
+    
+    private WrapperMessage communicate(Message m){
+        return ClientProxyWrapper.connect(SERVER_HOST,  SERVER_PORT, m);
+    }
+    
     @Override
     public void updateRope(String team, int contestant) {
-        ClientProxyWrapper.connect(NodeSetts.logServerName, 
-                NodeSetts.logServerPort, new Message(MessageType.updateRope, team, contestant));
+        communicate(new Message(MessageType.updateRope, team, contestant));
     }
     
 }

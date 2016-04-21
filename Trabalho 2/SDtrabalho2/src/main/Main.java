@@ -32,9 +32,9 @@ public class Main{
      */
     public static void main(String[] args){
         /* START THE ENTITIES */
-        int nCoaches = NodeSetts.nCoachs;
+        int nCoaches = NodeSetts.N_COACHS;
         String teams[] = NodeSetts.teams;
-        int nContestants = NodeSetts.nContestantsTeam*2;
+        int nContestants = NodeSetts.N_CONTESTANTS_TEAM*2;
         
         assert nCoaches == teams.length;
         

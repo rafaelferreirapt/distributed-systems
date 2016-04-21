@@ -20,10 +20,10 @@ public class BenchRun {
         /* estabelecimento do servico */
         
         // criação do canal de escuta e sua associação
-        schan = new ServerChannel(NodeSetts.benchServerPort);    
+        schan = new ServerChannel(NodeSetts.SERVER_PORTS.get("bench"));    
         schan.start();
         
-        BenchServer benchServer = new BenchServer(NodeSetts.nContestantsTeam, NodeSetts.nContestantsTeam);
+        BenchServer benchServer = new BenchServer(NodeSetts.N_CONTESTANTS_TEAM, NodeSetts.N_CONTESTANTS_TEAM);
         System.out.println("Bench service has started!\nServer is listening.");
 
         /* processamento de pedidos */

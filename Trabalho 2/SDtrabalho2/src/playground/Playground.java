@@ -92,13 +92,12 @@ public class Playground implements IReferee, IContestant{
     @Override
     public void pullTheRope(int id, String team) {
         try {
-            Thread.sleep((int)Math.ceil(Math.random() * NodeSetts.delayMax + NodeSetts.delayMin));
+            Thread.sleep((int)Math.ceil(Math.random() * NodeSetts.DELAY_MAX + NodeSetts.DELAY_MIN));
         } catch (InterruptedException ex) {
             Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("fui ao log!");
+        
         log.updateRope(team, id);
-        System.out.println("Log done!");
     }
     
 }
