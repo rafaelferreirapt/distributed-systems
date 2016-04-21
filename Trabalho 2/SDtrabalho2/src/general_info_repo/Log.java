@@ -291,6 +291,8 @@ public class Log implements IReferee, ICoach, IContestant, IPlayground{
     @Override
     public synchronized void setPosition(String team, int contestant){
         this.match.setPosition(team, contestant);
+        this.printLine();
+
     }
     
     /**
@@ -319,6 +321,8 @@ public class Log implements IReferee, ICoach, IContestant, IPlayground{
                 }
             }
         }
+        this.printLine();
+
     }
     
     private void printLine(){
