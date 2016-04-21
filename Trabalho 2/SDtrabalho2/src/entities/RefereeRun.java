@@ -15,8 +15,10 @@ public class RefereeRun {
         BenchProxy bp = new BenchProxy();
         RefereeSiteProxy rsp = new RefereeSiteProxy();
         PlaygroundProxy pp = new PlaygroundProxy();
+        LogProxy log = new LogProxy();
         
-        Referee ref = new Referee((playground.IReferee) pp, (bench.IReferee) bp, (referee_site.IReferee) rsp);
+        Referee ref = new Referee((playground.IReferee) pp, (bench.IReferee) bp, (referee_site.IReferee) rsp, 
+                (general_info_repo.IReferee) log);
         
         System.out.println("Number of referees: 1");
        

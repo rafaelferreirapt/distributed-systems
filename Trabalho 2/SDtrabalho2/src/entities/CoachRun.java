@@ -18,9 +18,10 @@ public class CoachRun {
         ArrayList<Coach> coachs = new ArrayList<>(NodeSetts.nCoachs);
         BenchProxy bp = new BenchProxy();
         RefereeSiteProxy rsp = new RefereeSiteProxy();
+        LogProxy log = new LogProxy();
         
         for (int i = 0; i < NodeSetts.nCoachs; i++){
-            coachs.add(new Coach((bench.ICoach) bp, (referee_site.ICoach) rsp, NodeSetts.teams[i]));
+            coachs.add(new Coach((bench.ICoach) bp, (referee_site.ICoach) rsp, NodeSetts.teams[i], (general_info_repo.ICoach) log));
         }
         
         

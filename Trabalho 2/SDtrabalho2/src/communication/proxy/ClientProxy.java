@@ -2,9 +2,7 @@ package communication.proxy;
 
 import communication.ClientChannel;
 import communication.message.Message;
-import communication.message.MessageType;
 import communication.message.WrapperMessage;
-import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,36 +14,15 @@ public class ClientProxy extends Thread {
     
     private final String clientProxyServerName;
     private final int toServerPort;
-    private final MessageType mt;
+    private final Message outMessage;
     private final WrapperMessage result;
-    private String team = null;
-    private int idC = -1;
     
     public ClientProxy(String clientProxyServerName, int toServerPort, WrapperMessage result,
-            MessageType mt){
+            Message outMessage){
         this.clientProxyServerName = clientProxyServerName;
         this.toServerPort = toServerPort;
-        this.mt = mt;
+        this.outMessage = outMessage;
         this.result = result;
-    }
-    
-    public ClientProxy(String clientProxyServerName, int toServerPort, WrapperMessage result,
-            MessageType mt, String team){
-        this.clientProxyServerName = clientProxyServerName;
-        this.toServerPort = toServerPort;
-        this.mt = mt;
-        this.result = result;
-        this.team = team;
-    }
-    
-    public ClientProxy(String clientProxyServerName, int toServerPort, WrapperMessage result,
-            MessageType mt, String team, int idC){
-        this.clientProxyServerName = clientProxyServerName;
-        this.toServerPort = toServerPort;
-        this.mt = mt;
-        this.result = result;
-        this.team = team;
-        this.idC = idC;
     }
     
     @Override
@@ -61,15 +38,6 @@ public class ClientProxy extends Thread {
                 }
             }   
             
-            Message outMessage;
-            
-            if(this.team != null && this.idC != -1){
-                outMessage = new Message(mt, team, idC);
-            }else if(this.team != null && this.idC == -1){
-                outMessage = new Message(mt, team);
-            }else{
-                outMessage = new Message(mt);
-            }
             con.writeObject(outMessage);
             
             this.result.setMessage((Message) con.readObject());

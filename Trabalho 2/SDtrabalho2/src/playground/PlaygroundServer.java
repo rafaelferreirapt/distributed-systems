@@ -20,8 +20,8 @@ public class PlaygroundServer extends Playground implements ServerInterface {
     
     private final boolean serverEnded;
     
-    public PlaygroundServer() {
-        super();
+    public PlaygroundServer(general_info_repo.IPlayground log) {
+        super(log);
         this.serverEnded = false;
     }
     

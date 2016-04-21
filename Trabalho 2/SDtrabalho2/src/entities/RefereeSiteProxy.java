@@ -5,11 +5,10 @@
  */
 package entities;
 
+import communication.message.Message;
 import communication.message.MessageType;
 import communication.message.WrapperMessage;
-import communication.proxy.ClientProxy;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import communication.proxy.ClientProxyWrapper;
 import referee_site.ICoach;
 import referee_site.IContestant;
 import referee_site.IReferee;
@@ -23,234 +22,62 @@ public class RefereeSiteProxy implements IReferee, ICoach, IContestant{
 
     @Override
     public void annouceNewGame() {
-        WrapperMessage result = new WrapperMessage();
-        
-        ClientProxy cp = new ClientProxy(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, result, MessageType.annouceNewGame);
-        
-        cp.start();
-        
-        try {
-            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
-            cp.join(); 
-            // System.out.println("Final Join");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if (result.getMessage().getType() != MessageType.ACK) {
-            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
-            System.exit(1);
-        }    
+        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
+                NodeSetts.refereeSiteServerPort, new Message(MessageType.annouceNewGame));
     }
 
     @Override
     public void declareGameWinner() {
-        WrapperMessage result = new WrapperMessage();
-        
-        ClientProxy cp = new ClientProxy(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, result, MessageType.declareGameWinner);
-        
-        cp.start();
-        
-        try {
-            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
-            cp.join(); 
-            // System.out.println("Final Join");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if (result.getMessage().getType() != MessageType.ACK) {
-            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
-            System.exit(1);
-        } 
+        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
+                NodeSetts.refereeSiteServerPort, new Message(MessageType.declareGameWinner));
     }
 
     @Override
     public void declareMatchWinner() {
-        WrapperMessage result = new WrapperMessage();
-        
-        ClientProxy cp = new ClientProxy(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, result, MessageType.declareMatchWinner);
-        
-        cp.start();
-        
-        try {
-            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
-            cp.join(); 
-            // System.out.println("Final Join");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if (result.getMessage().getType() != MessageType.ACK) {
-            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
-            System.exit(1);
-        } 
+        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
+                NodeSetts.refereeSiteServerPort, new Message(MessageType.declareMatchWinner));
     }
 
     @Override
     public boolean endOfMatch() {
-        WrapperMessage result = new WrapperMessage();
-        
-        ClientProxy cp = new ClientProxy(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, result, MessageType.endOfMatch);
-        
-        cp.start();
-        
-        try {
-            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
-            cp.join(); 
-            // System.out.println("Final Join");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if (result.getMessage().getType() != MessageType.ACK) {
-            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
-            System.exit(1);
-        } 
-        
+        WrapperMessage result = ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
+                    NodeSetts.refereeSiteServerPort, new Message(MessageType.endOfMatch));
         return result.getMessage().getEndOfMatch();
     }
 
     @Override
     public void waitForInformReferee() {
-        WrapperMessage result = new WrapperMessage();
-        
-        ClientProxy cp = new ClientProxy(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, result, MessageType.waitForInformReferee);
-        
-        cp.start();
-        
-        try {
-            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
-            cp.join(); 
-            // System.out.println("Final Join");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if (result.getMessage().getType() != MessageType.ACK) {
-            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
-            System.exit(1);
-        } 
+        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
+                NodeSetts.refereeSiteServerPort, new Message(MessageType.waitForInformReferee));
     }
 
     @Override
     public void waitForAmDone() {
-        WrapperMessage result = new WrapperMessage();
-        
-        ClientProxy cp = new ClientProxy(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, result, MessageType.waitForAmDone);
-        
-        cp.start();
-        
-        try {
-            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
-            cp.join(); 
-            // System.out.println("Final Join");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if (result.getMessage().getType() != MessageType.ACK) {
-            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
-            System.exit(1);
-        } 
+        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
+                NodeSetts.refereeSiteServerPort, new Message(MessageType.waitForAmDone));
     }
 
     @Override
     public void waitAllPositioned() {
-        WrapperMessage result = new WrapperMessage();
-        
-        ClientProxy cp = new ClientProxy(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, result, MessageType.waitAllPositioned);
-        
-        cp.start();
-        
-        try {
-            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
-            cp.join(); 
-            // System.out.println("Final Join");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if (result.getMessage().getType() != MessageType.ACK) {
-            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
-            System.exit(1);
-        } 
+        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
+                NodeSetts.refereeSiteServerPort, new Message(MessageType.waitAllPositioned));
     }
 
     @Override
     public void informReferee(String team) {
-        WrapperMessage result = new WrapperMessage();
-        
-        ClientProxy cp = new ClientProxy(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, result, MessageType.informReferee, team);
-        
-        cp.start();
-        
-        try {
-            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
-            cp.join(); 
-            // System.out.println("Final Join");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if (result.getMessage().getType() != MessageType.ACK) {
-            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
-            System.exit(1);
-        } 
+        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
+                NodeSetts.refereeSiteServerPort, new Message(MessageType.informReferee, team));
     }
 
     @Override
     public void amDone() {
-        WrapperMessage result = new WrapperMessage();
-        
-        ClientProxy cp = new ClientProxy(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, result, MessageType.amDone);
-        
-        cp.start();
-        
-        try {
-            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
-            cp.join(); 
-            // System.out.println("Final Join");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if (result.getMessage().getType() != MessageType.ACK) {
-            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
-            System.exit(1);
-        } 
+        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
+                NodeSetts.refereeSiteServerPort, new Message(MessageType.amDone));
     }
 
     @Override
     public void positioned() {
-        WrapperMessage result = new WrapperMessage();
-        
-        ClientProxy cp = new ClientProxy(NodeSetts.refereeSiteServerName, 
-                NodeSetts.refereeSiteServerPort, result, MessageType.positioned);
-        
-        cp.start();
-        
-        try {
-            // System.out.println("Init Join "+ (new Object(){}.getClass().getEnclosingMethod().getName())); 
-            cp.join(); 
-            // System.out.println("Final Join");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(BenchProxy.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if (result.getMessage().getType() != MessageType.ACK) {
-            System.out.println("Tipo Inválido. Message:" + result.getMessage().toString());
-            System.exit(1);
-        } 
+        ClientProxyWrapper.connect(NodeSetts.refereeSiteServerName, 
+                NodeSetts.refereeSiteServerPort, new Message(MessageType.positioned));
     }
-    
 }

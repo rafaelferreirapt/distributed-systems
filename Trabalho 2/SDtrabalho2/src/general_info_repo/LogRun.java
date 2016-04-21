@@ -1,4 +1,4 @@
-package playground;
+package general_info_repo;
 
 import communication.ServerChannel;
 import communication.proxy.ServerProxy;
@@ -8,11 +8,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import settings.NodeSetts;
 
-public class PlaygroundRun {
+public class LogRun {
     
     public static void main(String[] args) throws SocketException {
-        LogProxy log = new LogProxy();
-
         // canais de comunicação
         ServerChannel schan, schani;
         
@@ -22,11 +20,11 @@ public class PlaygroundRun {
         /* estabelecimento do servico */
         
         // criação do canal de escuta e sua associação
-        schan = new ServerChannel(NodeSetts.playgroundServerPort);    
+        schan = new ServerChannel(NodeSetts.logServerPort);    
         schan.start();
         
-        PlaygroundServer playgroundServer = new PlaygroundServer(log);
-        System.out.println("Playground service has started!\nServer is listening.");
+        LogServer logServer = new LogServer();
+        System.out.println("Log service has started!\nServer is listening.");
 
         /* processamento de pedidos */
         
@@ -36,10 +34,10 @@ public class PlaygroundRun {
                 // entrada em processo de escuta
                 schani = schan.accept();
                 // lançamento do agente prestador do serviço
-                cliProxy = new ServerProxy(schan, schani, playgroundServer);
+                cliProxy = new ServerProxy(schan, schani, logServer);
                 cliProxy.start();
             } catch (SocketTimeoutException ex) {
-                Logger.getLogger(PlaygroundRun.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(LogRun.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

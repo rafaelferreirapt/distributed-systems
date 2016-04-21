@@ -7,15 +7,14 @@ package main;
 import entities.BenchProxy;
 import entities.Coach;
 import entities.Contestant;
+import entities.LogProxy;
 import entities.PlaygroundProxy;
 import entities.Referee;
 import entities.RefereeSiteProxy;
-import general_info_repo.Log;
-import playground.Playground;
 import settings.NodeSetts;
 
 /**
- * Game of the Rope main!
+ * Game of the Rope main!fg
  *
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
@@ -23,7 +22,7 @@ public class Main{
     private static BenchProxy bench;
     private static RefereeSiteProxy referee_site;
     private static PlaygroundProxy playground;
-    private static Log lg;
+    private static LogProxy lg;
     private static Coach [] coachs;
     private static Contestant [] contestants;
     private static Referee ref;
@@ -43,22 +42,27 @@ public class Main{
 		referee_site = new RefereeSiteProxy();
         playground = new PlaygroundProxy();
 
-        lg = Log.getInstance();
+        lg = new LogProxy();
        
-        ref =  new Referee((playground.IReferee) playground, (bench.IReferee) bench, (referee_site.IReferee) referee_site);
+        ref =  new Referee((playground.IReferee) playground, (bench.IReferee) bench, 
+                (referee_site.IReferee) referee_site, (general_info_repo.IReferee) lg);
         
         coachs =  new Coach [nCoaches];
         for(int i = 0; i<nCoaches; i++){
-            coachs[i] = new Coach((bench.ICoach) bench,(referee_site.ICoach) referee_site, teams[i]);
+            coachs[i] = new Coach((bench.ICoach) bench,(referee_site.ICoach) referee_site, teams[i],
+            (general_info_repo.ICoach) lg);
         }
         
         contestants = new Contestant[nContestants];
         
         for(int i = 0; i<nContestants; i++){
             if(i < (nContestants/teams.length)){
-                contestants[i] = new Contestant((playground.IContestant) playground,(bench.IContestant) bench, (referee_site.IContestant) referee_site, i+1, teams[0]);
+                contestants[i] = new Contestant((playground.IContestant) playground,(bench.IContestant) bench, 
+                        (referee_site.IContestant) referee_site, i+1, teams[0], (general_info_repo.IContestant) lg);
             }else{
-                contestants[i] = new Contestant((playground.IContestant) playground,(bench.IContestant) bench, (referee_site.IContestant) referee_site, i-(nContestants/teams.length-1), teams[1]);
+                contestants[i] = new Contestant((playground.IContestant) playground,(bench.IContestant) bench, 
+                        (referee_site.IContestant) referee_site, i-(nContestants/teams.length-1), teams[1], 
+                        (general_info_repo.IContestant) lg);
             }
         }
         

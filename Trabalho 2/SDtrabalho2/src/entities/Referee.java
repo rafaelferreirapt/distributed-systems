@@ -14,10 +14,11 @@ public class Referee extends Thread {
     
     private RefereeState state;
     
-    private final Log log;
+    //private final Log log;
     private final playground.IReferee playground;
     private final bench.IReferee bench;
     private final referee_site.IReferee referee_site;
+    private final general_info_repo.IReferee log;
     
     /**
      * It will be passed to the Referee the methods of the bench and referee site
@@ -25,12 +26,14 @@ public class Referee extends Thread {
      * @param p Instance that implements playground referee methods.
      * @param b Instance that implements bench referee methods.
      * @param r Instance that implements referee site referee methods.
+     * @param l
      */
-    public Referee(playground.IReferee p, bench.IReferee b, referee_site.IReferee r){
+    public Referee(playground.IReferee p, bench.IReferee b, referee_site.IReferee r, 
+            general_info_repo.IReferee l){
         this.playground = p;
         this.bench = b;
         this.referee_site = r;
-        this.log = Log.getInstance();
+        this.log = l;
 
         this.setName("Referee");
         state = RefereeState.START_OF_THE_MATCH;

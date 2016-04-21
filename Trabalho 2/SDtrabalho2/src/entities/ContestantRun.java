@@ -19,12 +19,15 @@ public class ContestantRun {
         BenchProxy bp = new BenchProxy();
         RefereeSiteProxy rsp = new RefereeSiteProxy();
         PlaygroundProxy pp = new PlaygroundProxy();
+        LogProxy log = new LogProxy();
         
         for (int i = 0; i < contestants.size(); i++){
             if(i < NodeSetts.nContestantsTeam){
-                contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i, NodeSetts.teams[0]));
+                contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i, 
+                        NodeSetts.teams[0], (general_info_repo.IContestant) log));
             }else{
-                contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i, NodeSetts.teams[0]));
+                contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i, 
+                        NodeSetts.teams[0], (general_info_repo.IContestant) log));
             }
         }
         

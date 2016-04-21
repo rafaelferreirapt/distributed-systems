@@ -25,7 +25,7 @@ import java.util.logging.Logger;
  * the log of the match.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
-public class Log {
+public class Log implements IReferee, ICoach, IContestant, IPlayground{
     
     private final Match match = Match.getInstance();
     
@@ -37,40 +37,18 @@ public class Log {
     private static PrintWriter pw;
     
     /**
-     * This will be a singleton
-     */
-    private static Log instance = null;
-    
-    /**
      * This will instantiate the log Class
      * Name of the file where the log will be saved
      * @param filename where the log will be saved.
      */
-    private Log(String filename){
+    public Log(String filename){
         if(filename.length()==0){
             Date today = Calendar.getInstance().getTime();
             SimpleDateFormat date = new SimpleDateFormat("yyyyMMddhhmmss");
             filename = "GameOfTheRope_" + date.format(today) + ".log";
         }
         this.log = new File(filename);
-    }
-    
-    /**
-     * This static constructor is used to init the log file, this is a singleton and we 
-     * need to specify what is the filename, so we created this method that
-     * will allow to instantiate the singleton.
-     */
-    static{
-        instance = new Log("");
-        instance.writeInit();
-    }
-    
-    /**
-     * This is a singleton, this is important to return the Log instance.
-     * @return log intance, this is a singleton.
-     */
-    public synchronized static Log getInstance(){
-        return instance;
+        this.writeInit();
     }
     
     /**
@@ -113,6 +91,7 @@ public class Log {
      * This method will be called every time that one game is started
      * @param gameNumber the atual game number.
      */
+    @Override
     public synchronized void newGame(int gameNumber){
         pw.println("Game " + gameNumber);
         
@@ -160,6 +139,7 @@ public class Log {
     /**
      * New game and print line with the game.
      */
+    @Override
     public synchronized void newGame(){
         match.newGame();
         this.newGame(this.match.getNumberOfGames());
@@ -168,22 +148,16 @@ public class Log {
     /**
      * New trial with the game.
      */
+    @Override
     public synchronized void newTrial(){
         match.newTrial();
-    }
-    
-    /**
-     * Game number of trials played.
-     * @return game number of trials played.
-     */
-    public synchronized int gameNumberOfTrials(){
-        return match.gameNumberOfTrials();
     }
     
     /**
      * Number of games played.
      * @return number of games played.
      */
+    @Override
     public synchronized int getNumberOfGames(){
         return match.getNumberOfGames();
     }
@@ -191,6 +165,7 @@ public class Log {
     /**
      * Declare match winner.
      */
+    @Override
     public synchronized void declareMatchWinner(){
         pw.println(match.declareMatchWinner());
     }
@@ -199,6 +174,7 @@ public class Log {
      * Total number of games.
      * @return total number of games played.
      */
+    @Override
     public synchronized int getTotalNumberOfGames(){
         return match.getTotalNumberOfGames();
     }
@@ -209,6 +185,7 @@ public class Log {
      * @param team Team identifier, can be A or B.
      * @param contestant The contestant ID.
      */
+    @Override
     public synchronized void updateRope(String team, int contestant){
         match.updateRope(team, match.getContestantStrength(team, contestant));
     }
@@ -218,16 +195,9 @@ public class Log {
      * @return decision, can be 2 (B), -2 (A) for knock outs; 0 for game finished with win or draw
      * or 1 for new trial.
      */
+    @Override
     public synchronized int assertTrialDecision(){
         return match.assertTrialDecision();
-    }
-    
-    /**
-     * Number of trials played.
-     * @return number of trials played
-     */
-    public synchronized int getTrials_played() {
-        return match.getTrials_played();
     }
     
     /**
@@ -236,6 +206,7 @@ public class Log {
      * @param team Team identifier, can be A or B.
      * @param contestant The contestant ID.
      */
+    @Override
     public synchronized void initContestant(ContestantState state, String team, int contestant){
         this.match.setContestantState(state, team, contestant);
         this.match.setContestantStrength(0, team, contestant);
@@ -247,6 +218,7 @@ public class Log {
      * @param team Team identifier, can be A or B.
      * @param contestant The contestant ID.
      */
+    @Override
     public synchronized void setContestantState(ContestantState state, String team, int contestant){
         this.match.setContestantState(state, team, contestant);
         this.printLine();
@@ -257,6 +229,7 @@ public class Log {
      * @param team Team identifier, can be A or B.
      * @param state coach state.
      */
+    @Override
     public synchronized void initCoachState(String team, CoachState state){
         this.match.setCoachState(team, state);
     }
@@ -266,6 +239,7 @@ public class Log {
      * @param team Team identifier, can be A or B.
      * @param state coach state.
      */
+    @Override
     public synchronized void setCoachState(String team, CoachState state){
         this.match.setCoachState(team, state);
         this.printLine();
@@ -275,6 +249,7 @@ public class Log {
      * Init the referee state.
      * @param state referee state.
      */
+    @Override
     public synchronized void initRefereeState(RefereeState state){
         this.match.setRefereeState(state);
     }
@@ -283,19 +258,10 @@ public class Log {
      * Set the referee state.
      * @param state referee state.
      */
+    @Override
     public synchronized void setRefereeState(RefereeState state){
         this.match.setRefereeState(state);
         this.printLine();
-    }
-    
-    /**
-     * Get the contestant last trial, we only need the team and the contestant id.
-     * @param team Team identifier, can be A or B.
-     * @param contestant The contestant ID.
-     * @return
-     */
-    public synchronized int getContestantLastTrial(String team, int contestant){
-        return this.match.getContestantLastTrial(team, contestant);
     }
     
     /**
@@ -303,6 +269,7 @@ public class Log {
      * @param team Team identifier, can be A or B.
      * @param contestant The contestant ID.
      */
+    @Override
     public synchronized void setContestantLastTrial(String team, int contestant){
         this.match.setContestantLastTrial(team, contestant);
     }
@@ -311,6 +278,7 @@ public class Log {
      * Refresh strengths of the team, the coach calls this method.
      * @param team Team identifier, can be A or B.
      */
+    @Override
     public synchronized void refreshStrengths(String team){
         this.match.refreshStrengths(team);
     }
@@ -320,6 +288,7 @@ public class Log {
      * @param team Team identifier, can be A or B.
      * @param contestant The contestant ID.
      */
+    @Override
     public synchronized void setPosition(String team, int contestant){
         this.match.setPosition(team, contestant);
     }
@@ -329,6 +298,7 @@ public class Log {
      * @param team Team identifier, can be A or B.
      * @param contestant The contestant ID.
      */
+    @Override
     public synchronized void removePosition(String team, int contestant){
         if(team.equals("A")){
             HashMap<Integer, Integer> tmpA = this.match.getPositionsA();
@@ -413,6 +383,7 @@ public class Log {
     /**
      * Print game winner.
      */
+    @Override
     public synchronized void printGameWinner(){
         if(this.match.getNumberOfGames() > 0){
             pw.println(this.match.getWinner());

@@ -4,7 +4,6 @@
  */
 package playground;
 
-import general_info_repo.Log;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import settings.NodeSetts;
@@ -15,16 +14,18 @@ import settings.NodeSetts;
  */
 public class Playground implements IReferee, IContestant{
     
-    private final Log log;
     private static boolean trialDecisionTaken = false, startTrialTaken = false;
     private int contestantsIn = 0;
     private int contestantsAlerted = 0;
     
+    private final general_info_repo.IPlayground log;
+    
     /**
      * Log is a singleton, it needs the getInstance method.
+     * @param l
      */
-    public Playground(){
-        this.log = Log.getInstance();
+    public Playground(general_info_repo.IPlayground l){
+        this.log = l;
     }
     
     /**

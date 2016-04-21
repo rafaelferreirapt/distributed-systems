@@ -17,5 +17,11 @@ public enum MessageType {
     annouceNewGame, declareGameWinner, declareMatchWinner,
     endOfMatch, waitForInformReferee, waitForAmDone,
     waitAllPositioned, informReferee, amDone,
-    positioned, startTrial, pullTheRope, waitForStartTrial
+    positioned, startTrial, pullTheRope, waitForStartTrial,
+    newGame, writeEnd, newTrial, gameNumberOfTrials, updateRope,
+    getNumberOfGames, getTotalNumberOfGames, getTrials_played,
+    initContestant, setContestantState, initCoachState, setCoachState,
+    initRefereeState, setRefereeState, getContestantLastTrial,
+    setContestantLastTrial, refreshStrengths, setPosition, removePosition,
+    printGameWinner
 }

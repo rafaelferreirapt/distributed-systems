@@ -16,11 +16,11 @@ public class Contestant  extends Thread {
     
     private final int id;
     private final String team;
-    private final Log log;
     
     private final playground.IContestant playground;
     private final bench.IContestant bench;
     private final referee_site.IContestant referee_site;
+    private final general_info_repo.IContestant log;
     
     /**
      * It will be passed to the Contestant the methods of the bench and referee site
@@ -31,12 +31,14 @@ public class Contestant  extends Thread {
      * @param r Instance that implements referee site contestant methods.
      * @param id Contestant identifier.
      * @param team Team identifier, can be A or B.
+     * @param l
      */
-    public Contestant(playground.IContestant p, bench.IContestant b, referee_site.IContestant r, int id, String team){
+    public Contestant(playground.IContestant p, bench.IContestant b, referee_site.IContestant r, int id, String team,
+            general_info_repo.IContestant l){
         this.playground = p;
         this.bench = b;
         this.referee_site = r;
-        this.log = Log.getInstance();
+        this.log = l;
         
         this.team = team;
         this.id = id;
