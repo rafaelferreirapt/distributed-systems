@@ -23,5 +23,7 @@ public enum MessageType {
     initContestant, setContestantState, initCoachState, setCoachState,
     initRefereeState, setRefereeState, getContestantLastTrial,
     setContestantLastTrial, refreshStrengths, setPosition, removePosition,
-    printGameWinner
+    printGameWinner, SERVER_PORTS, NUMBER_OF_TRIALS, N_COACHS, SERVER_HOSTS,
+    NUMBER_OF_GAMES, N_CONTESTANTS_TEAM, MAX_STRENGTH, MIN_STRENGTH, teams,
+    DELAY_MIN, DELAY_MAX
 }

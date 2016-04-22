@@ -12,7 +12,7 @@ import communication.proxy.ClientProxyWrapper;
 import referee_site.ICoach;
 import referee_site.IContestant;
 import referee_site.IReferee;
-import settings.NodeSetts;
+import settings.NodeSettsProxy;
 
 /**
  *
@@ -20,8 +20,14 @@ import settings.NodeSetts;
  */
 public class RefereeSiteProxy implements IReferee, ICoach, IContestant{
 
-    private final String SERVER_HOST = NodeSetts.SERVER_HOSTS.get("refereeSite");
-    private final int SERVER_PORT = NodeSetts.SERVER_PORTS.get("refereeSite");
+    private final String SERVER_HOST;
+    private final int SERVER_PORT;
+    
+    public RefereeSiteProxy(){
+        NodeSettsProxy proxy = new NodeSettsProxy(); 
+        SERVER_HOST = proxy.SERVER_HOSTS().get("refereeSite");
+        SERVER_PORT = proxy.SERVER_PORTS().get("refereeSite");
+    }
     
     private WrapperMessage communicate(Message m){
         return ClientProxyWrapper.connect(SERVER_HOST,  SERVER_PORT, m);

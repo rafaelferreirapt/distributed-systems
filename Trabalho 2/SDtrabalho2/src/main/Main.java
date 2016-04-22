@@ -11,7 +11,7 @@ import entities.LogProxy;
 import entities.PlaygroundProxy;
 import entities.Referee;
 import entities.RefereeSiteProxy;
-import settings.NodeSetts;
+import settings.NodeSettsProxy;
 
 /**
  * Game of the Rope main!fg
@@ -31,10 +31,12 @@ public class Main{
      * @param args the command line arguments
      */
     public static void main(String[] args){
+        NodeSettsProxy proxy = new NodeSettsProxy(); 
+        
         /* START THE ENTITIES */
-        int nCoaches = NodeSetts.N_COACHS;
-        String teams[] = NodeSetts.teams;
-        int nContestants = NodeSetts.N_CONTESTANTS_TEAM*2;
+        int nCoaches = proxy.N_COACHS();
+        String teams[] = proxy.teams();
+        int nContestants = proxy.N_CONTESTANTS_TEAM()*2;
         
         assert nCoaches == teams.length;
         

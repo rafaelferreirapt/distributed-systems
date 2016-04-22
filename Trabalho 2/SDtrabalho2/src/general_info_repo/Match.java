@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 import settings.NodeSetts;
+import settings.NodeSettsProxy;
 
 /**
  * The match singleton will have games, positions, strengths, contestants last trials,
@@ -21,16 +22,16 @@ public class Match {
     
     private final Game[] games;
     private int game = 0;
-    private final int number_of_games = NodeSetts.NUMBER_OF_GAMES;
+    private final int number_of_games;
     private final int pontuation[];
     private int positionA = 0;
     private int positionB = 0;
     
-    private static final int MAX_STRENGTH = NodeSetts.MAX_STRENGTH;
-    private static final int MIN_STRENGTH = NodeSetts.MIN_STRENGTH;
+    private static int MAX_STRENGTH;
+    private static int MIN_STRENGTH;
     
-    public static final int NUMBER_OF_TRIALS = NodeSetts.NUMBER_OF_TRIALS;
-    public static final int N_CONTESTANTS = NodeSetts.N_CONTESTANTS_TEAM * NodeSetts.teams.length;
+    public static int NUMBER_OF_TRIALS;
+    public static int N_CONTESTANTS;
     
     private final HashMap<String, HashMap<Integer, Integer>> strengths;
     private final HashMap<Integer, Integer> positionsA;
@@ -45,6 +46,13 @@ public class Match {
     private static Match instance = null;
     
     private Match() {
+        NodeSettsProxy proxy = new NodeSettsProxy(); 
+        number_of_games = proxy.NUMBER_OF_GAMES();
+        MAX_STRENGTH = proxy.MAX_STRENGTH();
+        MIN_STRENGTH = proxy.MIN_STRENGTH();
+        NUMBER_OF_TRIALS = proxy.NUMBER_OF_TRIALS();
+        N_CONTESTANTS = proxy.N_CONTESTANTS_TEAM() * proxy.teams().length;
+                
         this.strengths = new HashMap<>();
         this.positionsA = new HashMap<>();
         this.positionsB = new HashMap<>();

@@ -10,7 +10,7 @@ import communication.message.MessageType;
 import communication.proxy.ClientProxyWrapper;
 import playground.IContestant;
 import playground.IReferee;
-import settings.NodeSetts;
+import settings.NodeSettsProxy;
 
 /**
  *
@@ -18,8 +18,14 @@ import settings.NodeSetts;
  */
 public class PlaygroundProxy implements IReferee, IContestant{
     
-    private final String SERVER_HOST = NodeSetts.SERVER_HOSTS.get("playground");
-    private final int SERVER_PORT = NodeSetts.SERVER_PORTS.get("playground");
+    private final String SERVER_HOST;
+    private final int SERVER_PORT;
+    
+    public PlaygroundProxy(){
+        NodeSettsProxy proxy = new NodeSettsProxy(); 
+        SERVER_HOST = proxy.SERVER_HOSTS().get("playground");
+        SERVER_PORT = proxy.SERVER_PORTS().get("playground");
+    }
     
     private void communicate(Message m){
         ClientProxyWrapper.connect(SERVER_HOST,  SERVER_PORT, m);

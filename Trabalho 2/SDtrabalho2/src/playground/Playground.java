@@ -6,7 +6,7 @@ package playground;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import settings.NodeSetts;
+import settings.NodeSettsProxy;
 
 /**
  * Playground instance.
@@ -18,6 +18,9 @@ public class Playground implements IReferee, IContestant{
     private int contestantsIn = 0;
     private int contestantsAlerted = 0;
     
+    private final int DELAY_MAX;
+    private final int DELAY_MIN;
+    
     private final general_info_repo.IPlayground log;
     
     /**
@@ -26,6 +29,9 @@ public class Playground implements IReferee, IContestant{
      */
     public Playground(general_info_repo.IPlayground l){
         this.log = l;
+        NodeSettsProxy proxy = new NodeSettsProxy(); 
+        DELAY_MAX = proxy.DELAY_MAX();
+        DELAY_MIN = proxy.DELAY_MIN();
     }
     
     /**
@@ -92,7 +98,7 @@ public class Playground implements IReferee, IContestant{
     @Override
     public void pullTheRope(int id, String team) {
         try {
-            Thread.sleep((int)Math.ceil(Math.random() * NodeSetts.DELAY_MAX + NodeSetts.DELAY_MIN));
+            Thread.sleep((int)Math.ceil(Math.random() * DELAY_MAX + DELAY_MIN));
         } catch (InterruptedException ex) {
             Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
         }

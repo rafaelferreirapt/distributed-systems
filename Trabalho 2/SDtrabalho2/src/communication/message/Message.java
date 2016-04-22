@@ -9,6 +9,7 @@ import entities.CoachState;
 import entities.ContestantState;
 import entities.RefereeState;
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  *
@@ -20,12 +21,15 @@ public class Message implements Serializable {
     private MessageType type = null;
     
     private String str = null;
+    private String[] str_arr = null;
     private boolean bool = false;
     private int integer = -1;
     
     private ContestantState contestant_state = null;
     private CoachState coach_state = null;
     private RefereeState referee_state = null;
+    
+    private HashMap<?, ?> map = null;
     
     public Message(MessageType type) {
         this.type = type;
@@ -67,6 +71,16 @@ public class Message implements Serializable {
         this.referee_state = referee_state;
     }
     
+    public Message(MessageType type, HashMap<?, ?> map){
+        this(type);
+        this.map = map;
+    }
+    
+    public Message(MessageType type, String[] str_arr){
+        this(type);
+        this.str_arr = str_arr;
+    }
+    
     public ContestantState getContestantState(){
         return this.contestant_state;
     }
@@ -93,5 +107,17 @@ public class Message implements Serializable {
     
     public boolean getBoolean(){
         return this.bool;
+    }
+    
+    public String[] getStringArr(){
+        return this.str_arr;
+    }
+    
+    public HashMap<String, String> getStrStrMap(){
+        return (HashMap<String, String>) this.map;
+    }
+    
+    public HashMap<String, Integer> getStrIntMap(){
+        return (HashMap<String, Integer>) this.map;
     }
 }

@@ -6,7 +6,7 @@
 package entities;
 
 import java.util.ArrayList;
-import settings.NodeSetts;
+import settings.NodeSettsProxy;
 
 /**
  *
@@ -14,20 +14,27 @@ import settings.NodeSetts;
  */
 public class ContestantRun {
     
-    public static void main(String [] args) {        
-        ArrayList<Contestant> contestants = new ArrayList<>(NodeSetts.N_CONTESTANTS_TEAM*2);
+    private static int N_CONTESTANTS_TEAM;
+    private static String[] teams;
+    
+    public static void main(String [] args) { 
+        NodeSettsProxy proxy = new NodeSettsProxy(); 
+        N_CONTESTANTS_TEAM = proxy.N_CONTESTANTS_TEAM();
+        teams = proxy.teams();
+        
+        ArrayList<Contestant> contestants = new ArrayList<>(N_CONTESTANTS_TEAM*2);
         BenchProxy bp = new BenchProxy();
         RefereeSiteProxy rsp = new RefereeSiteProxy();
         PlaygroundProxy pp = new PlaygroundProxy();
         LogProxy log = new LogProxy();
         
         for (int i = 0; i < contestants.size(); i++){
-            if(i < NodeSetts.N_CONTESTANTS_TEAM){
+            if(i < N_CONTESTANTS_TEAM){
                 contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i, 
-                        NodeSetts.teams[0], (general_info_repo.IContestant) log));
+                        teams[0], (general_info_repo.IContestant) log));
             }else{
                 contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i, 
-                        NodeSetts.teams[0], (general_info_repo.IContestant) log));
+                        teams[0], (general_info_repo.IContestant) log));
             }
         }
         

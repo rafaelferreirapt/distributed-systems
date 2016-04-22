@@ -6,7 +6,7 @@
 package entities;
 
 import java.util.ArrayList;
-import settings.NodeSetts;
+import settings.NodeSettsProxy;
 
 /**
  *
@@ -14,14 +14,21 @@ import settings.NodeSetts;
  */
 public class CoachRun {
     
-    public static void main(String [] args) {        
-        ArrayList<Coach> coachs = new ArrayList<>(NodeSetts.N_COACHS);
+    private static int N_COACHS;
+    private static String[] teams;
+    
+    public static void main(String [] args) {    
+        NodeSettsProxy proxy = new NodeSettsProxy(); 
+        N_COACHS = proxy.N_CONTESTANTS_TEAM();
+        teams = proxy.teams();
+        
+        ArrayList<Coach> coachs = new ArrayList<>(N_COACHS);
         BenchProxy bp = new BenchProxy();
         RefereeSiteProxy rsp = new RefereeSiteProxy();
         LogProxy log = new LogProxy();
         
-        for (int i = 0; i < NodeSetts.N_COACHS; i++){
-            coachs.add(new Coach((bench.ICoach) bp, (referee_site.ICoach) rsp, NodeSetts.teams[i], (general_info_repo.ICoach) log));
+        for (int i = 0; i < N_COACHS; i++){
+            coachs.add(new Coach((bench.ICoach) bp, (referee_site.ICoach) rsp, teams[i], (general_info_repo.ICoach) log));
         }
         
         

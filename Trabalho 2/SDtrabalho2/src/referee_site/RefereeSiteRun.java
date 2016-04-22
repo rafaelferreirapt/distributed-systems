@@ -6,11 +6,16 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import settings.NodeSetts;
+import settings.NodeSettsProxy;
 
 public class RefereeSiteRun {
     
+    private static int SERVER_PORT;
+    
     public static void main(String[] args) throws SocketException {
+        NodeSettsProxy proxy = new NodeSettsProxy(); 
+        SERVER_PORT = proxy.SERVER_PORTS().get("refereeSite");
+        
         // canais de comunicação
         ServerChannel schan, schani;
         
@@ -20,7 +25,7 @@ public class RefereeSiteRun {
         /* estabelecimento do servico */
         
         // criação do canal de escuta e sua associação
-        schan = new ServerChannel(NodeSetts.SERVER_PORTS.get("refereeSite"));    
+        schan = new ServerChannel(SERVER_PORT);    
         schan.start();
         
         RefereeSiteServer refereeSiteServer = new RefereeSiteServer();
