@@ -5,6 +5,11 @@
  */
 package entities;
 
+import communication.message.Message;
+import communication.message.MessageType;
+import communication.proxy.ClientProxyWrapper;
+import settings.NodeSettsProxy;
+
 /**
  *
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
@@ -31,6 +36,9 @@ public class RefereeRun {
         System.out.println("Sending TERMINATE message to the logging");
         
         /* SEND TO LOG THAT COACH HAS FINISHED */
-        
+        NodeSettsProxy proxy = new NodeSettsProxy(); 
+        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("log"), 
+                proxy.SERVER_PORTS().get("log"), 
+                new Message(MessageType.TERMINATE));
     }
 }

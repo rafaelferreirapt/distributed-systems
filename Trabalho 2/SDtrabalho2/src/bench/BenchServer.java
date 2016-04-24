@@ -18,7 +18,7 @@ import java.net.SocketException;
  */
 public class BenchServer extends Bench implements ServerInterface {
     
-    private final boolean serverEnded;
+    private boolean serverEnded;
     
     public BenchServer(int nContestantsTeamA, int nContestantsTeamB) {
         super(nContestantsTeamA, nContestantsTeamB);
@@ -30,6 +30,8 @@ public class BenchServer extends Bench implements ServerInterface {
     public Message processAndReply(Message inMessage, ServerChannel scon) throws MessageException, SocketException {
         
         switch(inMessage.getType()){
+            case TERMINATE:
+                this.serverEnded = true;
             case callTrial:
                 super.callTrial();
                 break;

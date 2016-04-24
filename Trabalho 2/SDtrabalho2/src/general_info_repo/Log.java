@@ -5,6 +5,9 @@
 package general_info_repo;
 
 import com.sun.javafx.binding.Logging;
+import communication.message.Message;
+import communication.message.MessageType;
+import communication.proxy.ClientProxyWrapper;
 import entities.CoachState;
 import entities.ContestantState;
 import entities.RefereeState;
@@ -18,6 +21,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import settings.NodeSettsProxy;
 
 /**
  * The log will be the gateway to all the information of the match, games, trials,
@@ -394,4 +398,23 @@ public class Log implements IReferee, ICoach, IContestant, IPlayground{
         }
     }
     
+    public void terminateServers(){
+        NodeSettsProxy proxy = new NodeSettsProxy(); 
+        
+        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("bench"), 
+                proxy.SERVER_PORTS().get("bench"), 
+                new Message(MessageType.TERMINATE));
+         
+        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("playground"), 
+                proxy.SERVER_PORTS().get("playground"), 
+                new Message(MessageType.TERMINATE));
+        
+        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("refereeSite"), 
+                proxy.SERVER_PORTS().get("refereeSite"), 
+                new Message(MessageType.TERMINATE));
+        
+        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("nodeSetts"), 
+                proxy.SERVER_PORTS().get("nodeSetts"), 
+                new Message(MessageType.TERMINATE));
+    }
 }

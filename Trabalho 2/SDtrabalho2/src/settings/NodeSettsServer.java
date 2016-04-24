@@ -18,7 +18,7 @@ import java.net.SocketException;
  */
 public class NodeSettsServer extends NodeSetts implements ServerInterface {
     
-    private final boolean serverEnded;
+    private boolean serverEnded;
     
     public NodeSettsServer() {
         super();
@@ -29,6 +29,8 @@ public class NodeSettsServer extends NodeSetts implements ServerInterface {
     @Override
     public Message processAndReply(Message inMessage, ServerChannel scon) throws MessageException, SocketException {
         switch(inMessage.getType()){
+            case TERMINATE:
+                this.serverEnded = true;
             case SERVER_PORTS:
                 return new Message(MessageType.ACK, NodeSetts.SERVER_PORTS);
             case SERVER_HOSTS:

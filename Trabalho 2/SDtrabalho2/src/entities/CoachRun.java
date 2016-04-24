@@ -5,6 +5,9 @@
  */
 package entities;
 
+import communication.message.Message;
+import communication.message.MessageType;
+import communication.proxy.ClientProxyWrapper;
 import java.util.ArrayList;
 import settings.NodeSettsProxy;
 
@@ -19,7 +22,7 @@ public class CoachRun {
     
     public static void main(String [] args) {    
         NodeSettsProxy proxy = new NodeSettsProxy(); 
-        N_COACHS = proxy.N_CONTESTANTS_TEAM();
+        N_COACHS = proxy.N_COACHS();
         teams = proxy.teams();
         
         ArrayList<Coach> coachs = new ArrayList<>(N_COACHS);
@@ -45,8 +48,9 @@ public class CoachRun {
         
         System.out.println("Sending TERMINATE message to the logging");
         
-        
         /* SEND TO LOG THAT COACH HAS FINISHED */
-        
+        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("log"), 
+                proxy.SERVER_PORTS().get("log"), 
+                new Message(MessageType.TERMINATE));
     }
 }

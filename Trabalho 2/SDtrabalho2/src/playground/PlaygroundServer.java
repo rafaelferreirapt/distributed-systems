@@ -18,7 +18,7 @@ import java.net.SocketException;
  */
 public class PlaygroundServer extends Playground implements ServerInterface {
     
-    private final boolean serverEnded;
+    private boolean serverEnded;
     
     public PlaygroundServer(general_info_repo.IPlayground log) {
         super(log);
@@ -29,6 +29,8 @@ public class PlaygroundServer extends Playground implements ServerInterface {
     @Override
     public Message processAndReply(Message inMessage, ServerChannel scon) throws MessageException, SocketException {
         switch(inMessage.getType()){
+            case TERMINATE:
+                this.serverEnded = true;
             case startTrial:
                 super.startTrial();
                 break;

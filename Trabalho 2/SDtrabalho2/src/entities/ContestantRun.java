@@ -5,6 +5,9 @@
  */
 package entities;
 
+import communication.message.Message;
+import communication.message.MessageType;
+import communication.proxy.ClientProxyWrapper;
 import java.util.ArrayList;
 import settings.NodeSettsProxy;
 
@@ -28,7 +31,7 @@ public class ContestantRun {
         PlaygroundProxy pp = new PlaygroundProxy();
         LogProxy log = new LogProxy();
         
-        for (int i = 0; i < contestants.size(); i++){
+        for (int i = 0; i < N_CONTESTANTS_TEAM*2; i++){
             if(i < N_CONTESTANTS_TEAM){
                 contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i, 
                         teams[0], (general_info_repo.IContestant) log));
@@ -54,6 +57,8 @@ public class ContestantRun {
         
         
         /* SEND TO LOG THAT COACH HAS FINISHED */
-        
+        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("log"), 
+                proxy.SERVER_PORTS().get("log"), 
+                new Message(MessageType.TERMINATE));
     }
 }

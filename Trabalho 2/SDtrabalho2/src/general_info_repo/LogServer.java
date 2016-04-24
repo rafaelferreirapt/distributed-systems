@@ -13,7 +13,8 @@ import java.net.SocketException;
  */
 public class LogServer extends Log implements ServerInterface {
     
-    private final boolean serverEnded;
+    private boolean serverEnded;
+    private int numberOfClientsRunning = 3;
     
     public LogServer() {
         super("");
@@ -87,6 +88,16 @@ public class LogServer extends Log implements ServerInterface {
                 break;
             case printGameWinner:
                 super.printGameWinner();
+                break;
+            case TERMINATE:
+                this.numberOfClientsRunning--;
+                
+                if(this.numberOfClientsRunning<=0){
+                    super.terminateServers();
+                    System.out.println("Terminating servers...");
+                    serverEnded = true;
+                    super.writeEnd();
+                }
                 break;
         }
         

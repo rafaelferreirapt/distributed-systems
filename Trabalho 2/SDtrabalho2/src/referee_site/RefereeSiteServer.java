@@ -18,7 +18,7 @@ import java.net.SocketException;
  */
 public class RefereeSiteServer extends RefereeSite implements ServerInterface {
     
-    private final boolean serverEnded;
+    private boolean serverEnded;
     
     public RefereeSiteServer() {
         super();
@@ -30,6 +30,8 @@ public class RefereeSiteServer extends RefereeSite implements ServerInterface {
     public Message processAndReply(Message inMessage, ServerChannel scon) throws MessageException, SocketException {
         boolean endMatch;
         switch(inMessage.getType()){
+            case TERMINATE:
+                this.serverEnded = true;
             case annouceNewGame:
                 super.annouceNewGame();
                 break;
