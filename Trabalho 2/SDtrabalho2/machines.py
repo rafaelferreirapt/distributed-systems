@@ -217,34 +217,45 @@ def upload():
 
         print jars_host["class"]["command"] % (
             jars_host["class"]["package"] + "." + jars_host["class"]["class"] + "Run")
-        stdin, stdout, stderr =  ssh.exec_command(
+        stdin, stdout, stderr = ssh.exec_command(
             jars_host["class"]["command"] % (jars_host["class"]["package"] + "." + jars_host["class"]["class"] + "Run"))
 
         if jars_host["class"]["class"] == "Log":
             log_connection = stdout.channel
 
-    print "Waiting for the simulation end!"
+    print "Waiting for the simulation end! CTRL+C if you don't want to wait"
 
-    if log_connection.recv_exit_status() == 0:
-        print "Simulation ended, copying log file to the local machine"
+    try:
+        if log_connection.recv_exit_status() == 0:
+            print "Simulation ended, copying log file to the local machine"
 
-        if not os.path.exists("logs"):
-            os.makedirs("logs")
-
-        ssh.connect(log_host["host"]["host"], username=log_host["host"]["user"],
-                    password=log_host["host"]["password"])
-        sftp = ssh.open_sftp()
-        dir = sftp.listdir(".")
-
-        for f in dir:
-            if str(f).endswith(".log"):
-                log_file = str(f)
-                sftp.get(log_file, "logs/"+log_file)
-    else:
-        print "UPS! Something went wrong..."
+            get_log(log_host["host"]["host"])
+        else:
+            print "UPS! Something went wrong..."
+    except KeyboardInterrupt:
+        print "Bye! Don't forget to call 'python machines.py show_logs'\n" + \
+              " and then: 'python machines.py get_log " + log_host["host"]["host"] + "'"
 
 
-def killall():
+def get_log(log_host_hostname):
+    for log_host in hosts:
+        if log_host["host"] == log_host_hostname:
+            break
+
+    if not os.path.exists("logs"):
+        os.makedirs("logs")
+
+    ssh.connect(log_host["host"], username=log_host["user"], password=log_host["password"])
+    sftp = ssh.open_sftp()
+    dir = sftp.listdir(".")
+
+    for f in dir:
+        if str(f).endswith(".log"):
+            log_file = str(f)
+            sftp.get(log_file, "logs/" + log_file)
+
+
+def kill_all():
     global ssh
 
     for host in hosts:
@@ -290,11 +301,14 @@ def show_logs():
 
 
 if __name__ == '__main__':
-    functions = {'upload': upload, 'killall': killall, 'show_logs': show_logs}
+    functions = {'upload': upload, 'killall': kill_all, 'show_logs': show_logs, 'get_log': get_log}
 
     if len(sys.argv) <= 1:
         print('Available functions are:\n' + repr(functions.keys()))
         exit(1)
 
     if sys.argv[1] in functions.keys():
-        functions[sys.argv[1]]()
+        if len(sys.argv[2:]) == 0:
+            functions[sys.argv[1]]()
+        else:
+            functions[sys.argv[1]](sys.argv[2:])
