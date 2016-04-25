@@ -19,28 +19,29 @@ public class ContestantRun {
     
     private static int N_CONTESTANTS_TEAM;
     private static String[] teams;
+    private static int nContestants;
     
     public static void main(String [] args) { 
         NodeSettsProxy proxy = new NodeSettsProxy(); 
         N_CONTESTANTS_TEAM = proxy.N_CONTESTANTS_TEAM();
         teams = proxy.teams();
+        nContestants = N_CONTESTANTS_TEAM * 2;
         
-        ArrayList<Contestant> contestants = new ArrayList<>(N_CONTESTANTS_TEAM*2);
+        ArrayList<Contestant> contestants = new ArrayList<>(nContestants);
         BenchProxy bp = new BenchProxy();
         RefereeSiteProxy rsp = new RefereeSiteProxy();
         PlaygroundProxy pp = new PlaygroundProxy();
         LogProxy log = new LogProxy();
         
-        for (int i = 0; i < N_CONTESTANTS_TEAM*2; i++){
+        for (int i = 0; i < nContestants; i++){
             if(i < N_CONTESTANTS_TEAM){
-                contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i, 
+                contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i+1, 
                         teams[0], (general_info_repo.IContestant) log));
             }else{
-                contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i, 
-                        teams[0], (general_info_repo.IContestant) log));
+                contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i-N_CONTESTANTS_TEAM, 
+                        teams[1], (general_info_repo.IContestant) log));
             }
         }
-        
         
         System.out.println("Number of contestants: " + contestants.size());
         
