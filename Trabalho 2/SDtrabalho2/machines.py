@@ -56,42 +56,58 @@ jars = [
     {
         "class": "Bench",
         "path": "build/classes/bench/BenchRun",
-        "type": "server"
+        "type": "server",
+        "order": 5,
+        "command": "java -jar %s.jar"
     },
     {
         "class": "Coach",
         "path": "build/classes/entities/CoachRun",
-        "type": "client"
+        "type": "client",
+        "order": 7,
+        "command": "java -jar %s.jar"
     },
     {
         "class": "Contestant",
         "path": "build/classes/entities/ContestantRun",
-        "type": "client"
+        "type": "client",
+        "order": 6,
+        "command": "java -jar %s.jar"
     },
     {
         "class": "Referee",
         "path": "build/classes/entities/RefereeRun",
-        "type": "client"
+        "type": "client",
+        "order": 8,
+        "command": "java -jar %s.jar"
     },
     {
         "class": "Log",
         "path": "build/classes/general_info_repo/LogRun",
-        "type": "server"
+        "type": "server",
+        "order": 2,
+        "command": "java -jar %s.jar"
     },
     {
         "class": "Playground",
         "path": "build/classes/playground/PlaygroundRun",
-        "type": "server"
+        "type": "server",
+        "order": 4,
+        "command": "java -jar %s.jar"
     },
     {
         "class": "RefereeSite",
         "path": "build/classes/referee_site/RefereeSiteRun",
-        "type": "server"
+        "type": "server",
+        "order": 3,
+        "command": "java -jar %s.jar"
     },
     {
         "class": "NodeSetts",
         "path": "build/classes/settings/NodeSettsRun",
-        "type": "server"
+        "type": "server",
+        "order": 1,
+        "command": "java -jar %s.jar hosts.json"
     },
 ]
 
@@ -123,7 +139,7 @@ def upload():
     print "Generating all different jars (Total: %d)" % (len(jars))
 
     for jar in jars:
-        call(["jar", "cfv", jar["class"] + ".jar", jar["path"] + ".class"])
+        call(["jar", "cf", jar["class"] + ".jar", jar["path"] + ".class"])
         os.rename(jar["class"] + ".jar", "jars/" + jar["class"] + ".jar")
 
     print "See what hosts are up to calculate the architecture of the solution"
@@ -183,9 +199,20 @@ def upload():
         json.dump(to_file, outfile)
 
     print "Upload hosts.json to the proper machine"
-    
 
-    """
+    for json_host in jars_hosts:
+        if json_host["class"]["class"] == "NodeSetts":
+            break
+
+    ssh = paramiko.SSHClient()
+    ssh.load_system_host_keys()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(json_host["host"]["host"], username=json_host["host"]["user"], password=json_host["host"]["password"])
+    sftp = ssh.open_sftp()
+    sftp.put(os.getcwd() + "/hosts.json", "hosts.json")
+
+    jars_hosts = sorted(jars_hosts, key=lambda jars_host: jars_host["class"]["order"])
+
     print "Executing each jar file on the proper workstation"
 
     for jars_host in jars_hosts:
@@ -194,8 +221,12 @@ def upload():
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(jars_host["host"]["host"], username=jars_host["host"]["user"],
                     password=jars_host["host"]["password"])
-        print "java -jar " + jars_host["class"]["class"] + ".jar"
-        ssh.exec_command("java -jar " + jars_host["class"]["class"] + ".jar")
+
+        print jars_host["class"]["command"] % jars_host["class"]["class"]
+        stdin, stdout, stderr = ssh.exec_command(jars_host["class"]["command"] % jars_host["class"]["class"])
+
+        print stdout.readlines()
+        print stderr.readlines()
 
     # http://stackoverflow.com/questions/28485647/wait-until-task-is-completed-on-remote-machine-through-python
 
@@ -203,7 +234,8 @@ def upload():
 
     if not os.path.exists("logs"):
         os.makedirs("logs")
-    """
+
+    print json_host
 
 
 def killall():
