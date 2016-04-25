@@ -17,8 +17,21 @@ import java.util.HashMap;
  */
 public class NodeSettsProxy {
     
-    private final String SERVER_HOST = NodeSetts.SERVER_HOSTS.get("NodeSetts");
-    private final int SERVER_PORT = NodeSetts.SERVER_PORTS.get("NodeSetts");
+    private final String SERVER_HOST;
+    private final int SERVER_PORT;
+    
+    public NodeSettsProxy(){
+        String json_path = "hosts.json";
+        
+        if(NodeSetts.DEBUG){
+            json_path = "debug_hosts.json";
+        }
+        
+        NodeSetts nodeSetts = new NodeSetts(json_path);
+        
+        this.SERVER_HOST = NodeSetts.SERVER_HOSTS.get("NodeSetts");
+        this.SERVER_PORT = NodeSetts.SERVER_PORTS.get("NodeSetts");
+    }
     
     private WrapperMessage communicate(Message m){
         return ClientProxyWrapper.connect(SERVER_HOST,  SERVER_PORT, m);

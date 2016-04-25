@@ -40,5 +40,7 @@ public class RefereeRun {
         ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("Log"), 
                 proxy.SERVER_PORTS().get("Log"), 
                 new Message(MessageType.TERMINATE));
+        
+        System.out.println("Done!");
     }
 }

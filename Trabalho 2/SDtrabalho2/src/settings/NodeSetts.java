@@ -24,6 +24,8 @@ public class NodeSetts {
     protected static HashMap<String, Integer> SERVER_PORTS;
     protected static HashMap<String, String> SERVER_HOSTS;
     
+    protected static boolean DEBUG = false;
+    
     protected final int N_COACHS = 2;
     protected final int NUMBER_OF_TRIALS = 6;
     protected final int NUMBER_OF_GAMES = 3;

@@ -11,7 +11,10 @@ public class NodeSettsRun {
     
     public static void main(String[] args) throws SocketException {
         String json_path = "hosts.json";
-        // json_path = "debug_hosts.json";
+        
+        if(NodeSetts.DEBUG){
+            json_path = "debug_hosts.json";
+        }
         
         if(args.length == 1){
             json_path = args[0];

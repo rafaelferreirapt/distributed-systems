@@ -1,7 +1,6 @@
 import os
 import sys
 import json
-from subprocess import call
 import paramiko
 
 hosts = [
@@ -55,74 +54,76 @@ hosts = [
 jars = [
     {
         "class": "Bench",
-        "path": "build/classes/bench/BenchRun",
+        "package": "bench",
         "type": "server",
         "order": 5,
-        "command": "java -jar %s.jar"
+        "command": "java -cp 'SDTrabalho2.jar:libs/*' %s &> output"
     },
     {
         "class": "Coach",
-        "path": "build/classes/entities/CoachRun",
+        "package": "entities",
         "type": "client",
         "order": 7,
-        "command": "java -jar %s.jar"
+        "command": "java -cp 'SDTrabalho2.jar:libs/*' %s &> output"
     },
     {
         "class": "Contestant",
-        "path": "build/classes/entities/ContestantRun",
+        "package": "entities",
         "type": "client",
         "order": 6,
-        "command": "java -jar %s.jar"
+        "command": "java -cp 'SDTrabalho2.jar:libs/*' %s &> output"
     },
     {
         "class": "Referee",
-        "path": "build/classes/entities/RefereeRun",
+        "package": "entities",
         "type": "client",
         "order": 8,
-        "command": "java -jar %s.jar"
+        "command": "java -cp 'SDTrabalho2.jar:libs/*' %s &> output"
     },
     {
         "class": "Log",
-        "path": "build/classes/general_info_repo/LogRun",
+        "package": "general_info_repo",
         "type": "server",
         "order": 2,
-        "command": "java -jar %s.jar"
+        "command": "java -cp 'SDTrabalho2.jar:libs/*' %s &> output"
     },
     {
         "class": "Playground",
-        "path": "build/classes/playground/PlaygroundRun",
+        "package": "playground",
         "type": "server",
         "order": 4,
-        "command": "java -jar %s.jar"
+        "command": "java -cp 'SDTrabalho2.jar:libs/*' %s &> output"
     },
     {
         "class": "RefereeSite",
-        "path": "build/classes/referee_site/RefereeSiteRun",
+        "package": "referee_site",
         "type": "server",
         "order": 3,
-        "command": "java -jar %s.jar"
+        "command": "java -cp 'SDTrabalho2.jar:libs/*' %s &> output"
     },
     {
         "class": "NodeSetts",
-        "path": "build/classes/settings/NodeSettsRun",
+        "package": "settings",
         "type": "server",
         "order": 1,
-        "command": "java -jar %s.jar hosts.json"
+        "command": "java -cp 'SDTrabalho2.jar:libs/*' %s hosts.json > output"
     },
 ]
+
+ssh = paramiko.SSHClient()
+ssh.load_system_host_keys()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
 
 def send_jar(host, jar):
     print "Jar: " + jar["class"]
     print "Sending the proper jar to the workstation"
 
-    ssh = paramiko.SSHClient()
-    ssh.load_system_host_keys()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(host["host"], username=host["user"], password=host["password"])
-    ssh.exec_command("rm -rf *")
     sftp = ssh.open_sftp()
-    sftp.put(os.getcwd() + "/jars/" + jar["class"] + ".jar", jar["class"] + ".jar")
+    sftp.put(os.getcwd() + "/dist/SDTrabalho2.jar", "SDTrabalho2.jar")
+    sftp.put(os.getcwd() + "/libs/json-simple-1.1.jar", "libs/json-simple-1.1.jar")
+    sftp.put(os.getcwd() + "/libs/org.json-20120521.jar", "libs/org.json-20120521.jar")
 
     return [{
         "class": jar,
@@ -131,16 +132,9 @@ def send_jar(host, jar):
 
 
 def upload():
+    global ssh
+
     print "Creating directory jars if it doesn't exist"
-
-    if not os.path.exists("jars"):
-        os.makedirs("jars")
-
-    print "Generating all different jars (Total: %d)" % (len(jars))
-
-    for jar in jars:
-        call(["jar", "cf", jar["class"] + ".jar", jar["path"] + ".class"])
-        os.rename(jar["class"] + ".jar", "jars/" + jar["class"] + ".jar")
 
     print "See what hosts are up to calculate the architecture of the solution"
 
@@ -152,10 +146,10 @@ def upload():
             hosts.remove(host)
             continue
         try:
-            ssh = paramiko.SSHClient()
-            ssh.load_system_host_keys()
-            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(host["host"], username=host["user"], password=host["password"])
+            ssh.exec_command("rm -rf *")
+            ssh.exec_command("killall java")
+            ssh.exec_command("mkdir libs")
         except Exception:
             hosts.remove(host)
 
@@ -198,47 +192,61 @@ def upload():
     with open('hosts.json', 'w') as outfile:
         json.dump(to_file, outfile)
 
-    print "Upload hosts.json to the proper machine"
+    print "Upload hosts.json to all machines"
 
-    for json_host in jars_hosts:
-        if json_host["class"]["class"] == "NodeSetts":
+    for log_host in jars_hosts:
+        if log_host["class"]["class"] == "Log":
             break
 
-    ssh = paramiko.SSHClient()
-    ssh.load_system_host_keys()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(json_host["host"]["host"], username=json_host["host"]["user"], password=json_host["host"]["password"])
-    sftp = ssh.open_sftp()
-    sftp.put(os.getcwd() + "/hosts.json", "hosts.json")
+    for json_host in jars_hosts:
+        ssh.connect(json_host["host"]["host"], username=json_host["host"]["user"],
+                    password=json_host["host"]["password"])
+        sftp = ssh.open_sftp()
+        sftp.put(os.getcwd() + "/hosts.json", "hosts.json")
 
-    jars_hosts = sorted(jars_hosts, key=lambda jars_host: jars_host["class"]["order"])
+    jars_hosts = sorted(jars_hosts, key=lambda jar_host: jar_host["class"]["order"])
 
     print "Executing each jar file on the proper workstation"
 
+    log_connection = None
+
     for jars_host in jars_hosts:
-        ssh = paramiko.SSHClient()
-        ssh.load_system_host_keys()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        print "[%s]" % (jars_host["host"]["host"])
         ssh.connect(jars_host["host"]["host"], username=jars_host["host"]["user"],
                     password=jars_host["host"]["password"])
 
-        print jars_host["class"]["command"] % jars_host["class"]["class"]
-        stdin, stdout, stderr = ssh.exec_command(jars_host["class"]["command"] % jars_host["class"]["class"])
+        print jars_host["class"]["command"] % (
+            jars_host["class"]["package"] + "." + jars_host["class"]["class"] + "Run")
+        stdin, stdout, stderr =  ssh.exec_command(
+            jars_host["class"]["command"] % (jars_host["class"]["package"] + "." + jars_host["class"]["class"] + "Run"))
 
-        print stdout.readlines()
-        print stderr.readlines()
+        if jars_host["class"]["class"] == "Log":
+            log_connection = stdout.channel
 
-    # http://stackoverflow.com/questions/28485647/wait-until-task-is-completed-on-remote-machine-through-python
+    print "Waiting for the simulation end!"
 
-    print "Simulation ended, copying log file to the local machine"
+    if log_connection.recv_exit_status() == 0:
+        print "Simulation ended, copying log file to the local machine"
 
-    if not os.path.exists("logs"):
-        os.makedirs("logs")
+        if not os.path.exists("logs"):
+            os.makedirs("logs")
 
-    print json_host
+        ssh.connect(log_host["host"]["host"], username=log_host["host"]["user"],
+                    password=log_host["host"]["password"])
+        sftp = ssh.open_sftp()
+        dir = sftp.listdir(".")
+
+        for f in dir:
+            if str(f).endswith(".log"):
+                log_file = str(f)
+                sftp.get(log_file, "logs/"+log_file)
+    else:
+        print "UPS! Something went wrong..."
 
 
 def killall():
+    global ssh
+
     for host in hosts:
         hostname = host["host"]
         response = os.system("ping -c 1 -W 1 " + hostname)
@@ -247,24 +255,42 @@ def killall():
             hosts.remove(host)
             continue
         try:
-            ssh = paramiko.SSHClient()
-            ssh.load_system_host_keys()
-            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(host["host"], username=host["user"], password=host["password"])
         except Exception:
             hosts.remove(host)
 
     for host in hosts:
-        ssh = paramiko.SSHClient()
-        ssh.load_system_host_keys()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(host["host"], username=host["user"], password=host["password"])
         ssh.exec_command("killall java")
         print host["host"] + ": killall java"
 
 
+def show_logs():
+    global ssh
+
+    for host in hosts:
+        hostname = host["host"]
+        response = os.system("ping -c 1 -W 1 " + hostname)
+
+        if response != 0:
+            hosts.remove(host)
+            continue
+        try:
+            ssh.connect(host["host"], username=host["user"], password=host["password"])
+        except Exception:
+            hosts.remove(host)
+
+    print "\nSHOW LOGS\n"
+
+    for host in hosts:
+        ssh.connect(host["host"], username=host["user"], password=host["password"])
+        stdin, stdout, stderr = ssh.exec_command("cat output")
+        print host["host"]
+        print stdout.readlines()
+
+
 if __name__ == '__main__':
-    functions = {'upload': upload, 'killall': killall}
+    functions = {'upload': upload, 'killall': killall, 'show_logs': show_logs}
 
     if len(sys.argv) <= 1:
         print('Available functions are:\n' + repr(functions.keys()))
