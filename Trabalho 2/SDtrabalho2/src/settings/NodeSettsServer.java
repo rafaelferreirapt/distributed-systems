@@ -20,11 +20,10 @@ public class NodeSettsServer extends NodeSetts implements ServerInterface {
     
     private boolean serverEnded;
     
-    public NodeSettsServer() {
-        super();
+    public NodeSettsServer(String jsonfilepath) {
+        super(jsonfilepath);
         this.serverEnded = false;
     }
-    
     
     @Override
     public Message processAndReply(Message inMessage, ServerChannel scon) throws MessageException, SocketException {
@@ -32,27 +31,27 @@ public class NodeSettsServer extends NodeSetts implements ServerInterface {
             case TERMINATE:
                 this.serverEnded = true;
             case SERVER_PORTS:
-                return new Message(MessageType.ACK, NodeSetts.SERVER_PORTS);
+                return new Message(MessageType.ACK, super.SERVER_PORTS);
             case SERVER_HOSTS:
-                return new Message(MessageType.ACK, NodeSetts.SERVER_HOSTS);
+                return new Message(MessageType.ACK, super.SERVER_HOSTS);
             case N_COACHS:
-                return new Message(MessageType.ACK, NodeSetts.N_COACHS);
+                return new Message(MessageType.ACK, super.N_COACHS);
             case NUMBER_OF_TRIALS:
-                return new Message(MessageType.ACK, NodeSetts.NUMBER_OF_TRIALS);
+                return new Message(MessageType.ACK, super.NUMBER_OF_TRIALS);
             case NUMBER_OF_GAMES:
-                return new Message(MessageType.ACK, NodeSetts.NUMBER_OF_GAMES);
+                return new Message(MessageType.ACK, super.NUMBER_OF_GAMES);
             case N_CONTESTANTS_TEAM:
-                return new Message(MessageType.ACK, NodeSetts.N_CONTESTANTS_TEAM);
+                return new Message(MessageType.ACK, super.N_CONTESTANTS_TEAM);
             case MAX_STRENGTH:
-                return new Message(MessageType.ACK, NodeSetts.MAX_STRENGTH);
+                return new Message(MessageType.ACK, super.MAX_STRENGTH);
             case MIN_STRENGTH:
-                return new Message(MessageType.ACK, NodeSetts.MIN_STRENGTH);
+                return new Message(MessageType.ACK, super.MIN_STRENGTH);
             case teams:
-                return new Message(MessageType.ACK, NodeSetts.teams);
+                return new Message(MessageType.ACK, super.teams);
             case DELAY_MIN:
-                return new Message(MessageType.ACK, NodeSetts.DELAY_MIN);
+                return new Message(MessageType.ACK, super.DELAY_MIN);
             case DELAY_MAX:
-                return new Message(MessageType.ACK, NodeSetts.DELAY_MAX);
+                return new Message(MessageType.ACK, super.DELAY_MAX);
         }
         
         return new Message(MessageType.ACK);   

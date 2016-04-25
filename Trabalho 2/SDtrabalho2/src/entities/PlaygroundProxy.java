@@ -23,8 +23,8 @@ public class PlaygroundProxy implements IReferee, IContestant{
     
     public PlaygroundProxy(){
         NodeSettsProxy proxy = new NodeSettsProxy(); 
-        SERVER_HOST = proxy.SERVER_HOSTS().get("playground");
-        SERVER_PORT = proxy.SERVER_PORTS().get("playground");
+        SERVER_HOST = proxy.SERVER_HOSTS().get("Playground");
+        SERVER_PORT = proxy.SERVER_PORTS().get("Playground");
     }
     
     private void communicate(Message m){

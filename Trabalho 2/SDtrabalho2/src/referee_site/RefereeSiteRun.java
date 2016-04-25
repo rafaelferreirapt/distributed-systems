@@ -14,7 +14,7 @@ public class RefereeSiteRun {
     
     public static void main(String[] args) throws SocketException {
         NodeSettsProxy proxy = new NodeSettsProxy(); 
-        SERVER_PORT = proxy.SERVER_PORTS().get("refereeSite");
+        SERVER_PORT = proxy.SERVER_PORTS().get("RefereeSite");
         
         // canais de comunicação
         ServerChannel schan, schani;

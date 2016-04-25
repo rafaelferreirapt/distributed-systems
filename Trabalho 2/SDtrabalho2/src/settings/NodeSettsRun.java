@@ -10,6 +10,13 @@ import java.util.logging.Logger;
 public class NodeSettsRun {
     
     public static void main(String[] args) throws SocketException {
+        String json_path = "hosts.json";
+        // json_path = "debug_hosts.json";
+        
+        if(args.length == 1){
+            json_path = args[0];
+        }
+        
         // canais de comunicação
         ServerChannel schan, schani;
         
@@ -18,11 +25,12 @@ public class NodeSettsRun {
 
         /* estabelecimento do servico */
         
+        NodeSettsServer nodeSettsServer = new NodeSettsServer(json_path);
+        
         // criação do canal de escuta e sua associação
-        schan = new ServerChannel(NodeSetts.SERVER_PORTS.get("nodeSetts"));    
+        schan = new ServerChannel(nodeSettsServer.SERVER_PORTS.get("NodeSetts"));    
         schan.start();
         
-        NodeSettsServer nodeSettsServer = new NodeSettsServer();
         System.out.println("Node Setts service has started!\nServer is listening.");
 
         /* processamento de pedidos */

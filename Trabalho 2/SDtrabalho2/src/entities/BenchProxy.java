@@ -24,8 +24,8 @@ public class BenchProxy implements IReferee, ICoach, IContestant{
     
     public BenchProxy(){
         NodeSettsProxy proxy = new NodeSettsProxy(); 
-        SERVER_HOST = proxy.SERVER_HOSTS().get("bench");
-        SERVER_PORT = proxy.SERVER_PORTS().get("bench");
+        SERVER_HOST = proxy.SERVER_HOSTS().get("Bench");
+        SERVER_PORT = proxy.SERVER_PORTS().get("Bench");
     }
     
     private void communicate(Message m){

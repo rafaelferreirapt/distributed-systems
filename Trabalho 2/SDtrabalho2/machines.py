@@ -1,60 +1,8 @@
 import os
+import sys
+import json
 from subprocess import call
 import paramiko
-
-print "Creating directory jars if it doesn't exist"
-
-if not os.path.exists("jars"):
-    os.makedirs("jars")
-
-jars = [
-    {
-        "class": "Bench",
-        "path": "build/classes/bench/BenchRun",
-        "type": "server"
-    },
-    {
-        "class": "Coach",
-        "path": "build/classes/entities/CoachRun",
-        "type": "client"
-    },
-    {
-        "class": "Contestant",
-        "path": "build/classes/entities/ContestantRun",
-        "type": "client"
-    },
-    {
-        "class": "Referee",
-        "path": "build/classes/entities/RefereeRun",
-        "type": "client"
-    },
-    {
-        "class": "Log",
-        "path": "build/classes/general_info_repo/LogRun",
-        "type": "server"
-    },
-    {
-        "class": "Playground",
-        "path": "build/classes/playground/PlaygroundRun",
-        "type": "server"
-    },
-    {
-        "class": "RefereeSite",
-        "path": "build/classes/referee_site/RefereeSiteRun",
-        "type": "server"
-    },
-    {
-        "class": "NodeSetts",
-        "path": "build/classes/settings/NodeSettsRun",
-        "type": "server"
-    },
-]
-
-print "Generating all different jars (Total: %d)" % (len(jars))
-
-for jar in jars:
-    call(["jar", "cfv", jar["class"] +".jar", jar["path"] + ".class"])
-    os.rename(jar["class"] + ".jar", "jars/" + jar["class"] + ".jar")
 
 hosts = [
     {
@@ -104,116 +52,191 @@ hosts = [
     }
 ]
 
-print "See what hosts are up to calculate the architecture of the solution"
+jars = [
+    {
+        "class": "Bench",
+        "path": "build/classes/bench/BenchRun",
+        "type": "server"
+    },
+    {
+        "class": "Coach",
+        "path": "build/classes/entities/CoachRun",
+        "type": "client"
+    },
+    {
+        "class": "Contestant",
+        "path": "build/classes/entities/ContestantRun",
+        "type": "client"
+    },
+    {
+        "class": "Referee",
+        "path": "build/classes/entities/RefereeRun",
+        "type": "client"
+    },
+    {
+        "class": "Log",
+        "path": "build/classes/general_info_repo/LogRun",
+        "type": "server"
+    },
+    {
+        "class": "Playground",
+        "path": "build/classes/playground/PlaygroundRun",
+        "type": "server"
+    },
+    {
+        "class": "RefereeSite",
+        "path": "build/classes/referee_site/RefereeSiteRun",
+        "type": "server"
+    },
+    {
+        "class": "NodeSetts",
+        "path": "build/classes/settings/NodeSettsRun",
+        "type": "server"
+    },
+]
 
-for host in hosts:
-    hostname = host["host"]
-    response = os.system("ping -c 1 -W 1 " + hostname)
 
-    if response != 0:
-        hosts.remove(host)
-        continue
-    try:
-        ssh = paramiko.SSHClient()
-        ssh.load_system_host_keys()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(host["host"], username=host["user"], password=host["password"])
-    except Exception:
-        hosts.remove(host)
-
-"""
-for host in hosts:
+def send_jar(host, jar):
+    print "Jar: " + jar["class"]
+    print "Sending the proper jar to the workstation"
 
     ssh = paramiko.SSHClient()
     ssh.load_system_host_keys()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(host["host"], username=host["user"], password=host["password"])
-    ssh.exec_command("killall java")
+    ssh.exec_command("rm -rf *")
+    sftp = ssh.open_sftp()
+    sftp.put(os.getcwd() + "/jars/" + jar["class"] + ".jar", jar["class"] + ".jar")
 
-"""
-print "and sending them to the workstations"
+    return [{
+        "class": jar,
+        "host": host
+    }]
 
-jar_i = 0
 
-jars_hosts = []
+def upload():
+    print "Creating directory jars if it doesn't exist"
 
-if len(hosts) == 0:
-    print "There are no machines active!"
-    exit(1)
-elif len(jars) <= len(hosts):
+    if not os.path.exists("jars"):
+        os.makedirs("jars")
+
+    print "Generating all different jars (Total: %d)" % (len(jars))
+
+    for jar in jars:
+        call(["jar", "cfv", jar["class"] + ".jar", jar["path"] + ".class"])
+        os.rename(jar["class"] + ".jar", "jars/" + jar["class"] + ".jar")
+
+    print "See what hosts are up to calculate the architecture of the solution"
+
     for host in hosts:
-        print "Jar: " + jars[jar_i]["class"]
-        print "Sending the proper jar to the workstation"
+        hostname = host["host"]
+        response = os.system("ping -c 1 -W 1 " + hostname)
 
-        jars_hosts += [{
-            "class": jars[jar_i],
-            "host": host
+        if response != 0:
+            hosts.remove(host)
+            continue
+        try:
+            ssh = paramiko.SSHClient()
+            ssh.load_system_host_keys()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(host["host"], username=host["user"], password=host["password"])
+        except Exception:
+            hosts.remove(host)
+
+    print "and sending them to the workstations"
+
+    jar_i = 0
+
+    jars_hosts = []
+
+    if len(hosts) == 0:
+        print "There are no machines active!"
+        exit(1)
+    elif len(jars) <= len(hosts):
+        for host in hosts:
+            jars_hosts += send_jar(host, jars[jar_i])
+
+            jar_i += 1
+            if jar_i == len(jars):
+                break
+    else:
+        for host in hosts:
+            jars_hosts += send_jar(host, jars[jar_i])
+
+            jar_i += 1
+            if jar_i == len(jars):
+                break
+
+        for i in range(len(hosts) - 1, len(jars)):
+            jars_hosts += send_jar(hosts[len(hosts) - 1], jars[i])
+
+    print "Save the hosts in a JSON file to send it to the NodeSettsServer"
+
+    to_file = []
+
+    for host in jars_hosts:
+        to_file += [{
+            host["class"]["class"]: host["host"]["host"]
         }]
 
+    with open('hosts.json', 'w') as outfile:
+        json.dump(to_file, outfile)
+
+    print "Upload hosts.json to the proper machine"
+    
+
+    """
+    print "Executing each jar file on the proper workstation"
+
+    for jars_host in jars_hosts:
+        ssh = paramiko.SSHClient()
+        ssh.load_system_host_keys()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(jars_host["host"]["host"], username=jars_host["host"]["user"],
+                    password=jars_host["host"]["password"])
+        print "java -jar " + jars_host["class"]["class"] + ".jar"
+        ssh.exec_command("java -jar " + jars_host["class"]["class"] + ".jar")
+
+    # http://stackoverflow.com/questions/28485647/wait-until-task-is-completed-on-remote-machine-through-python
+
+    print "Simulation ended, copying log file to the local machine"
+
+    if not os.path.exists("logs"):
+        os.makedirs("logs")
+    """
+
+
+def killall():
+    for host in hosts:
+        hostname = host["host"]
+        response = os.system("ping -c 1 -W 1 " + hostname)
+
+        if response != 0:
+            hosts.remove(host)
+            continue
+        try:
+            ssh = paramiko.SSHClient()
+            ssh.load_system_host_keys()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(host["host"], username=host["user"], password=host["password"])
+        except Exception:
+            hosts.remove(host)
+
+    for host in hosts:
         ssh = paramiko.SSHClient()
         ssh.load_system_host_keys()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(host["host"], username=host["user"], password=host["password"])
-        ssh.exec_command("rm -rf *")
-        sftp = ssh.open_sftp()
-        sftp.put(os.getcwd() + "/jars/" + jars[jar_i]["class"] + ".jar", jars[jar_i]["class"] + ".jar")
-
-        jar_i += 1
-        if jar_i == len(jars):
-            break
-else:
-    for host in hosts:
-        print "Jar: " + jars[jar_i]["class"]
-        print "Sending the proper jar to the workstation"
-
-        jars_hosts += [{
-            "class": jars[jar_i],
-            "host": host
-        }]
-
-        ssh = paramiko.SSHClient()
-        ssh.load_system_host_keys()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(host["host"], username=host["user"], password=host["password"])
-        ssh.exec_command("rm -rf *")
-        sftp = ssh.open_sftp()
-        sftp.put(os.getcwd() + "/jars/" + jars[jar_i]["class"] + ".jar", jars[jar_i]["class"] + ".jar")
-
-        jar_i += 1
-        if jar_i == len(jars):
-            break
-
-    for i in range(len(hosts)-1, len(jars)):
-        print "Sending the proper jar to the workstation"
-
-        jars_hosts += [{
-            "class": jars[jar_i],
-            "host": hosts[i]
-        }]
-
-        ssh = paramiko.SSHClient()
-        ssh.load_system_host_keys()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(hosts[i]["host"], username=hosts[i]["user"], password=hosts[i]["password"])
-        ssh.exec_command("rm -rf *")
-        sftp = ssh.open_sftp()
-        sftp.put(os.getcwd() + "/jars/" + jars[jar_i]["class"] + ".jar", jars[jar_i]["class"] + ".jar")
-
-print "Executing each jar file on the proper workstation"
-
-for jars_host in jars_hosts:
-    ssh = paramiko.SSHClient()
-    ssh.load_system_host_keys()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(jars_host["host"]["host"], username=jars_host["host"]["user"], password=jars_host["host"]["password"])
-    print "java -jar " + jars_host["class"]["class"] + ".jar"
-    ssh.exec_command("java -jar " + jars_host["class"]["class"] + ".jar")
-
-# http://stackoverflow.com/questions/28485647/wait-until-task-is-completed-on-remote-machine-through-python
-
-print "Simulation ended, copying log file to the local machine"
-
-if not os.path.exists("logs"):
-    os.makedirs("logs")
+        ssh.exec_command("killall java")
+        print host["host"] + ": killall java"
 
 
+if __name__ == '__main__':
+    functions = {'upload': upload, 'killall': killall}
+
+    if len(sys.argv) <= 1:
+        print('Available functions are:\n' + repr(functions.keys()))
+        exit(1)
+
+    if sys.argv[1] in functions.keys():
+        functions[sys.argv[1]]()

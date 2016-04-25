@@ -15,7 +15,7 @@ public class BenchRun {
     
     public static void main(String[] args) throws SocketException {
         NodeSettsProxy proxy = new NodeSettsProxy(); 
-        SERVER_PORT = proxy.SERVER_PORTS().get("bench");
+        SERVER_PORT = proxy.SERVER_PORTS().get("Bench");
         N_CONTESTANTS_TEAM = proxy.N_CONTESTANTS_TEAM();
         
         

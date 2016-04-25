@@ -14,7 +14,7 @@ public class PlaygroundRun {
     
     public static void main(String[] args) throws SocketException {
         NodeSettsProxy proxy = new NodeSettsProxy(); 
-        SERVER_PORT = proxy.SERVER_PORTS().get("playground");
+        SERVER_PORT = proxy.SERVER_PORTS().get("Playground");
         
         LogProxy log = new LogProxy();
 

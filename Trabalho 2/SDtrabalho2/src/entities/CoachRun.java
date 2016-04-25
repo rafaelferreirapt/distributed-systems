@@ -49,8 +49,8 @@ public class CoachRun {
         System.out.println("Sending TERMINATE message to the logging");
         
         /* SEND TO LOG THAT COACH HAS FINISHED */
-        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("log"), 
-                proxy.SERVER_PORTS().get("log"), 
+        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("Log"), 
+                proxy.SERVER_PORTS().get("Log"), 
                 new Message(MessageType.TERMINATE));
     }
 }

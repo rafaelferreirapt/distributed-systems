@@ -25,8 +25,8 @@ public class LogProxy implements IReferee, ICoach, IContestant{
     
     public LogProxy(){
         NodeSettsProxy proxy = new NodeSettsProxy(); 
-        SERVER_HOST = proxy.SERVER_HOSTS().get("log");
-        SERVER_PORT = proxy.SERVER_PORTS().get("log");
+        SERVER_HOST = proxy.SERVER_HOSTS().get("Log");
+        SERVER_PORT = proxy.SERVER_PORTS().get("Log");
     }
     
     private WrapperMessage communicate(Message m){

@@ -5,7 +5,15 @@
  */
 package settings;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.simple.JSONArray;
+import org.json.JSONException;
+import org.json.simple.parser.JSONParser;
 
 /**
  *
@@ -13,35 +21,53 @@ import java.util.HashMap;
  */
 public class NodeSetts {
     
-    protected static final HashMap<String, Integer> SERVER_PORTS;
-    protected static final HashMap<String, String> SERVER_HOSTS;
+    protected static HashMap<String, Integer> SERVER_PORTS;
+    protected static HashMap<String, String> SERVER_HOSTS;
     
-    protected static final int N_COACHS = 2;
-    protected static final int NUMBER_OF_TRIALS = 6;
-    protected static final int NUMBER_OF_GAMES = 3;
-    protected static final int N_CONTESTANTS_TEAM = 5; 
-    protected static final int MAX_STRENGTH = 24;
-    protected static final int MIN_STRENGTH = 20;  
+    protected final int N_COACHS = 2;
+    protected final int NUMBER_OF_TRIALS = 6;
+    protected final int NUMBER_OF_GAMES = 3;
+    protected final int N_CONTESTANTS_TEAM = 5; 
+    protected final int MAX_STRENGTH = 24;
+    protected final int MIN_STRENGTH = 20;  
     
-    protected static String teams[] = {"A", "B"};
+    protected String teams[] = {"A", "B"};
     
-    protected static final int DELAY_MIN = 0;
-    protected static final int DELAY_MAX = 0;
+    protected final int DELAY_MIN = 0;
+    protected final int DELAY_MAX = 0;
     
-    static{
+    public NodeSetts(String jsonfilepath){
+        JSONParser parser = new JSONParser();
+        
+        try {     
+            Object obj = parser.parse(new FileReader(jsonfilepath));
+
+            JSONArray json =  (JSONArray) obj;
+            
+            SERVER_HOSTS = JSONUtils.jsonToHashString(json);
+        } catch (JSONException ex) {
+            Logger.getLogger(NodeSetts.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(NodeSetts.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | org.json.simple.parser.ParseException ex) {
+            Logger.getLogger(NodeSetts.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         // 22120 - 22129
         SERVER_PORTS = new HashMap<>();
-        SERVER_PORTS.put("nodeSetts", 22124);
-        SERVER_PORTS.put("log", 22123);
-        SERVER_PORTS.put("bench", 22122);
-        SERVER_PORTS.put("playground", 22121);
-        SERVER_PORTS.put("refereeSite", 22120);
+        SERVER_PORTS.put("NodeSetts", 22124);
+        SERVER_PORTS.put("Log", 22123);
+        SERVER_PORTS.put("Bench", 22122);
+        SERVER_PORTS.put("Playground", 22121);
+        SERVER_PORTS.put("RefereeSite", 22120);
         
+        /*
         SERVER_HOSTS = new HashMap<>();
-        SERVER_HOSTS.put("nodeSetts", "127.0.0.1");
-        SERVER_HOSTS.put("log", "127.0.0.1");
-        SERVER_HOSTS.put("bench", "127.0.0.1");
-        SERVER_HOSTS.put("playground", "127.0.0.1");
-        SERVER_HOSTS.put("refereeSite", "127.0.0.1");
+        SERVER_HOSTS.put("NodeSetts", "127.0.0.1");
+        SERVER_HOSTS.put("Log", "127.0.0.1");
+        SERVER_HOSTS.put("Bench", "127.0.0.1");
+        SERVER_HOSTS.put("Playground", "127.0.0.1");
+        SERVER_HOSTS.put("RefereeSite", "127.0.0.1");
+        */
     }
 }

@@ -17,8 +17,8 @@ import java.util.HashMap;
  */
 public class NodeSettsProxy {
     
-    private final String SERVER_HOST = NodeSetts.SERVER_HOSTS.get("nodeSetts");
-    private final int SERVER_PORT = NodeSetts.SERVER_PORTS.get("nodeSetts");
+    private final String SERVER_HOST = NodeSetts.SERVER_HOSTS.get("NodeSetts");
+    private final int SERVER_PORT = NodeSetts.SERVER_PORTS.get("NodeSetts");
     
     private WrapperMessage communicate(Message m){
         return ClientProxyWrapper.connect(SERVER_HOST,  SERVER_PORT, m);

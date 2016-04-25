@@ -37,8 +37,8 @@ public class RefereeRun {
         
         /* SEND TO LOG THAT COACH HAS FINISHED */
         NodeSettsProxy proxy = new NodeSettsProxy(); 
-        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("log"), 
-                proxy.SERVER_PORTS().get("log"), 
+        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("Log"), 
+                proxy.SERVER_PORTS().get("Log"), 
                 new Message(MessageType.TERMINATE));
     }
 }

@@ -25,8 +25,8 @@ public class RefereeSiteProxy implements IReferee, ICoach, IContestant{
     
     public RefereeSiteProxy(){
         NodeSettsProxy proxy = new NodeSettsProxy(); 
-        SERVER_HOST = proxy.SERVER_HOSTS().get("refereeSite");
-        SERVER_PORT = proxy.SERVER_PORTS().get("refereeSite");
+        SERVER_HOST = proxy.SERVER_HOSTS().get("RefereeSite");
+        SERVER_PORT = proxy.SERVER_PORTS().get("RefereeSite");
     }
     
     private WrapperMessage communicate(Message m){

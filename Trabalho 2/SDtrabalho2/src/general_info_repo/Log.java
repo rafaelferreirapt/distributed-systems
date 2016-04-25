@@ -401,20 +401,20 @@ public class Log implements IReferee, ICoach, IContestant, IPlayground{
     public void terminateServers(){
         NodeSettsProxy proxy = new NodeSettsProxy(); 
         
-        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("bench"), 
-                proxy.SERVER_PORTS().get("bench"), 
+        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("Bench"), 
+                proxy.SERVER_PORTS().get("Bench"), 
                 new Message(MessageType.TERMINATE));
          
-        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("playground"), 
-                proxy.SERVER_PORTS().get("playground"), 
+        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("Playground"), 
+                proxy.SERVER_PORTS().get("Playground"), 
                 new Message(MessageType.TERMINATE));
         
-        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("refereeSite"), 
-                proxy.SERVER_PORTS().get("refereeSite"), 
+        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("RefereeSite"), 
+                proxy.SERVER_PORTS().get("RefereeSite"), 
                 new Message(MessageType.TERMINATE));
         
-        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("nodeSetts"), 
-                proxy.SERVER_PORTS().get("nodeSetts"), 
+        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("NodeSetts"), 
+                proxy.SERVER_PORTS().get("NodeSetts"), 
                 new Message(MessageType.TERMINATE));
     }
 }

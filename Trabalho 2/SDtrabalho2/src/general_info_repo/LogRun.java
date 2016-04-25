@@ -14,7 +14,7 @@ public class LogRun {
     
     public static void main(String[] args) throws SocketException {
         NodeSettsProxy proxy = new NodeSettsProxy(); 
-        SERVER_PORT = proxy.SERVER_PORTS().get("log");
+        SERVER_PORT = proxy.SERVER_PORTS().get("Log");
         
         // canais de comunicação
         ServerChannel schan, schani;
