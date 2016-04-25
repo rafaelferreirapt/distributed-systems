@@ -38,7 +38,7 @@ public class ContestantRun {
                 contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i+1, 
                         teams[0], (general_info_repo.IContestant) log));
             }else{
-                contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i-N_CONTESTANTS_TEAM, 
+                contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i-N_CONTESTANTS_TEAM+1, 
                         teams[1], (general_info_repo.IContestant) log));
             }
         }
