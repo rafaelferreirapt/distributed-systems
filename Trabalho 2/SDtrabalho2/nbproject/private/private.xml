@@ -2,6 +2,12 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/rafaelferreira/Development/ect_ua/sd/Trabalho%202/SDtrabalho2/src/entities/RefereeRun.java</file>
+            <file>file:/Users/rafaelferreira/Development/ect_ua/sd/Trabalho%202/SDtrabalho2/src/entities/CoachRun.java</file>
+            <file>file:/Users/rafaelferreira/Development/ect_ua/sd/Trabalho%202/SDtrabalho2/src/entities/ContestantRun.java</file>
+            <file>file:/Users/rafaelferreira/Development/ect_ua/sd/Trabalho%202/SDtrabalho2/src/settings/NodeSetts.java</file>
+            <file>file:/Users/rafaelferreira/Development/ect_ua/sd/Trabalho%202/SDtrabalho2/src/general_info_repo/LogRun.java</file>
+        </group>
     </open-files>
 </project-private>

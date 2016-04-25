@@ -131,7 +131,7 @@ def send_jar(host, jar):
     }]
 
 
-def upload():
+def upload(wait):
     global ssh
 
     print "Creating directory jars if it doesn't exist"
@@ -223,18 +223,19 @@ def upload():
         if jars_host["class"]["class"] == "Log":
             log_connection = stdout.channel
 
-    print "Waiting for the simulation end! CTRL+C if you don't want to wait"
-
-    try:
-        if log_connection.recv_exit_status() == 0:
-            print "Simulation ended, copying log file to the local machine"
-
-            get_log(log_host["host"]["host"])
-        else:
-            print "UPS! Something went wrong..."
-    except KeyboardInterrupt:
+    if len(wait) == 1 and wait[0] == "not":
         print "Bye! Don't forget to call 'python machines.py show_logs'\n" + \
               " and then: 'python machines.py get_log " + log_host["host"]["host"] + "'"
+        exit(1)
+
+    print "Waiting for the simulation end!"
+
+    if log_connection.recv_exit_status() == 0:
+        print "Simulation ended, copying log file to the local machine"
+
+        get_log(log_host["host"]["host"])
+    else:
+        print "UPS! Something went wrong..."
 
 
 def get_log(log_host_hostname):
