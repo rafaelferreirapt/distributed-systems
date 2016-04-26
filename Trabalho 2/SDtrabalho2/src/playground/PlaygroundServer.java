@@ -13,7 +13,8 @@ import communication.proxy.ServerInterface;
 import java.net.SocketException;
 
 /**
- * Playground server
+ * Server that extends the Playground and will process the events
+ * of the server.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class PlaygroundServer extends Playground implements ServerInterface {
@@ -30,7 +31,6 @@ public class PlaygroundServer extends Playground implements ServerInterface {
     }
     
     /**
-
     * Process and reply all the messages
      * @throws communication.message.MessageException
      * @throws java.net.SocketException

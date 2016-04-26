@@ -8,6 +8,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import settings.NodeSettsProxy;
 
+/**
+ * Playground Run main instance.
+ * @author António Ferreira, 67405; Rodrigo Cunha, 67800
+ */
 public class PlaygroundRun {
     
     private static int SERVER_PORT;

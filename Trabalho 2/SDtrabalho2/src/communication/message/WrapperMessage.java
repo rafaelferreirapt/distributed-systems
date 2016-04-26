@@ -6,7 +6,7 @@
 package communication.message;
 
 /**
- *
+ * Wrapper Message
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class WrapperMessage {

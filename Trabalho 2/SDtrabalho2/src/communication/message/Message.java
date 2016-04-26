@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 /**
- *
+ * Message class
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class Message implements Serializable {

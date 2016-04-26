@@ -13,7 +13,8 @@ import communication.proxy.ServerInterface;
 import java.net.SocketException;
 
 /**
- * RefereeSiteServer
+ * Server that extends the RefereeSite and will process the events
+ * of the server.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class RefereeSiteServer extends RefereeSite implements ServerInterface {
