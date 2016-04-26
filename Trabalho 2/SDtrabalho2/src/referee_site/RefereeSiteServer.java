@@ -13,19 +13,26 @@ import communication.proxy.ServerInterface;
 import java.net.SocketException;
 
 /**
- *
+ * RefereeSiteServer
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class RefereeSiteServer extends RefereeSite implements ServerInterface {
     
     private boolean serverEnded;
-    
+    /**
+    * Referee Site server construct
+     *
+    */
     public RefereeSiteServer() {
         super();
         this.serverEnded = false;
     }
     
-    
+    /**
+    * Process and reply all the messages
+     * @throws communication.message.MessageException
+     * @throws java.net.SocketException
+    */
     @Override
     public Message processAndReply(Message inMessage, ServerChannel scon) throws MessageException, SocketException {
         boolean endMatch;
@@ -66,7 +73,10 @@ public class RefereeSiteServer extends RefereeSite implements ServerInterface {
         
         return new Message(MessageType.ACK);   
     }
-
+    /**
+     * Method for return the service end flag
+     * @return 
+     */
     @Override
     public boolean serviceEnded() {
         return serverEnded;
