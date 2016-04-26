@@ -19,7 +19,8 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 /**
- *
+ * Class for all the client channels, this will have the hostName and serverPort,
+ * as well will send the proxy information.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class ClientChannel {
@@ -29,6 +30,7 @@ public class ClientChannel {
     private final String hostName;
     private ObjectInputStream request = null;
     private ObjectOutputStream response = null;
+    
     
     public ClientChannel(String hostName, int serverPort) {
         this.hostName = hostName;

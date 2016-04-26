@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import sys
 import json
@@ -277,7 +279,7 @@ def kill_all():
         print host["host"] + ": killall java"
 
 
-def show_logs():
+def show_logs(command="tail"):
     global ssh
 
     for host in hosts:
@@ -296,7 +298,12 @@ def show_logs():
 
     for host in hosts:
         ssh.connect(host["host"], username=host["user"], password=host["password"])
-        stdin, stdout, stderr = ssh.exec_command("cat output")
+
+        if len(command) == 1:
+            stdin, stdout, stderr = ssh.exec_command(command[0]+" output")
+        else:
+            stdin, stdout, stderr = ssh.exec_command(command+" output")
+
         print host["host"]
         print stdout.readlines()
 

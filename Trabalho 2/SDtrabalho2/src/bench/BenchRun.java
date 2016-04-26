@@ -8,11 +8,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import settings.NodeSettsProxy;
 
+/**
+ * Bench Run main instance.
+ * @author António Ferreira, 67405; Rodrigo Cunha, 67800
+ */
 public class BenchRun {
     
     private static int SERVER_PORT;
     private static int N_CONTESTANTS_TEAM;
-    
+    /**
+     * This class will launch one server listening one port and processing
+     * the events.
+     * @param args
+     * @throws java.net.SocketException
+     */
     public static void main(String[] args) throws SocketException {
         NodeSettsProxy proxy = new NodeSettsProxy(); 
         SERVER_PORT = proxy.SERVER_PORTS().get("Bench");

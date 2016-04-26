@@ -6,8 +6,7 @@ package bench;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import settings.NodeSetts;
-import settings.NodeSettsProxy;
+
 
 /**
  * Bench instance.

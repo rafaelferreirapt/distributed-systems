@@ -28,7 +28,7 @@ public class NodeSetts {
     
     protected final int N_COACHS = 2;
     protected final int NUMBER_OF_TRIALS = 6;
-    protected final int NUMBER_OF_GAMES = 1000000;
+    protected final int NUMBER_OF_GAMES = 10000;
     protected final int N_CONTESTANTS_TEAM = 5; 
     protected final int MAX_STRENGTH = 24;
     protected final int MIN_STRENGTH = 20;  
