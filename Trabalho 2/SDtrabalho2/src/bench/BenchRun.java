@@ -16,6 +16,7 @@ public class BenchRun {
     
     private static int SERVER_PORT;
     private static int N_CONTESTANTS_TEAM;
+    
     /**
      * This class will launch one server listening one port and processing
      * the events.

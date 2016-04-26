@@ -11,7 +11,7 @@ import communication.proxy.ClientProxy;
 import settings.NodeSettsProxy;
 
 /**
- *
+ * Referee Run
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class RefereeRun {

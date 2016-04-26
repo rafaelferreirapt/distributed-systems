@@ -8,7 +8,8 @@ import communication.proxy.ServerInterface;
 import java.net.SocketException;
 
 /**
- *
+ * Server that extends the Log and will process the events
+ * of the server.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class LogServer extends Log implements ServerInterface {
@@ -21,7 +22,11 @@ public class LogServer extends Log implements ServerInterface {
         this.serverEnded = false;
     }
     
-    
+    /**
+     * Method for process and reply the messages received
+     * @throws communication.message.MessageException
+     * @throws java.net.SocketException
+     */
     @Override
     public Message processAndReply(Message inMessage, ServerChannel scon) throws MessageException, SocketException {
         switch(inMessage.getType()){
@@ -104,6 +109,10 @@ public class LogServer extends Log implements ServerInterface {
         return new Message(MessageType.ACK);
     }
 
+    /**
+     * Method for return the service end flag
+     * @return 
+     */
     @Override
     public boolean serviceEnded() {
         return serverEnded;
