@@ -7,7 +7,7 @@ package entities;
 
 import communication.message.Message;
 import communication.message.MessageType;
-import communication.proxy.ClientProxyWrapper;
+import communication.proxy.ClientProxy;
 import settings.NodeSettsProxy;
 
 /**
@@ -37,7 +37,7 @@ public class RefereeRun {
         
         /* SEND TO LOG THAT COACH HAS FINISHED */
         NodeSettsProxy proxy = new NodeSettsProxy(); 
-        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("Log"), 
+        ClientProxy.connect(proxy.SERVER_HOSTS().get("Log"), 
                 proxy.SERVER_PORTS().get("Log"), 
                 new Message(MessageType.TERMINATE));
         

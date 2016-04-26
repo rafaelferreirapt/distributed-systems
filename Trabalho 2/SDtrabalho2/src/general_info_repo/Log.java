@@ -7,7 +7,7 @@ package general_info_repo;
 import com.sun.javafx.binding.Logging;
 import communication.message.Message;
 import communication.message.MessageType;
-import communication.proxy.ClientProxyWrapper;
+import communication.proxy.ClientProxy;
 import entities.CoachState;
 import entities.ContestantState;
 import entities.RefereeState;
@@ -401,19 +401,19 @@ public class Log implements IReferee, ICoach, IContestant, IPlayground{
     public void terminateServers(){
         NodeSettsProxy proxy = new NodeSettsProxy(); 
         
-        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("Bench"), 
+        ClientProxy.connect(proxy.SERVER_HOSTS().get("Bench"), 
                 proxy.SERVER_PORTS().get("Bench"), 
                 new Message(MessageType.TERMINATE));
          
-        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("Playground"), 
+        ClientProxy.connect(proxy.SERVER_HOSTS().get("Playground"), 
                 proxy.SERVER_PORTS().get("Playground"), 
                 new Message(MessageType.TERMINATE));
         
-        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("RefereeSite"), 
+        ClientProxy.connect(proxy.SERVER_HOSTS().get("RefereeSite"), 
                 proxy.SERVER_PORTS().get("RefereeSite"), 
                 new Message(MessageType.TERMINATE));
         
-        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("NodeSetts"), 
+        ClientProxy.connect(proxy.SERVER_HOSTS().get("NodeSetts"), 
                 proxy.SERVER_PORTS().get("NodeSetts"), 
                 new Message(MessageType.TERMINATE));
     }

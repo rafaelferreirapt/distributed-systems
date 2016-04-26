@@ -9,7 +9,7 @@ import communication.message.Message;
 import general_info_repo.IPlayground;
 import communication.message.MessageType;
 import communication.message.WrapperMessage;
-import communication.proxy.ClientProxyWrapper;
+import communication.proxy.ClientProxy;
 import settings.NodeSettsProxy;
 
 /**
@@ -28,7 +28,7 @@ public class LogProxy implements IPlayground{
     }
     
     private WrapperMessage communicate(Message m){
-        return ClientProxyWrapper.connect(SERVER_HOST,  SERVER_PORT, m);
+        return ClientProxy.connect(SERVER_HOST,  SERVER_PORT, m);
     }
     
     @Override

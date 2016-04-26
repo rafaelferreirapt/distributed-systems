@@ -8,7 +8,7 @@ package entities;
 import communication.message.Message;
 import communication.message.MessageType;
 import communication.message.WrapperMessage;
-import communication.proxy.ClientProxyWrapper;
+import communication.proxy.ClientProxy;
 import referee_site.ICoach;
 import referee_site.IContestant;
 import referee_site.IReferee;
@@ -30,7 +30,7 @@ public class RefereeSiteProxy implements IReferee, ICoach, IContestant{
     }
     
     private WrapperMessage communicate(Message m){
-        return ClientProxyWrapper.connect(SERVER_HOST,  SERVER_PORT, m);
+        return ClientProxy.connect(SERVER_HOST,  SERVER_PORT, m);
     }
     
     @Override

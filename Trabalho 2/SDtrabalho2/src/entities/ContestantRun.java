@@ -7,7 +7,7 @@ package entities;
 
 import communication.message.Message;
 import communication.message.MessageType;
-import communication.proxy.ClientProxyWrapper;
+import communication.proxy.ClientProxy;
 import java.util.ArrayList;
 import settings.NodeSettsProxy;
 
@@ -58,7 +58,7 @@ public class ContestantRun {
         
         
         /* SEND TO LOG THAT COACH HAS FINISHED */
-        ClientProxyWrapper.connect(proxy.SERVER_HOSTS().get("Log"), 
+        ClientProxy.connect(proxy.SERVER_HOSTS().get("Log"), 
                 proxy.SERVER_PORTS().get("Log"), 
                 new Message(MessageType.TERMINATE));
         
