@@ -12,7 +12,7 @@ import org.json.JSONException;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * JSON Utils to decode the json file
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class JSONUtils {

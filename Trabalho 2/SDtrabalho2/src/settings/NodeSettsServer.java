@@ -13,18 +13,27 @@ import communication.proxy.ServerInterface;
 import java.net.SocketException;
 
 /**
- *
+ * Node settings server
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class NodeSettsServer extends NodeSetts implements ServerInterface {
     
     private boolean serverEnded;
     
+    /**
+     * Node settings server
+     * @param jsonfilepath
+     */
     public NodeSettsServer(String jsonfilepath) {
         super(jsonfilepath);
         this.serverEnded = false;
     }
     
+    /**
+    * Process and reply all the messages
+     * @throws communication.message.MessageException
+     * @throws java.net.SocketException
+    */
     @Override
     public Message processAndReply(Message inMessage, ServerChannel scon) throws MessageException, SocketException {
         switch(inMessage.getType()){

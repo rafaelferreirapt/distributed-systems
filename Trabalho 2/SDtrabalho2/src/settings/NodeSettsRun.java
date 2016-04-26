@@ -7,6 +7,10 @@ import java.net.SocketTimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Node settings server run
+ * @author António Ferreira, 67405; Rodrigo Cunha, 67800
+ */
 public class NodeSettsRun {
     
     public static void main(String[] args) throws SocketException {
