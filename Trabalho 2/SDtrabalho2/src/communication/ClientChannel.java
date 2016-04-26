@@ -30,13 +30,21 @@ public class ClientChannel {
     private final String hostName;
     private ObjectInputStream request = null;
     private ObjectOutputStream response = null;
-    
-    
+
+    /**
+     * Construct to create ClientChannel with hostName and serverPort
+     * @param hostName
+     * @param serverPort
+     */
     public ClientChannel(String hostName, int serverPort) {
         this.hostName = hostName;
         this.serverPort = serverPort;
     }
     
+    /**
+     * Construct to create ClientChannel with hostName and serverPort
+     * @return 
+     */
     public boolean open() {
         boolean success = true;
         SocketAddress serverAddress = new InetSocketAddress(this.hostName, serverPort);
@@ -99,6 +107,9 @@ public class ClientChannel {
         return (success);
     }
     
+    /**
+     * Method for close the channel
+     */
     public void close() {
         try {
             request.close();
@@ -125,6 +136,10 @@ public class ClientChannel {
         }
     }
     
+    /**
+     * Method for read object
+     * @return 
+     */
     public Object readObject() {
         Object fromServer = null;
         
@@ -147,6 +162,10 @@ public class ClientChannel {
         return fromServer;
     }
     
+    /**
+     * Method for write object 
+     * @param toServer
+     */
     public void writeObject(Object toServer) {
         try {
             response.writeObject(toServer);

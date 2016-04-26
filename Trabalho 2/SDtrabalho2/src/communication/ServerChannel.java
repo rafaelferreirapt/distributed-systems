@@ -27,15 +27,27 @@ public class ServerChannel {
     private ObjectInputStream request = null;
     private ObjectOutputStream response = null;
     
+    /**
+     * Method for read object
+     * @param serverPort
+     */
     public ServerChannel(int serverPort) {
         this.serverPort = serverPort;
     }
     
+    /**
+     * Construct for create server channel with server port and server socket
+     * @param serverPort
+     * @param lSocket
+     */
     public ServerChannel(int serverPort, ServerSocket lSocket) {
         this(serverPort);
         this.listenSocket = lSocket;
     }
     
+    /**
+     * Start the server channel
+     */
     public void start() {
         try {
             this.listenSocket = new ServerSocket(this.serverPort);
@@ -48,6 +60,9 @@ public class ServerChannel {
         }
     }
     
+    /**
+     * End the server channel
+     */
     public void end() {
         try {
             this.listenSocket.close();
