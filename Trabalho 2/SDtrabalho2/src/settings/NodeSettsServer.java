@@ -66,6 +66,10 @@ public class NodeSettsServer extends NodeSetts implements ServerInterface {
         return new Message(MessageType.ACK);   
     }
 
+    /**
+     * Method for return the service end flag
+     * @return 
+     */
     @Override
     public boolean serviceEnded() {
         return serverEnded;
