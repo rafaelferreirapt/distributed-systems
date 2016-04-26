@@ -308,8 +308,39 @@ def show_logs(command="tail"):
         print stdout.readlines()
 
 
+def command(command_to="tail"):
+    if len(command_to) != 1:
+        print "Please send the command that you want!"
+        exit(1)
+
+    global ssh
+
+    for host in hosts:
+        hostname = host["host"]
+        response = os.system("ping -c 1 -W 1 " + hostname)
+
+        if response != 0:
+            hosts.remove(host)
+            continue
+        try:
+            ssh.connect(host["host"], username=host["user"], password=host["password"])
+        except Exception:
+            hosts.remove(host)
+
+    print "\nCOMMAND: " + command_to[0] + "\n"
+
+    for host in hosts:
+        ssh.connect(host["host"], username=host["user"], password=host["password"])
+
+        stdin, stdout, stderr = ssh.exec_command(command_to[0])
+
+        print host["host"]
+        print stdout.readlines()
+
+
 if __name__ == '__main__':
-    functions = {'upload': upload, 'killall': kill_all, 'show_logs': show_logs, 'get_log': get_log}
+    functions = {'upload': upload, 'killall': kill_all, 'show_logs': show_logs, 'get_log': get_log,
+                 'command': command}
 
     if len(sys.argv) <= 1:
         print('Available functions are:\n' + repr(functions.keys()))

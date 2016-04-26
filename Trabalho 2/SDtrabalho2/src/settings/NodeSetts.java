@@ -16,7 +16,7 @@ import org.json.JSONException;
 import org.json.simple.parser.JSONParser;
 
 /**
- *
+ * Node settings, all the setting in one place
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class NodeSetts {
@@ -37,7 +37,11 @@ public class NodeSetts {
     
     protected final int DELAY_MIN = 0;
     protected final int DELAY_MAX = 0;
-    
+
+    /**
+     * Node settings, it will read from the jsonfilepath the JSON with the hosts
+     * @param jsonfilepath
+     */
     public NodeSetts(String jsonfilepath){
         JSONParser parser = new JSONParser();
         
@@ -63,13 +67,5 @@ public class NodeSetts {
         SERVER_PORTS.put("Playground", 22121);
         SERVER_PORTS.put("RefereeSite", 22120);
         
-        /*
-        SERVER_HOSTS = new HashMap<>();
-        SERVER_HOSTS.put("NodeSetts", "127.0.0.1");
-        SERVER_HOSTS.put("Log", "127.0.0.1");
-        SERVER_HOSTS.put("Bench", "127.0.0.1");
-        SERVER_HOSTS.put("Playground", "127.0.0.1");
-        SERVER_HOSTS.put("RefereeSite", "127.0.0.1");
-        */
     }
 }
