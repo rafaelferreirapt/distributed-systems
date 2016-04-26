@@ -7,7 +7,7 @@ package entities;
 
 import communication.message.Message;
 import communication.message.MessageType;
-import communication.proxy.ClientProxyWrapper;
+import communication.proxy.ClientProxy;
 import playground.IContestant;
 import playground.IReferee;
 import settings.NodeSettsProxy;
@@ -28,7 +28,7 @@ public class PlaygroundProxy implements IReferee, IContestant{
     }
     
     private void communicate(Message m){
-        ClientProxyWrapper.connect(SERVER_HOST,  SERVER_PORT, m);
+        ClientProxy.connect(SERVER_HOST,  SERVER_PORT, m);
     }
     
     @Override

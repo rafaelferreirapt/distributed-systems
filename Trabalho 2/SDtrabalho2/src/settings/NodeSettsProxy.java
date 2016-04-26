@@ -8,7 +8,7 @@ package settings;
 import communication.message.Message;
 import communication.message.MessageType;
 import communication.message.WrapperMessage;
-import communication.proxy.ClientProxyWrapper;
+import communication.proxy.ClientProxy;
 import java.util.HashMap;
 
 /**
@@ -34,7 +34,7 @@ public class NodeSettsProxy {
     }
     
     private WrapperMessage communicate(Message m){
-        return ClientProxyWrapper.connect(SERVER_HOST,  SERVER_PORT, m);
+        return ClientProxy.connect(SERVER_HOST,  SERVER_PORT, m);
     }
     
     public HashMap<String, String> SERVER_HOSTS() {

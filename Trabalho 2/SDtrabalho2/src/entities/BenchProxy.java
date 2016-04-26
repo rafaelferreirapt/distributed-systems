@@ -10,7 +10,7 @@ import bench.IContestant;
 import bench.IReferee;
 import communication.message.Message;
 import communication.message.MessageType;
-import communication.proxy.ClientProxyWrapper;
+import communication.proxy.ClientProxy;
 import settings.NodeSettsProxy;
 
 /**
@@ -29,7 +29,7 @@ public class BenchProxy implements IReferee, ICoach, IContestant{
     }
     
     private void communicate(Message m){
-        ClientProxyWrapper.connect(SERVER_HOST,  SERVER_PORT, m);
+        ClientProxy.connect(SERVER_HOST,  SERVER_PORT, m);
     }
     
     @Override

@@ -28,6 +28,14 @@ public class ServerProxy extends Thread {
     private final ServerChannel scon;
 
     
+    /**
+     *
+     * @param inMessage
+     * @param scon
+     * @return
+     * @throws MessageException
+     * @throws SocketException
+     */
     public ServerProxy(ServerChannel scon, ServerChannel sconi, ServerInterface sInterface) {
         super("Proxy_" + getProxyId());
 

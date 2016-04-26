@@ -11,7 +11,7 @@ import general_info_repo.IContestant;
 import general_info_repo.IReferee;
 import communication.message.MessageType;
 import communication.message.WrapperMessage;
-import communication.proxy.ClientProxyWrapper;
+import communication.proxy.ClientProxy;
 import settings.NodeSettsProxy;
 
 /**
@@ -30,7 +30,7 @@ public class LogProxy implements IReferee, ICoach, IContestant{
     }
     
     private WrapperMessage communicate(Message m){
-        return ClientProxyWrapper.connect(SERVER_HOST,  SERVER_PORT, m);
+        return ClientProxy.connect(SERVER_HOST,  SERVER_PORT, m);
     }
     
     @Override

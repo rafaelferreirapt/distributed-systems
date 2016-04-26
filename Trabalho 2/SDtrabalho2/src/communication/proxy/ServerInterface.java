@@ -27,5 +27,9 @@ public interface ServerInterface {
     public Message processAndReply (Message inMessage, ServerChannel scon) throws MessageException, SocketException;
     
     
+    /**
+     * Service end
+     * @return 
+     */
     public boolean serviceEnded();
 }

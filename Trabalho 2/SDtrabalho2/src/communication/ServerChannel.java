@@ -72,6 +72,11 @@ public class ServerChannel {
         }
     }
     
+    /**
+     * Accept connection
+     * @return 
+     * @throws java.net.SocketTimeoutException
+     */
     public ServerChannel accept() throws SocketTimeoutException {
         ServerChannel server_channel;
         
@@ -106,6 +111,9 @@ public class ServerChannel {
         return server_channel;
     }
 
+    /**
+     * Close connection
+     */
     public void close() {
         try {
             request.close();
@@ -129,6 +137,10 @@ public class ServerChannel {
         }
     }
 
+    /**
+     * Read object
+     * @return 
+     */
     public Object readObject() {
         Object from_client = null; 
         
@@ -148,6 +160,10 @@ public class ServerChannel {
         return from_client;
     }
 
+    /**
+     * Write connection
+     * @param toClient
+     */
     public void writeObject(Object toClient) {
         try {
             response.writeObject(toClient);
