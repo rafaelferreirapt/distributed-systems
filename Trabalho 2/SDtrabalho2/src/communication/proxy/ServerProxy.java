@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 
 /**
- *
+ * Server proxy
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class ServerProxy extends Thread {
@@ -29,12 +29,10 @@ public class ServerProxy extends Thread {
 
     
     /**
-     *
-     * @param inMessage
+     * Server Proxy construction
      * @param scon
-     * @return
-     * @throws MessageException
-     * @throws SocketException
+     * @param sconi
+     * @param sInterface
      */
     public ServerProxy(ServerChannel scon, ServerChannel sconi, ServerInterface sInterface) {
         super("Proxy_" + getProxyId());
@@ -44,6 +42,9 @@ public class ServerProxy extends Thread {
         this.scon = scon;
     }
 
+    /**
+     * Server Proxy run
+     */
     @Override
     public void run() {
         Message request = null;  // mensagem de entrada
@@ -71,6 +72,10 @@ public class ServerProxy extends Thread {
         }
     }
 
+    /**
+     * Server Proxy get proxy id
+     * @return 
+     */
     public static int getProxyId(){
         return nProxy;
     }
