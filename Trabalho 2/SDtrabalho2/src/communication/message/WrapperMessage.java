@@ -13,10 +13,18 @@ public class WrapperMessage {
     
     private Message m;
     
+    /**
+     * Set Message
+     * @param m
+     */
     public void setMessage(Message m){
         this.m = m;
     }
     
+    /**
+     * Return Message
+     * @return
+     */
     public Message getMessage(){
         return this.m;
     }
