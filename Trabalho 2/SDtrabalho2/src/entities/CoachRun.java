@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import settings.NodeSettsProxy;
 
 /**
- *
+ * Coach Run
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class CoachRun {
@@ -20,6 +20,11 @@ public class CoachRun {
     private static int N_COACHS;
     private static String[] teams;
     
+    /**
+     * This class will launch one coach
+     * the events.
+     * @param args
+     */
     public static void main(String [] args) {    
         NodeSettsProxy proxy = new NodeSettsProxy(); 
         N_COACHS = proxy.N_COACHS();

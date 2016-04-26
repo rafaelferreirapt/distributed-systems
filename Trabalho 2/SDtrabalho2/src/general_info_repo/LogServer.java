@@ -8,7 +8,8 @@ import communication.proxy.ServerInterface;
 import java.net.SocketException;
 
 /**
- *
+ * Server that extends the Log and will process the events
+ * of the server.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class LogServer extends Log implements ServerInterface {
@@ -107,7 +108,8 @@ public class LogServer extends Log implements ServerInterface {
         
         return new Message(MessageType.ACK);
     }
-     /**
+
+    /**
      * Method for return the service end flag
      * @return 
      */

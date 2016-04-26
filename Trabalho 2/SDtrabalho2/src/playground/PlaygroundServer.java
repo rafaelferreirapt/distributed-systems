@@ -13,24 +13,28 @@ import communication.proxy.ServerInterface;
 import java.net.SocketException;
 
 /**
- *
+ * Playground server
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
 public class PlaygroundServer extends Playground implements ServerInterface {
     
     private boolean serverEnded;
     
+    /**
+    * Playground server construct
+     * @param log
+    */
     public PlaygroundServer(general_info_repo.IPlayground log) {
         super(log);
         this.serverEnded = false;
     }
     
     /**
-     * This class will launch one server listening one port and processing
-     * the events.
-     * @param args
+
+    * Process and reply all the messages
+     * @throws communication.message.MessageException
      * @throws java.net.SocketException
-     */
+    */
     @Override
     public Message processAndReply(Message inMessage, ServerChannel scon) throws MessageException, SocketException {
         switch(inMessage.getType()){
