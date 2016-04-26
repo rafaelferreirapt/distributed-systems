@@ -11,7 +11,12 @@ import settings.NodeSettsProxy;
 public class LogRun {
     
     private static int SERVER_PORT;
-    
+    /**
+     * This class will launch one server listening one port and processing
+     * the events.
+     * @param args
+     * @throws java.net.SocketException
+     */
     public static void main(String[] args) throws SocketException {
         NodeSettsProxy proxy = new NodeSettsProxy(); 
         SERVER_PORT = proxy.SERVER_PORTS().get("Log");

@@ -21,7 +21,11 @@ public class LogServer extends Log implements ServerInterface {
         this.serverEnded = false;
     }
     
-    
+    /**
+     * Method for process and reply the messages received
+     * @throws communication.message.MessageException
+     * @throws java.net.SocketException
+     */
     @Override
     public Message processAndReply(Message inMessage, ServerChannel scon) throws MessageException, SocketException {
         switch(inMessage.getType()){
@@ -103,7 +107,10 @@ public class LogServer extends Log implements ServerInterface {
         
         return new Message(MessageType.ACK);
     }
-
+     /**
+     * Method for return the service end flag
+     * @return 
+     */
     @Override
     public boolean serviceEnded() {
         return serverEnded;

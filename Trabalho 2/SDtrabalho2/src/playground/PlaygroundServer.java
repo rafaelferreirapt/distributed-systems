@@ -25,7 +25,12 @@ public class PlaygroundServer extends Playground implements ServerInterface {
         this.serverEnded = false;
     }
     
-    
+    /**
+     * This class will launch one server listening one port and processing
+     * the events.
+     * @param args
+     * @throws java.net.SocketException
+     */
     @Override
     public Message processAndReply(Message inMessage, ServerChannel scon) throws MessageException, SocketException {
         switch(inMessage.getType()){
@@ -50,7 +55,10 @@ public class PlaygroundServer extends Playground implements ServerInterface {
         
         return new Message(MessageType.ACK);
     }
-
+    /**
+     * Method for return the service end flag
+     * @return 
+     */
     @Override
     public boolean serviceEnded() {
         return serverEnded;
