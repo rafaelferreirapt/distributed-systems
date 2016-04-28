@@ -32,6 +32,9 @@ import settings.NodeSettsProxy;
 public class Log implements IReferee, ICoach, IContestant, IPlayground{
     
     private final Match match = Match.getInstance();
+   
+    private final int N_COACHS;
+    private final int N_CONTESTANTS;
     
     /**
      *  File where the log will be saved
@@ -46,6 +49,10 @@ public class Log implements IReferee, ICoach, IContestant, IPlayground{
      * @param filename where the log will be saved.
      */
     public Log(String filename){
+        NodeSettsProxy proxy = new NodeSettsProxy(); 
+        N_COACHS = proxy.N_COACHS();
+        N_CONTESTANTS = proxy.N_CONTESTANTS_TEAM() * 2;
+        
         if(filename.length()==0){
             Date today = Calendar.getInstance().getTime();
             SimpleDateFormat date = new SimpleDateFormat("yyyyMMddhhmmss");
@@ -330,6 +337,11 @@ public class Log implements IReferee, ICoach, IContestant, IPlayground{
     }
     
     private void printLine(){
+        if(this.match.getCoachStatesN() != N_COACHS ||
+            this.match.getContestantsStatesN() != N_CONTESTANTS){
+            return;
+        }
+        
         if(this.match.getNumberOfGames()==0){
             return;
         }

@@ -241,6 +241,9 @@ def upload(wait):
 
 
 def get_log(log_host_hostname):
+    if len(log_host_hostname) == 1:
+        log_host_hostname = log_host_hostname[0]
+
     for log_host in hosts:
         if log_host["host"] == log_host_hostname:
             break
@@ -275,6 +278,7 @@ def kill_all():
 
     for host in hosts:
         ssh.connect(host["host"], username=host["user"], password=host["password"])
+        ssh.exec_command("rm -rf *")
         ssh.exec_command("killall java")
         print host["host"] + ": killall java"
 

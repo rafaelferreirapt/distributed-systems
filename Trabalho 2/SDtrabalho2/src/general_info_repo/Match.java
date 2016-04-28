@@ -77,6 +77,26 @@ public class Match {
     }
     
     /**
+     * Count the contestants states.
+     * @return 
+     */
+    public int getContestantsStatesN(){
+        if (this.contestants_states.size() != 2){
+            return 0;
+        }
+        
+        return this.contestants_states.get("A").size() + this.contestants_states.get("B").size();
+    }
+    
+    /**
+     * Count the coachs states.
+     * @return 
+     */
+    public int getCoachStatesN(){
+        return this.coach_states.size();
+    }
+    
+    /**
      * Update the contestant state.
      * @param state contestant state.
      * @param team Team identifier, can be A or B.
