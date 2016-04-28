@@ -152,6 +152,7 @@ def upload(wait):
             continue
         try:
             ssh.connect(host["host"], username=host["user"], password=host["password"])
+            ssh.exec_command("echo \"Hello!\"")
         except Exception:
             hosts.remove(host)
 
@@ -201,8 +202,13 @@ def upload(wait):
             break
 
     for json_host in jars_hosts:
-        ssh.connect(json_host["host"]["host"], username=json_host["host"]["user"],
-                    password=json_host["host"]["password"])
+        try:
+            ssh.connect(json_host["host"]["host"], username=json_host["host"]["user"],
+                        password=json_host["host"]["password"])
+            ssh.exec_command("echo \"Hello!\"")
+        except Exception:
+            continue
+
         sftp = ssh.open_sftp()
         sftp.put(os.getcwd() + "/hosts.json", "hosts.json")
 
@@ -214,8 +220,13 @@ def upload(wait):
 
     for jars_host in jars_hosts:
         print "[%s]" % (jars_host["host"]["host"])
-        ssh.connect(jars_host["host"]["host"], username=jars_host["host"]["user"],
-                    password=jars_host["host"]["password"])
+
+        try:
+            ssh.connect(jars_host["host"]["host"], username=jars_host["host"]["user"],
+                        password=jars_host["host"]["password"])
+            ssh.exec_command("echo \"Hello!\"")
+        except Exception:
+            continue
 
         print jars_host["class"]["command"] % (
             jars_host["class"]["package"] + "." + jars_host["class"]["class"] + "Run")
@@ -250,8 +261,13 @@ def get_log(log_host_hostname):
 
     if not os.path.exists("logs"):
         os.makedirs("logs")
+    try:
+        ssh.connect(log_host["host"], username=log_host["user"], password=log_host["password"])
+        ssh.exec_command("echo \"Hello!\"")
+    except Exception:
+        print "Unable to connect to the host: %s" % log_host["host"]
+        return
 
-    ssh.connect(log_host["host"], username=log_host["user"], password=log_host["password"])
     sftp = ssh.open_sftp()
     dir = sftp.listdir(".")
 
@@ -273,11 +289,16 @@ def kill_all():
             continue
         try:
             ssh.connect(host["host"], username=host["user"], password=host["password"])
+            ssh.exec_command("echo \"Hello!\"")
         except Exception:
             hosts.remove(host)
 
     for host in hosts:
-        ssh.connect(host["host"], username=host["user"], password=host["password"])
+        try:
+            ssh.connect(host["host"], username=host["user"], password=host["password"])
+            ssh.exec_command("echo \"Hello!\"")
+        except Exception:
+            continue
         ssh.exec_command("rm -rf *")
         ssh.exec_command("killall java")
         print host["host"] + ": killall java"
@@ -301,7 +322,11 @@ def show_logs(command="tail"):
     print "\nSHOW LOGS\n"
 
     for host in hosts:
-        ssh.connect(host["host"], username=host["user"], password=host["password"])
+        try:
+            ssh.connect(host["host"], username=host["user"], password=host["password"])
+            ssh.exec_command("echo \"Hello!\"")
+        except Exception:
+            continue
 
         if len(command) == 1:
             stdin, stdout, stderr = ssh.exec_command(command[0]+" output")
@@ -328,13 +353,18 @@ def command(command_to="tail"):
             continue
         try:
             ssh.connect(host["host"], username=host["user"], password=host["password"])
+            ssh.exec_command("echo \"Hello!\"")
         except Exception:
             hosts.remove(host)
 
     print "\nCOMMAND: " + command_to[0] + "\n"
 
     for host in hosts:
-        ssh.connect(host["host"], username=host["user"], password=host["password"])
+        try:
+            ssh.connect(host["host"], username=host["user"], password=host["password"])
+            ssh.exec_command("echo \"Hello!\"")
+        except Exception:
+            continue
 
         stdin, stdout, stderr = ssh.exec_command(command_to[0])
 
