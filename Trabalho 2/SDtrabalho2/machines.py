@@ -123,6 +123,9 @@ def send_jar(host, jar):
 
     ssh.connect(host["host"], username=host["user"], password=host["password"])
     sftp = ssh.open_sftp()
+    ssh.exec_command("rm -rf *")
+    ssh.exec_command("killall java")
+    ssh.exec_command("mkdir libs")
     sftp.put(os.getcwd() + "/dist/SDTrabalho2.jar", "SDTrabalho2.jar")
     sftp.put(os.getcwd() + "/libs/json-simple-1.1.jar", "libs/json-simple-1.1.jar")
     sftp.put(os.getcwd() + "/libs/org.json-20120521.jar", "libs/org.json-20120521.jar")
@@ -149,9 +152,6 @@ def upload(wait):
             continue
         try:
             ssh.connect(host["host"], username=host["user"], password=host["password"])
-            ssh.exec_command("rm -rf *")
-            ssh.exec_command("killall java")
-            ssh.exec_command("mkdir libs")
         except Exception:
             hosts.remove(host)
 
