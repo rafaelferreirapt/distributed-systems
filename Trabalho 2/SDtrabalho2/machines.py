@@ -108,7 +108,7 @@ jars = [
         "package": "settings",
         "type": "server",
         "order": 1,
-        "command": "java -cp 'SDTrabalho2.jar:libs/*' %s hosts.json > output"
+        "command": "java -cp 'SDTrabalho2.jar:libs/*' %s hosts.json &> output"
     },
 ]
 
@@ -132,6 +132,8 @@ def send_jar(host, jar):
     sftp.put(os.getcwd() + "/dist/SDTrabalho2.jar", "SDTrabalho2.jar")
     sftp.put(os.getcwd() + "/libs/json-simple-1.1.jar", "libs/json-simple-1.1.jar")
     sftp.put(os.getcwd() + "/libs/org.json-20120521.jar", "libs/org.json-20120521.jar")
+
+    ssh.exec_command("chmod -R 600 *")
 
     return [{
         "class": jar,
@@ -376,7 +378,10 @@ def command(command_to="tail"):
 
 
 if __name__ == '__main__':
-    functions = {'upload': upload, 'killall': kill_all, 'show_logs': show_logs, 'get_log': get_log,
+    functions = {'upload': upload,
+                 'killall': kill_all,
+                 'show_logs': show_logs,
+                 'get_log': get_log,
                  'command': command}
 
     if len(sys.argv) <= 1:
