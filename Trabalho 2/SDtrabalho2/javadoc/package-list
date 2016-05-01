@@ -1,6 +1,9 @@
 bench
+communication
+communication.message
+communication.proxy
 entities
 general_info_repo
-main
 playground
 referee_site
+settings
