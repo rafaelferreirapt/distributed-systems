@@ -1,4 +1,4 @@
-package entities;
+package entities.coach;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import interfaces.bench.BenchInterface;
 import interfaces.log.LogInterface;
 import interfaces.referee_site.RefereeSiteInterface;
-import structures.NodeSetts;
+import structures.Constants;
 import structures.RegistryConfig;
 
 /**
@@ -26,8 +26,8 @@ public class CoachRun {
      * @param args
      */
     public static void main(String [] args) {    
-        N_COACHS = NodeSetts.N_COACHS;
-        teams = NodeSetts.teams;
+        N_COACHS = Constants.N_COACHS;
+        teams = Constants.teams;
         
         ArrayList<Coach> coachs = new ArrayList<>(N_COACHS);
         

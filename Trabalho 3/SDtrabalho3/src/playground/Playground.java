@@ -8,7 +8,7 @@ import interfaces.playground.PlaygroundInterface;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import structures.NodeSetts;
+import structures.Constants;
 
 /**
  * Playground instance.
@@ -20,8 +20,8 @@ public class Playground implements PlaygroundInterface{
     private int contestantsIn = 0;
     private int contestantsAlerted = 0;
     
-    private final int DELAY_MAX = NodeSetts.DELAY_MAX;
-    private final int DELAY_MIN = NodeSetts.DELAY_MIN;
+    private final int DELAY_MAX = Constants.DELAY_MAX;
+    private final int DELAY_MIN = Constants.DELAY_MIN;
     
     private final interfaces.log.IPlayground log;
     

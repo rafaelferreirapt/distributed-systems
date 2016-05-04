@@ -2,7 +2,7 @@
  * Distributed Systems
  * Rafael Ferreira and Rodrigo Cunha
  */
-package entities;
+package entities.referee;
 
 import structures.RefereeState;
 

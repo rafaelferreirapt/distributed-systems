@@ -76,7 +76,7 @@ public class RegistryConfig {
      * @return parameter value
      */
     public String registryHost() {
-        return prop.getProperty("REGISTER_HOST");
+        return prop.getProperty("registry_host");
     }
     
     /** 
@@ -84,41 +84,41 @@ public class RegistryConfig {
      * @return parameter value
      */
     public int registryPort() {
-        return Integer.parseInt(prop.getProperty("REGISTER_PORT"));
+        return Integer.parseInt(prop.getProperty("registry_port"));
     }
     /** 
      * Loads the parameter REGISTER_OBJECT_PORT from the configuration file.
      * @return parameter value
      */
     public int objectPort() {
-        return Integer.parseInt(prop.getProperty("REGISTER_OBJECT_PORT"));
+        return Integer.parseInt(prop.getProperty("registryobject_port"));
     }
     /** 
      * Loads the parameter LOGGING_PORT from the configuration file.
      * @return parameter value
      */
     public int loggingPort() {
-        return Integer.parseInt(prop.getProperty("LOGGING_PORT"));
+        return Integer.parseInt(prop.getProperty("log_port"));
     }
     /** 
      * Loads the parameter BENCH_PORT from the configuration file.
      * @return parameter value
      */
     public int benchPort() {
-        return Integer.parseInt(prop.getProperty("BENCH_PORT"));
+        return Integer.parseInt(prop.getProperty("bench_port"));
     }
     /** 
      * Loads the parameter PLAYGROUND_PORT from the configuration file.
      * @return parameter value
      */
     public int playgroundPort() {
-        return Integer.parseInt(prop.getProperty("PLAYGROUND_PORT"));
+        return Integer.parseInt(prop.getProperty("playground_port"));
     }
     /** 
      * Loads the parameter REFEREE_SITE_PORT from the configuration file.
      * @return parameter value
      */
     public int refereeSitePort() {
-        return Integer.parseInt(prop.getProperty("REFEREE_SITE_PORT"));
+        return Integer.parseInt(prop.getProperty("refereesite_port"));
     }
 }

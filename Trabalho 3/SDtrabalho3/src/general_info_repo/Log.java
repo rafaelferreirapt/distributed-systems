@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 import interfaces.log.LogInterface;
-import structures.NodeSetts;
+import structures.Constants;
 import structures.CoachState;
 import structures.ContestantState;
 import structures.RefereeState;
@@ -45,8 +45,8 @@ public class Log implements LogInterface{
      * @param filename where the log will be saved.
      */
     public Log(String filename){
-        N_COACHS = NodeSetts.N_COACHS;
-        N_CONTESTANTS = NodeSetts.N_CONTESTANTS_TEAM * 2;
+        N_COACHS = Constants.N_COACHS;
+        N_CONTESTANTS = Constants.N_CONTESTANTS_TEAM * 2;
         
         if(filename.length()==0){
             Date today = Calendar.getInstance().getTime();

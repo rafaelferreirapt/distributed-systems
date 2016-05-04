@@ -4,120 +4,13 @@ import os
 import sys
 import json
 import paramiko
-
-hosts = [
-    {
-        "host": "l040101-ws01.ua.pt",
-        "user": "sd0102",
-        "password": "8OP22hFN2K570806411tzL388090k437u68N290d61y7100sxSl68w69M779HSI2oW7D6415g4X2c510u984CO299i5T05xiTU7q87c08XbMx8604Mp16T0S"
-    },
-    {
-        "host": "l040101-ws02.ua.pt",
-        "user": "sd0102",
-        "password": "KuwAU1oEfbeyAaKxOFeEyTPSdQUihxxmJbDOSzeBoHbxzUppSdVitEPqAaRlhpNgHvlffOAHTSkCjOftLlUsjl8tiDgaDgqHOTVypxBlNOrnocdUaNgUaLbp"
-    },
-    {
-        "host": "l040101-ws03.ua.pt",
-        "user": "sd0102",
-        "password": "462o9vX0x18O7CW871s727967pmL58510s26I779Do6gr2o31423020UAV3H9F1iz7r5C196Z0NhYcw3Vws1w5r36yY773W54936L804Fa941yZ1493bc71W"
-    },
-    {
-        "host": "l040101-ws04.ua.pt",
-        "user": "sd0102",
-        "password": "c6wSS1b97Y0287PA9N53S08069AdIn9387aHC515OcFP39xN315DlH9k3Fr798378Nq2o5KodxkG16C15Qd2f8484Mrh2M2xC439fU24c856RA5p995Iz3RJ"
-    },
-    {
-        "host": "l040101-ws05.ua.pt",
-        "user": "sd0102",
-        "password": "8g0cRpI3J5UjEc18CzKtKwdLKy428aQrNh146tJufdK7vaUGL8697h2116z9V1zYiYcemuxqUpsk4innr8lhq1ytsWu92TJO7Q03djRGDir8A7p5e0CiD7tA"
-    },
-    {
-        "host": "l040101-ws06.ua.pt",
-        "user": "sd0102",
-        "password": "8W0dUd0I16E18115HS0260QWoK1743X3736V60zS12H01Qb9XW515qG27a9A16w9elVs1676l36N6g17055954gv8O5l9Y2y25kU0F9Bq8327Mw43f25v7Df"
-    },
-    {
-        "host": "l040101-ws07.ua.pt",
-        "user": "sd0102",
-        "password": "atRyWsqE1Qu1t902ioAhgPnmb9x84VFO6dTje6DZ20Nr81WMh5m3GyB85oh0Es94YwMO1R3zH7No8fJp2x2z5n3gOoDPhFPlWi4R9yY7S126FpF41Z35t0Pv"
-    },
-    {
-        "host": "l040101-ws09.ua.pt",
-        "user": "sd0102",
-        "password": "28wT04L4FjV04kuR25x3qi8D1o1KY975A1R3y5l24xi76x86652Y39rO6T5yU5Fu82u30389008a5N3igip24p75847RqD486mj03854Vuh503135B81kMey"
-    },
-    {
-        "host": "l040101-ws10.ua.pt",
-        "user": "sd0102",
-        "password": "R91qV402bu1F1M6YMBaMQ4VABAvLO0MRPL09oSUcp1IcUiuXtV30se80A1YJGy5yKhE56p23793t9031467W8lZvEi4n7atB7cCQ435cOmz204DE430102kJ"
-    }
-]
-
-jars = [
-    {
-        "class": "Bench",
-        "package": "bench",
-        "type": "server",
-        "order": 5,
-        "command": "java -cp 'SDtrabalho3.jar:libs/*' %s &> output"
-    },
-    {
-        "class": "Coach",
-        "package": "entities",
-        "type": "client",
-        "order": 7,
-        "command": "java -cp 'SDtrabalho3.jar:libs/*' %s &> output"
-    },
-    {
-        "class": "Contestant",
-        "package": "entities",
-        "type": "client",
-        "order": 6,
-        "command": "java -cp 'SDtrabalho3.jar:libs/*' %s &> output"
-    },
-    {
-        "class": "Referee",
-        "package": "entities",
-        "type": "client",
-        "order": 8,
-        "command": "java -cp 'SDtrabalho3.jar:libs/*' %s &> output"
-    },
-    {
-        "class": "Log",
-        "package": "general_info_repo",
-        "type": "server",
-        "order": 2,
-        "command": "java -cp 'SDtrabalho3.jar:libs/*' %s &> output"
-    },
-    {
-        "class": "Playground",
-        "package": "playground",
-        "type": "server",
-        "order": 4,
-        "command": "java -cp 'SDtrabalho3.jar:libs/*' %s &> output"
-    },
-    {
-        "class": "RefereeSite",
-        "package": "referee_site",
-        "type": "server",
-        "order": 3,
-        "command": "java -cp 'SDtrabalho3.jar:libs/*' %s &> output"
-    },
-    {
-        "class": "NodeSetts",
-        "package": "settings",
-        "type": "server",
-        "order": 1,
-        "command": "java -cp 'SDtrabalho3.jar:libs/*' %s hosts.json &> output"
-    },
-]
-
-ssh = paramiko.SSHClient()
-ssh.load_system_host_keys()
-ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+import ConfigParser
+from subprocess import call
+from scp import SCPClient
 
 
 def send_jar(host, jar):
+    """
     print "Jar: " + jar["class"]
     print "Sending the proper jar to the workstation"
 
@@ -134,17 +27,11 @@ def send_jar(host, jar):
     sftp.put(os.getcwd() + "/libs/org.json-20120521.jar", "libs/org.json-20120521.jar")
 
     ssh.exec_command("chmod -R 600 *")
-
-    return [{
-        "class": jar,
-        "host": host
-    }]
+    """
 
 
-def upload(wait):
+def generate_config():
     global ssh
-
-    print "Creating directory jars if it doesn't exist"
 
     print "See what hosts are up to calculate the architecture of the solution"
 
@@ -161,8 +48,6 @@ def upload(wait):
         except Exception:
             hosts.remove(host)
 
-    print "and sending them to the workstations"
-
     jar_i = 0
 
     jars_hosts = []
@@ -172,47 +57,128 @@ def upload(wait):
         exit(1)
     elif len(jars) <= len(hosts):
         for host in hosts:
-            jars_hosts += send_jar(host, jars[jar_i])
+            jars_hosts += [{
+                "class": jars[jar_i],
+                "host": host
+            }]
 
             jar_i += 1
             if jar_i == len(jars):
                 break
     else:
         for host in hosts:
-            jars_hosts += send_jar(host, jars[jar_i])
-
+            jars_hosts += [{
+                "class": jars[jar_i],
+                "host": host
+            }]
             jar_i += 1
             if jar_i == len(jars):
                 break
 
         for i in range(len(hosts) - 1, len(jars)):
-            jars_hosts += send_jar(hosts[len(hosts) - 1], jars[i])
+            jars_hosts += [{
+                "class": jars[i],
+                "host": hosts[len(hosts) - 1]
+            }]
 
-    print "Save the hosts in a JSON file to send it to the NodeSettsServer"
+    print "Save the hosts in a config file"
 
-    to_file = []
+    config = ConfigParser.RawConfigParser()
+    config.add_section("mapping")
 
-    for host in jars_hosts:
-        to_file += [{
-            host["class"]["class"]: host["host"]["host"]
-        }]
+    for jars_host in jars_hosts:
+        config.set("mapping", jars_host["class"]["class"] + "_HOST", jars_host["host"]["host"])
+        if jars_host["class"]["type"] != "client":
+            config.set("mapping", jars_host["class"]["class"] + "_PORT", jars_host["class"]["port"])
 
-    with open('hosts.json', 'w') as outfile:
-        json.dump(to_file, outfile)
+    config.set("mapping", "RegistryObject", 22125)
 
-    print "Upload hosts.json to all machines"
+    with open('configs/config.ini', 'wb') as configfile:
+        config.write(configfile)
 
-    for log_host in jars_hosts:
-        if log_host["class"]["class"] == "Log":
-            break
 
+def upload(wait=None):
+    call(["sh", "build.sh"])
+
+    settings = ConfigParser.ConfigParser()
+    settings.read('configs/config.ini')
+
+    lst = {
+        "Coach": {
+            "hostname": settings.get("mapping", "coach_host"),
+        },
+        "Contestant": {
+            "hostname": settings.get("mapping", "contestant_host"),
+        },
+        "Referee": {
+            "hostname": settings.get("mapping", "referee_host"),
+        },
+        "Registry": {
+            "hostname": settings.get("mapping", "registry_host"),
+            "port": settings.get("mapping", "registry_port"),
+        },
+        "Log": {
+            "hostname": settings.get("mapping", "log_host"),
+            "port": settings.get("mapping", "log_port"),
+        },
+        "Bench": {
+            "hostname": settings.get("mapping", "bench_host"),
+            "port": settings.get("mapping", "bench_port"),
+        },
+        "Playground": {
+            "hostname": settings.get("mapping", "playground_host"),
+            "port": settings.get("mapping", "playground_port"),
+        },
+        "RefereeSite": {
+            "hostname": settings.get("mapping", "refereesite_host"),
+            "port": settings.get("mapping", "refereesite_port"),
+        }
+    }
+
+    for key, value in lst.iteritems():
+        for host in hosts:
+            if value["hostname"] == host["host"]:
+                value["host"] = host
+                break
+
+        for jar in jars:
+            if key == jar["class"]:
+                value["class"] = jar
+                break
+
+    # clean
+    print "Cleaning the remote server"
+
+    for key, value in lst.iteritems():
+        ssh.connect(value["host"]["host"], username=value["host"]["user"], password=value["host"]["password"])
+
+        print value["host"]["host"]
+        print("rm -rf Public/*")
+        ssh.exec_command("rm -rf Public/*")
+
+        print("killall java")
+        ssh.exec_command("killall java")
+        ssh.close()
+
+    # Upload folders on the remote server
+    print "Upload folders on the remote server"
+
+    for key, value in lst.iteritems():
+        ssh.connect(value["host"]["host"], username=value["host"]["user"], password=value["host"]["password"])
+
+        print value["host"]["host"]
+
+        scp = SCPClient(ssh.get_transport())
+        scp.put(files="javas/"+value["class"]["path"],
+                remote_path="Public/classes/"+value["class"]["path"],
+                recursive=True)
+
+        ssh.close()
+        scp.close()
+
+    print "ok"
+    """
     for json_host in jars_hosts:
-        try:
-            ssh.connect(json_host["host"]["host"], username=json_host["host"]["user"],
-                        password=json_host["host"]["password"])
-            ssh.exec_command("echo \"Hello!\"")
-        except Exception:
-            continue
 
         sftp = ssh.open_sftp()
         sftp.put(os.getcwd() + "/hosts.json", "hosts.json")
@@ -254,6 +220,7 @@ def upload(wait):
         get_log(log_host["host"]["host"])
     else:
         print "UPS! Something went wrong..."
+    """
 
 
 def get_log(log_host_hostname):
@@ -304,9 +271,14 @@ def kill_all():
             ssh.exec_command("echo \"Hello!\"")
         except Exception:
             continue
-        ssh.exec_command("rm -rf *")
+
+        print host["host"]
+
+        print("rm -rf Public/*")
+        ssh.exec_command("rm -rf Public/*")
+
+        print("killall java")
         ssh.exec_command("killall java")
-        print host["host"] + ": killall java"
 
 
 def show_logs(command="tail"):
@@ -334,9 +306,9 @@ def show_logs(command="tail"):
             continue
 
         if len(command) == 1:
-            stdin, stdout, stderr = ssh.exec_command(command[0]+" output")
+            stdin, stdout, stderr = ssh.exec_command(command[0] + " output")
         else:
-            stdin, stdout, stderr = ssh.exec_command(command+" output")
+            stdin, stdout, stderr = ssh.exec_command(command + " output")
 
         print host["host"]
         print stdout.readlines()
@@ -378,7 +350,8 @@ def command(command_to="tail"):
 
 
 if __name__ == '__main__':
-    functions = {'upload': upload,
+    functions = {'generate_config': generate_config,
+                 'upload': upload,
                  'killall': kill_all,
                  'show_logs': show_logs,
                  'get_log': get_log,
@@ -387,6 +360,18 @@ if __name__ == '__main__':
     if len(sys.argv) <= 1:
         print('Available functions are:\n' + repr(functions.keys()))
         exit(1)
+
+    with open('configs/hosts.json') as json_data:
+        hosts = json.load(json_data)
+        json_data.close()
+
+    with open('configs/mapping.json') as json_data:
+        jars = json.load(json_data)
+        json_data.close()
+
+    ssh = paramiko.SSHClient()
+    ssh.load_system_host_keys()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
     if sys.argv[1] in functions.keys():
         if len(sys.argv[2:]) == 0:

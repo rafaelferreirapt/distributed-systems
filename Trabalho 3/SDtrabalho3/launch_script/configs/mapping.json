@@ -1,0 +1,47 @@
+[
+    {
+        "class": "Coach",
+        "path": "dir_clientSide/coach",
+        "type": "client"
+    },
+    {
+        "class": "Contestant",
+        "path": "dir_clientSide/contestant",
+        "type": "client"
+    },
+    {
+        "class": "Referee",
+        "path": "dir_clientSide/referee",
+        "type": "client"
+    },
+    {
+        "class": "Registry",
+        "path": "dir_registry",
+        "type": "registry",
+        "port": 22124
+    },
+    {
+        "class": "Log",
+        "path": "dir_serverSide/general_info_repo",
+        "type": "server",
+        "port": 22123
+    },
+    {
+        "class": "Bench",
+        "path": "dir_serverSide/bench",
+        "type": "server",
+        "port": 22122
+    },
+    {
+        "class": "Playground",
+        "path": "dir_serverSide/playground",
+        "type": "server",
+        "port": 22121
+    },
+    {
+        "class": "RefereeSite",
+        "path": "dir_serverSide/referee_site",
+        "type": "server",
+        "port": 22120
+    }
+]

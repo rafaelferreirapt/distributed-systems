@@ -14,7 +14,7 @@ import java.rmi.server.UnicastRemoteObject;
 import interfaces.bench.BenchInterface;
 import interfaces.RegisterInterface;
 import structures.RegistryConfig;
-import structures.NodeSetts;
+import structures.Constants;
 
 /**
  * Server that extends the Bench and will process the events
@@ -48,7 +48,7 @@ public class BenchServer {
         /* instanciação do objecto remoto que representa o bench e geração de um stub para ele */
         Bench bench = null;
         BenchInterface benchInterface = null;
-        bench = new Bench(NodeSetts.N_CONTESTANTS_TEAM, NodeSetts.N_CONTESTANTS_TEAM);
+        bench = new Bench(Constants.N_CONTESTANTS_TEAM, Constants.N_CONTESTANTS_TEAM);
         
         try {
             benchInterface = (BenchInterface) UnicastRemoteObject.exportObject(bench, rc.benchPort());

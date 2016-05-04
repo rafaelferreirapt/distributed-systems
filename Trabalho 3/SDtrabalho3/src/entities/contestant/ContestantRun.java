@@ -1,27 +1,34 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package entities;
+package entities.contestant;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import interfaces.bench.BenchInterface;
 import interfaces.log.LogInterface;
 import interfaces.playground.PlaygroundInterface;
 import interfaces.referee_site.RefereeSiteInterface;
+import structures.Constants;
 import structures.RegistryConfig;
 
 /**
- * Referee Run
+ * Contestant Run
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
-public class RefereeRun {
+public class ContestantRun {
     
-    public static void main(String [] args) {
+    private static int N_CONTESTANTS_TEAM;
+    private static String[] teams;
+    private static int nContestants;
+    
+    public static void main(String [] args) { 
+        N_CONTESTANTS_TEAM = Constants.N_CONTESTANTS_TEAM;
+        teams = Constants.teams;
+        nContestants = N_CONTESTANTS_TEAM * 2;
+        
+        ArrayList<Contestant> contestants = new ArrayList<>(nContestants);
+        
         BenchInterface bp = null;
         RefereeSiteInterface rsp = null;
         PlaygroundInterface pp = null;
@@ -31,7 +38,7 @@ public class RefereeRun {
         String rmiRegHostName;
         // port de escuta do serviço
         int rmiRegPortNumb;
-        
+
         RegistryConfig rc = new RegistryConfig("../../config.ini");
         rmiRegHostName = rc.registryHost();
         rmiRegPortNumb = rc.registryPort();
@@ -100,15 +107,24 @@ public class RefereeRun {
             System.exit(1);
         }
         
-        Referee ref = new Referee(pp, bp, rsp, log);
+        for (int i = 0; i < nContestants; i++){
+            if(i < N_CONTESTANTS_TEAM){
+                contestants.add(new Contestant(pp, bp, rsp, i+1, teams[0], log));
+            }else{
+                contestants.add(new Contestant(pp, bp, rsp, i-N_CONTESTANTS_TEAM+1, teams[1], log));
+            }
+        }
         
-        System.out.println("Number of referees: 1");
-       
-        ref.start();
+        System.out.println("Number of contestants: " + contestants.size());
         
-        try { 
-            ref.join ();
-        } catch (InterruptedException e) {}
+        for (Contestant c : contestants)
+            c.start();
+        
+        for (Contestant c : contestants) { 
+            try { 
+                c.join ();
+            } catch (InterruptedException e) {}
+        }
         
         System.out.println("Done!");
     }
