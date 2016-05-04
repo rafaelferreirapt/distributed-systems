@@ -4,34 +4,33 @@
  */
 package playground;
 
+import interfaces.playground.PlaygroundInterface;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import settings.NodeSettsProxy;
+import structures.NodeSetts;
 
 /**
  * Playground instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
-public class Playground implements IReferee, IContestant{
+public class Playground implements PlaygroundInterface{
     
     private static boolean trialDecisionTaken = false, startTrialTaken = false;
     private int contestantsIn = 0;
     private int contestantsAlerted = 0;
     
-    private final int DELAY_MAX;
-    private final int DELAY_MIN;
+    private final int DELAY_MAX = NodeSetts.DELAY_MAX;
+    private final int DELAY_MIN = NodeSetts.DELAY_MIN;
     
-    private final general_info_repo.IPlayground log;
+    private final interfaces.log.IPlayground log;
     
     /**
      * Log is a singleton, it needs the getInstance method.
      * @param l
      */
-    public Playground(general_info_repo.IPlayground l){
+    public Playground(interfaces.log.IPlayground l){
         this.log = l;
-        NodeSettsProxy proxy = new NodeSettsProxy(); 
-        DELAY_MAX = proxy.DELAY_MAX();
-        DELAY_MIN = proxy.DELAY_MIN();
     }
     
     /**
@@ -104,6 +103,11 @@ public class Playground implements IReferee, IContestant{
         }
         
         log.updateRope(team, id);
+    }
+
+    @Override
+    public void signalShutdown() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

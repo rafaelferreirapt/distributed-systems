@@ -4,6 +4,8 @@
  */
 package entities;
 
+import structures.ContestantState;
+
 
 /**
  * Contestant instance.
@@ -16,10 +18,10 @@ public class Contestant  extends Thread {
     private final int id;
     private final String team;
     
-    private final playground.IContestant playground;
-    private final bench.IContestant bench;
-    private final referee_site.IContestant referee_site;
-    private final general_info_repo.IContestant log;
+    private final interfaces.playground.IContestant playground;
+    private final interfaces.bench.IContestant bench;
+    private final interfaces.referee_site.IContestant referee_site;
+    private final interfaces.log.IContestant log;
     
     /**
      * It will be passed to the Contestant the methods of the bench and referee site
@@ -32,8 +34,8 @@ public class Contestant  extends Thread {
      * @param team Team identifier, can be A or B.
      * @param l
      */
-    public Contestant(playground.IContestant p, bench.IContestant b, referee_site.IContestant r, int id, String team,
-            general_info_repo.IContestant l){
+    public Contestant(interfaces.playground.IContestant p, interfaces.bench.IContestant b, interfaces.referee_site.IContestant r, int id, String team,
+            interfaces.log.IContestant l){
         this.playground = p;
         this.bench = b;
         this.referee_site = r;

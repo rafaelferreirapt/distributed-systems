@@ -4,6 +4,8 @@
  */
 package bench;
 
+import interfaces.bench.BenchInterface;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,7 +14,7 @@ import java.util.logging.Logger;
  * Bench instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
-public class Bench implements IReferee, ICoach, IContestant{
+public class Bench implements BenchInterface{
     
     private int nContestantsInBench;
     private int nCoachesAlerted = 0;
@@ -334,6 +336,11 @@ public class Bench implements IReferee, ICoach, IContestant{
     public synchronized void wakeUp(){
         this.endMatch = true;
         notifyAll();
+    }
+
+    @Override
+    public void signalShutdown() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

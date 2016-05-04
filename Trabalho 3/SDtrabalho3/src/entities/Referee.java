@@ -4,6 +4,8 @@
  */
 package entities;
 
+import structures.RefereeState;
+
 /**
  * Referee instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
@@ -13,10 +15,10 @@ public class Referee extends Thread {
     private RefereeState state;
     
     //private final Log log;
-    private final playground.IReferee playground;
-    private final bench.IReferee bench;
-    private final referee_site.IReferee referee_site;
-    private final general_info_repo.IReferee log;
+    private final interfaces.playground.IReferee playground;
+    private final interfaces.bench.IReferee bench;
+    private final interfaces.referee_site.IReferee referee_site;
+    private final interfaces.log.IReferee log;
     
     /**
      * It will be passed to the Referee the methods of the bench and referee site
@@ -26,8 +28,8 @@ public class Referee extends Thread {
      * @param r Instance that implements referee site referee methods.
      * @param l
      */
-    public Referee(playground.IReferee p, bench.IReferee b, referee_site.IReferee r, 
-            general_info_repo.IReferee l){
+    public Referee(interfaces.playground.IReferee p, interfaces.bench.IReferee b, interfaces.referee_site.IReferee r, 
+            interfaces.log.IReferee l){
         this.playground = p;
         this.bench = b;
         this.referee_site = r;

@@ -1,15 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entities;
 
-import communication.message.Message;
-import communication.message.MessageType;
-import communication.proxy.ClientProxy;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
-import settings.NodeSettsProxy;
+import interfaces.bench.BenchInterface;
+import interfaces.log.LogInterface;
+import interfaces.playground.PlaygroundInterface;
+import interfaces.referee_site.RefereeSiteInterface;
+import structures.NodeSetts;
+import structures.RegistryConfig;
 
 /**
  * Contestant Run
@@ -22,24 +23,95 @@ public class ContestantRun {
     private static int nContestants;
     
     public static void main(String [] args) { 
-        NodeSettsProxy proxy = new NodeSettsProxy(); 
-        N_CONTESTANTS_TEAM = proxy.N_CONTESTANTS_TEAM();
-        teams = proxy.teams();
+        N_CONTESTANTS_TEAM = NodeSetts.N_CONTESTANTS_TEAM;
+        teams = NodeSetts.teams;
         nContestants = N_CONTESTANTS_TEAM * 2;
         
         ArrayList<Contestant> contestants = new ArrayList<>(nContestants);
-        BenchProxy bp = new BenchProxy();
-        RefereeSiteProxy rsp = new RefereeSiteProxy();
-        PlaygroundProxy pp = new PlaygroundProxy();
-        LogProxy log = new LogProxy();
+        
+        BenchInterface bp = null;
+        RefereeSiteInterface rsp = null;
+        PlaygroundInterface pp = null;
+        LogInterface log = null;
+        
+        // nome do sistema onde está localizado o serviço de registos RMI
+        String rmiRegHostName;
+        // port de escuta do serviço
+        int rmiRegPortNumb;
+
+        RegistryConfig rc = new RegistryConfig("../../config.ini");
+        rmiRegHostName = rc.registryHost();
+        rmiRegPortNumb = rc.registryPort();
+        
+        try
+        { 
+            Registry registry = LocateRegistry.getRegistry (rmiRegHostName, rmiRegPortNumb);
+            rsp = (RefereeSiteInterface) registry.lookup (RegistryConfig.refereeSiteNameEntry);
+        }
+        catch (RemoteException e)
+        { 
+            System.out.println("Exception thrown while locating referee site: " + e.getMessage () + "!");
+            System.exit (1);
+        }
+        catch (NotBoundException e)
+        { 
+            System.out.println("Referee site is not registered: " + e.getMessage () + "!");
+            System.exit(1);
+        }
+        
+        try
+        { 
+            Registry registry = LocateRegistry.getRegistry (rmiRegHostName, rmiRegPortNumb);
+            pp = (PlaygroundInterface) registry.lookup (RegistryConfig.playgroundNameEntry);
+        }
+        catch (RemoteException e)
+        { 
+            System.out.println("Exception thrown while locating playground: " + e.getMessage () + "!");
+            System.exit (1);
+        }
+        catch (NotBoundException e)
+        { 
+            System.out.println("Playground is not registered: " + e.getMessage () + "!");
+            System.exit(1);
+        }
+        
+        try
+        { 
+            Registry registry = LocateRegistry.getRegistry (rmiRegHostName, rmiRegPortNumb);
+            log = (LogInterface) registry.lookup (RegistryConfig.logNameEntry);
+        }
+        catch (RemoteException e)
+        { 
+            System.out.println("Exception thrown while locating Log: " + e.getMessage () + "!");
+            System.exit (1);
+        }
+        catch (NotBoundException e)
+        { 
+            System.out.println("Log is not registered: " + e.getMessage () + "!");
+            System.exit(1);
+        }
+        
+        try
+        { 
+            Registry registry = LocateRegistry.getRegistry (rmiRegHostName, rmiRegPortNumb);
+            bp = (BenchInterface) registry.lookup (RegistryConfig.benchNameEntry);
+        }
+        catch (RemoteException e)
+        { 
+            System.out.println("Exception thrown while locating bench: " + e.getMessage () + "!");
+            System.exit (1);
+        }
+        catch (NotBoundException e)
+        { 
+            System.out.println("Bench is not registered: " + e.getMessage () + "!");
+            System.exit(1);
+        }
         
         for (int i = 0; i < nContestants; i++){
             if(i < N_CONTESTANTS_TEAM){
-                contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i+1, 
-                        teams[0], (general_info_repo.IContestant) log));
+                contestants.add(new Contestant(pp, bp, rsp, i+1, teams[0], log));
             }else{
-                contestants.add(new Contestant((playground.IContestant) pp, (bench.IContestant) bp, (referee_site.IContestant) rsp, i-N_CONTESTANTS_TEAM+1, 
-                        teams[1], (general_info_repo.IContestant) log));
+                contestants.add(new Contestant(pp, bp, rsp, i-N_CONTESTANTS_TEAM+1, teams[1], log));
             }
         }
         
@@ -53,14 +125,6 @@ public class ContestantRun {
                 c.join ();
             } catch (InterruptedException e) {}
         }
-        
-        System.out.println("Sending TERMINATE message to the logging");
-        
-        
-        /* SEND TO LOG THAT COACH HAS FINISHED */
-        ClientProxy.connect(proxy.SERVER_HOSTS().get("Log"), 
-                proxy.SERVER_PORTS().get("Log"), 
-                new Message(MessageType.TERMINATE));
         
         System.out.println("Done!");
     }

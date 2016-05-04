@@ -4,6 +4,8 @@
  */
 package entities;
 
+import structures.CoachState;
+
 /**
  * Coach instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
@@ -13,9 +15,9 @@ public class Coach extends Thread {
     private CoachState state;
     
     private final String team;
-    private final bench.ICoach bench;
-    private final referee_site.ICoach referee_site;
-    private final general_info_repo.ICoach log;
+    private final interfaces.bench.ICoach bench;
+    private final interfaces.referee_site.ICoach referee_site;
+    private final interfaces.log.ICoach log;
     
     /**
      * It will be passed to the Coach the methods of the bench and referee site
@@ -26,7 +28,7 @@ public class Coach extends Thread {
      * @param team Team identifier, can be A or B.
      * @param l
      */
-    public Coach(bench.ICoach b, referee_site.ICoach r, String team, general_info_repo.ICoach l){
+    public Coach(interfaces.bench.ICoach b, interfaces.referee_site.ICoach r, String team, interfaces.log.ICoach l){
         this.bench = b;
         this.referee_site = r;
         this.log = l;

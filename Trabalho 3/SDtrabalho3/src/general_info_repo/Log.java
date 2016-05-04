@@ -4,24 +4,20 @@
  */
 package general_info_repo;
 
-import com.sun.javafx.binding.Logging;
-import communication.message.Message;
-import communication.message.MessageType;
-import communication.proxy.ClientProxy;
-import entities.CoachState;
-import entities.ContestantState;
-import entities.RefereeState;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import settings.NodeSettsProxy;
+import interfaces.log.LogInterface;
+import structures.NodeSetts;
+import structures.CoachState;
+import structures.ContestantState;
+import structures.RefereeState;
 
 /**
  * The log will be the gateway to all the information of the match, games, trials,
@@ -29,7 +25,7 @@ import settings.NodeSettsProxy;
  * the log of the match.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
-public class Log implements IReferee, ICoach, IContestant, IPlayground{
+public class Log implements LogInterface{
     
     private final Match match = Match.getInstance();
    
@@ -49,9 +45,8 @@ public class Log implements IReferee, ICoach, IContestant, IPlayground{
      * @param filename where the log will be saved.
      */
     public Log(String filename){
-        NodeSettsProxy proxy = new NodeSettsProxy(); 
-        N_COACHS = proxy.N_COACHS();
-        N_CONTESTANTS = proxy.N_CONTESTANTS_TEAM() * 2;
+        N_COACHS = NodeSetts.N_COACHS;
+        N_CONTESTANTS = NodeSetts.N_CONTESTANTS_TEAM * 2;
         
         if(filename.length()==0){
             Date today = Calendar.getInstance().getTime();
@@ -94,7 +89,7 @@ public class Log implements IReferee, ICoach, IContestant, IPlayground{
             
             pw.flush();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Logging.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("File not found");
         }
     }
     
@@ -411,22 +406,11 @@ public class Log implements IReferee, ICoach, IContestant, IPlayground{
     }
     
     public void terminateServers(){
-        NodeSettsProxy proxy = new NodeSettsProxy(); 
         
-        ClientProxy.connect(proxy.SERVER_HOSTS().get("Bench"), 
-                proxy.SERVER_PORTS().get("Bench"), 
-                new Message(MessageType.TERMINATE));
-         
-        ClientProxy.connect(proxy.SERVER_HOSTS().get("Playground"), 
-                proxy.SERVER_PORTS().get("Playground"), 
-                new Message(MessageType.TERMINATE));
-        
-        ClientProxy.connect(proxy.SERVER_HOSTS().get("RefereeSite"), 
-                proxy.SERVER_PORTS().get("RefereeSite"), 
-                new Message(MessageType.TERMINATE));
-        
-        ClientProxy.connect(proxy.SERVER_HOSTS().get("NodeSetts"), 
-                proxy.SERVER_PORTS().get("NodeSetts"), 
-                new Message(MessageType.TERMINATE));
+    }
+
+    @Override
+    public void signalShutdown() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -4,14 +4,13 @@
  */
 package general_info_repo;
 
-import entities.CoachState;
-import entities.ContestantState;
-import entities.RefereeState;
+import structures.CoachState;
+import structures.ContestantState;
+import structures.RefereeState;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
-import settings.NodeSetts;
-import settings.NodeSettsProxy;
+import structures.NodeSetts;
 
 /**
  * The match singleton will have games, positions, strengths, contestants last trials,
@@ -46,12 +45,11 @@ public class Match {
     private static Match instance = null;
     
     private Match() {
-        NodeSettsProxy proxy = new NodeSettsProxy(); 
-        number_of_games = proxy.NUMBER_OF_GAMES();
-        MAX_STRENGTH = proxy.MAX_STRENGTH();
-        MIN_STRENGTH = proxy.MIN_STRENGTH();
-        NUMBER_OF_TRIALS = proxy.NUMBER_OF_TRIALS();
-        N_CONTESTANTS = proxy.N_CONTESTANTS_TEAM() * proxy.teams().length;
+        number_of_games = NodeSetts.NUMBER_OF_GAMES;
+        MAX_STRENGTH = NodeSetts.MAX_STRENGTH;
+        MIN_STRENGTH = NodeSetts.MIN_STRENGTH;
+        NUMBER_OF_TRIALS = NodeSetts.NUMBER_OF_TRIALS;
+        N_CONTESTANTS = NodeSetts.N_CONTESTANTS_TEAM * NodeSetts.teams.length;
                 
         this.strengths = new HashMap<>();
         this.positionsA = new HashMap<>();

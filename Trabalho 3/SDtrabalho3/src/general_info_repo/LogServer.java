@@ -1,120 +1,96 @@
 package general_info_repo;
 
-import communication.ServerChannel;
-import communication.message.Message;
-import communication.message.MessageException;
-import communication.message.MessageType;
-import communication.proxy.ServerInterface;
-import java.net.SocketException;
+import interfaces.log.LogInterface;
+import java.rmi.AlreadyBoundException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import playground.Playground;
+import interfaces.playground.PlaygroundInterface;
+import interfaces.RegisterInterface;
+import structures.RegistryConfig;
 
 /**
  * Server that extends the Log and will process the events
  * of the server.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
-public class LogServer extends Log implements ServerInterface {
-    
-    private boolean serverEnded;
-    private int numberOfClientsRunning = 3;
-    
-    public LogServer() {
-        super("");
-        this.serverEnded = false;
-    }
-    
-    /**
-     * Method for process and reply the messages received
-     * @throws communication.message.MessageException
-     * @throws java.net.SocketException
-     */
-    @Override
-    public Message processAndReply(Message inMessage, ServerChannel scon) throws MessageException, SocketException {
-        switch(inMessage.getType()){
-            case newGame:
-                if(inMessage.getInteger()== -1){
-                    super.newGame();
-                }else{
-                    super.newGame(inMessage.getInteger());
-                }
-                break;
-            case writeEnd:
-                super.writeEnd();
-                break;
-            case newTrial:
-                super.newTrial();
-                break;
-            case getNumberOfGames:
-                return new Message(MessageType.ACK, super.getNumberOfGames());
-            case declareMatchWinner:
-                super.declareMatchWinner();
-                break;
-            case getTotalNumberOfGames:
-                return new Message(MessageType.ACK, super.getTotalNumberOfGames());
-            case updateRope:
-                String t = inMessage.getString();
-                int i = inMessage.getInteger();
-                super.updateRope(t, i);
-                break;
-            case assertTrialDecision:
-                return new Message(MessageType.ACK, super.assertTrialDecision());
-            case initContestant:
-                super.initContestant(inMessage.getContestantState(), 
-                        inMessage.getString(), 
-                        inMessage.getInteger());
-                break;
-            case setContestantState:
-                super.setContestantState(inMessage.getContestantState(), 
-                        inMessage.getString(),
-                        inMessage.getInteger());
-                break;
-            case initCoachState:
-                super.initCoachState(inMessage.getString(), inMessage.getCoachState());
-                break;
-            case setCoachState:
-                super.setCoachState(inMessage.getString(), inMessage.getCoachState());
-                break;
-            case initRefereeState:
-                super.initRefereeState(inMessage.getRefereeState());
-                break;
-            case setRefereeState:
-                super.setRefereeState(inMessage.getRefereeState());
-                break;
-            case setContestantLastTrial:
-                super.setContestantLastTrial(inMessage.getString(), inMessage.getInteger());
-                break;
-            case refreshStrengths:
-                super.refreshStrengths(inMessage.getString());
-                break;
-            case setPosition:
-                super.setPosition(inMessage.getString(), inMessage.getInteger());
-                break;
-            case removePosition:
-                super.removePosition(inMessage.getString(), inMessage.getInteger());
-                break;
-            case printGameWinner:
-                super.printGameWinner();
-                break;
-            case TERMINATE:
-                this.numberOfClientsRunning--;
-                
-                if(this.numberOfClientsRunning<=0){
-                    super.terminateServers();
-                    System.out.println("Terminating servers...");
-                    serverEnded = true;
-                    super.writeEnd();
-                }
-                break;
-        }
-        
-        return new Message(MessageType.ACK);
-    }
+public class LogServer {
 
     /**
-     * Method for return the service end flag
-     * @return 
+     * The main class for the log server.
+     * @param args No arguments are going to be used.
      */
-    @Override
-    public boolean serviceEnded() {
-        return serverEnded;
+    public static void main(String[] args) {
+        /* obtenção da localização do serviço de registo RMI */
+        
+        // nome do sistema onde está localizado o serviço de registos RMI
+        String rmiRegHostName;
+        
+        // port de escuta do serviço
+        int rmiRegPortNumb;            
+
+        RegistryConfig rc = new RegistryConfig("../../config.ini");
+        rmiRegHostName = rc.registryHost();
+        rmiRegPortNumb = rc.registryPort();
+        
+        /* instanciação e instalação do gestor de segurança */
+        if (System.getSecurityManager() == null) {
+            System.setSecurityManager(new SecurityManager());
+        }
+        
+        /* instanciação do objecto remoto que representa o playground e geração de um stub para ele */
+        Log log = null;
+        LogInterface logInterface = null;
+        log = new Log("");
+        
+        try {
+            logInterface = (LogInterface) UnicastRemoteObject.exportObject(log, rc.playgroundPort());
+        } catch (RemoteException e) {
+            System.out.println("Excepção na geração do stub para o log: " + e.getMessage());
+            System.exit(1);
+        }
+        
+        System.out.println("O stub para o log foi gerado!");
+
+        /* seu registo no serviço de registo RMI */
+        String nameEntryBase = RegistryConfig.registerHandler;
+        String nameEntryObject = RegistryConfig.playgroundNameEntry;
+        Registry registry = null;
+        RegisterInterface reg = null;
+
+        try {
+            registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
+        } catch (RemoteException e) {
+            System.out.println("Excepção na criação do registo RMI: " + e.getMessage());
+            System.exit(1);
+        }
+        
+        System.out.println("O registo RMI foi criado!");
+
+        try {
+            reg = (RegisterInterface) registry.lookup(nameEntryBase);
+        } catch (RemoteException e) {
+            System.out.println("RegisterRemoteObject lookup exception: " + e.getMessage());
+            System.exit(1);
+        } catch (NotBoundException e) {
+            System.out.println("RegisterRemoteObject not bound exception: " + e.getMessage());
+            System.exit(1);
+        }
+
+        try {
+            reg.bind(nameEntryObject, logInterface);
+        } catch (RemoteException e) {
+            System.out.println("Excepção no registo do playground: " + e.getMessage());
+            System.exit(1);
+        } catch (AlreadyBoundException e) {
+            System.out.println("O playground já está registado: " + e.getMessage());
+            System.exit(1);
+        }
+        
+        System.out.println("O playground foi registado!");
     }
+    
 }

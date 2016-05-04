@@ -4,6 +4,8 @@
  */
 package referee_site;
 
+import interfaces.referee_site.RefereeSiteInterface;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,7 +13,7 @@ import java.util.logging.Logger;
  * Referee Site instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
  */
-public class RefereeSite implements ICoach, IContestant, IReferee{
+public class RefereeSite implements RefereeSiteInterface{
     
     private boolean informRefereeA = false, informRefereeB = false;
     private int amDoneCounter = 0, positionedCounter = 0;
@@ -138,5 +140,10 @@ public class RefereeSite implements ICoach, IContestant, IReferee{
     @Override
     public synchronized boolean endOfMatch(){
         return this.matchEnds;
+    }
+
+    @Override
+    public void signalShutdown() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
