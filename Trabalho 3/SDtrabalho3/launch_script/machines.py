@@ -92,6 +92,7 @@ def generate_config():
             config.set("mapping", jars_host["class"]["class"] + "_PORT", jars_host["class"]["port"])
 
     config.set("mapping", "RegistryObject", 22125)
+    config.set("mapping", "group", "sd0102")
 
     with open('configs/config.ini', 'wb') as configfile:
         config.write(configfile)
@@ -173,8 +174,25 @@ def upload(wait=None):
                 remote_path="Public/classes/"+value["class"]["path"],
                 recursive=True)
 
+        scp.put(files="configs/config.ini", remote_path="Public/classes/")
+
         ssh.close()
         scp.close()
+
+    print "Executing . . . in the workstation"
+
+    order = [
+        "Registry",
+        "Log",
+        "Bench",
+        "Playground",
+        "RefereeSite",
+        "Coach",
+        "Contestant",
+        "Referee"
+    ]
+
+
 
     print "ok"
     """

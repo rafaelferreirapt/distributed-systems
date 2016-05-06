@@ -2,45 +2,53 @@
     {
         "class": "Coach",
         "path": "dir_clientSide/coach",
+        "package": "entities.coach",
         "type": "client"
     },
     {
         "class": "Contestant",
         "path": "dir_clientSide/contestant",
+        "package": "entities.contestant",
         "type": "client"
     },
     {
         "class": "Referee",
         "path": "dir_clientSide/referee",
+        "package": "entities.referee",
         "type": "client"
     },
     {
         "class": "Registry",
         "path": "dir_registry",
+        "package": "registry",
         "type": "registry",
         "port": 22124
     },
     {
         "class": "Log",
         "path": "dir_serverSide/general_info_repo",
+        "package": "general_info_repo",
         "type": "server",
         "port": 22123
     },
     {
         "class": "Bench",
         "path": "dir_serverSide/bench",
+        "package": "bench",
         "type": "server",
         "port": 22122
     },
     {
         "class": "Playground",
         "path": "dir_serverSide/playground",
+        "package": "playground",
         "type": "server",
         "port": 22121
     },
     {
         "class": "RefereeSite",
         "path": "dir_serverSide/referee_site",
+        "package": "referee_site",
         "type": "server",
         "port": 22120
     }

@@ -8,48 +8,48 @@ import paramiko
 hosts = [
     {
         "host": "l040101-ws01.ua.pt",
-        "user": "sd0102",
-        "password": "8OP22hFN2K570806411tzL388090k437u68N290d61y7100sxSl68w69M779HSI2oW7D6415g4X2c510u984CO299i5T05xiTU7q87c08XbMx8604Mp16T0S"
+        "user": "sd0209",
+        "password": "qwerty"
     },
     {
         "host": "l040101-ws02.ua.pt",
-        "user": "sd0102",
-        "password": "KuwAU1oEfbeyAaKxOFeEyTPSdQUihxxmJbDOSzeBoHbxzUppSdVitEPqAaRlhpNgHvlffOAHTSkCjOftLlUsjl8tiDgaDgqHOTVypxBlNOrnocdUaNgUaLbp"
+        "user": "sd0209",
+        "password": "qwerty"
     },
     {
         "host": "l040101-ws03.ua.pt",
-        "user": "sd0102",
-        "password": "462o9vX0x18O7CW871s727967pmL58510s26I779Do6gr2o31423020UAV3H9F1iz7r5C196Z0NhYcw3Vws1w5r36yY773W54936L804Fa941yZ1493bc71W"
+        "user": "sd0209",
+        "password": "qwerty"
     },
     {
         "host": "l040101-ws04.ua.pt",
-        "user": "sd0102",
-        "password": "c6wSS1b97Y0287PA9N53S08069AdIn9387aHC515OcFP39xN315DlH9k3Fr798378Nq2o5KodxkG16C15Qd2f8484Mrh2M2xC439fU24c856RA5p995Iz3RJ"
+        "user": "sd0209",
+        "password": "qwerty"
     },
     {
         "host": "l040101-ws05.ua.pt",
-        "user": "sd0102",
-        "password": "8g0cRpI3J5UjEc18CzKtKwdLKy428aQrNh146tJufdK7vaUGL8697h2116z9V1zYiYcemuxqUpsk4innr8lhq1ytsWu92TJO7Q03djRGDir8A7p5e0CiD7tA"
+        "user": "sd0209",
+        "password": "qwerty"
     },
     {
         "host": "l040101-ws06.ua.pt",
-        "user": "sd0102",
-        "password": "8W0dUd0I16E18115HS0260QWoK1743X3736V60zS12H01Qb9XW515qG27a9A16w9elVs1676l36N6g17055954gv8O5l9Y2y25kU0F9Bq8327Mw43f25v7Df"
+        "user": "sd0209",
+        "password": "qwerty"
     },
     {
         "host": "l040101-ws07.ua.pt",
-        "user": "sd0102",
-        "password": "atRyWsqE1Qu1t902ioAhgPnmb9x84VFO6dTje6DZ20Nr81WMh5m3GyB85oh0Es94YwMO1R3zH7No8fJp2x2z5n3gOoDPhFPlWi4R9yY7S126FpF41Z35t0Pv"
+        "user": "sd0209",
+        "password": "qwerty"
     },
     {
         "host": "l040101-ws09.ua.pt",
-        "user": "sd0102",
-        "password": "28wT04L4FjV04kuR25x3qi8D1o1KY975A1R3y5l24xi76x86652Y39rO6T5yU5Fu82u30389008a5N3igip24p75847RqD486mj03854Vuh503135B81kMey"
+        "user": "sd0209",
+        "password": "qwerty"
     },
     {
         "host": "l040101-ws10.ua.pt",
-        "user": "sd0102",
-        "password": "R91qV402bu1F1M6YMBaMQ4VABAvLO0MRPL09oSUcp1IcUiuXtV30se80A1YJGy5yKhE56p23793t9031467W8lZvEi4n7atB7cCQ435cOmz204DE430102kJ"
+        "user": "sd0209",
+        "password": "qwerty"
     }
 ]
 
@@ -132,8 +132,6 @@ def send_jar(host, jar):
     sftp.put(os.getcwd() + "/dist/SDTrabalho2.jar", "SDTrabalho2.jar")
     sftp.put(os.getcwd() + "/libs/json-simple-1.1.jar", "libs/json-simple-1.1.jar")
     sftp.put(os.getcwd() + "/libs/org.json-20120521.jar", "libs/org.json-20120521.jar")
-
-    ssh.exec_command("chmod -R 600 *")
 
     return [{
         "class": jar,

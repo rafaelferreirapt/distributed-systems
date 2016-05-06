@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 set -x
 echo "	@ Compiling all source code "
-find . -name "*.class" -exec rm -rf {} \;
-find . -type d -empty -delete
+find javas -name "*.class" -exec rm -rf {} \;
+find javas -type d -empty -delete
 find ../src -name "*.java" > sources.txt
 javac @sources.txt -d .
 rm sources.txt
-
-rm -rf javas
 
 mkdir -p javas/dir_clientSide/coach
 mkdir -p javas/dir_clientSide/contestant
