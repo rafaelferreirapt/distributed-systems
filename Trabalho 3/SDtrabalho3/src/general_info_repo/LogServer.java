@@ -39,13 +39,13 @@ public class LogServer {
             System.setSecurityManager(new SecurityManager());
         }
         
-        /* instanciação do objecto remoto que representa o playground e geração de um stub para ele */
+        /* instanciação do objecto remoto que representa o log e geração de um stub para ele */
         Log log = null;
         LogInterface logInterface = null;
         log = new Log("");
         
         try {
-            logInterface = (LogInterface) UnicastRemoteObject.exportObject(log, rc.playgroundPort());
+            logInterface = (LogInterface) UnicastRemoteObject.exportObject(log, rc.loggingPort());
         } catch (RemoteException e) {
             System.out.println("Excepção na geração do stub para o log: " + e.getMessage());
             System.exit(1);
@@ -55,7 +55,7 @@ public class LogServer {
 
         /* seu registo no serviço de registo RMI */
         String nameEntryBase = RegistryConfig.registerHandler;
-        String nameEntryObject = RegistryConfig.playgroundNameEntry;
+        String nameEntryObject = RegistryConfig.logNameEntry;
         Registry registry = null;
         RegisterInterface reg = null;
 
@@ -81,14 +81,14 @@ public class LogServer {
         try {
             reg.bind(nameEntryObject, logInterface);
         } catch (RemoteException e) {
-            System.out.println("Excepção no registo do playground: " + e.getMessage());
+            System.out.println("Excepção no registo do log: " + e.getMessage());
             System.exit(1);
         } catch (AlreadyBoundException e) {
-            System.out.println("O playground já está registado: " + e.getMessage());
+            System.out.println("O log já está registado: " + e.getMessage());
             System.exit(1);
         }
         
-        System.out.println("O playground foi registado!");
+        System.out.println("O log foi registado!");
     }
     
 }

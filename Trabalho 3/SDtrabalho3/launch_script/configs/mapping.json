@@ -66,7 +66,7 @@
         "package": "referee_site",
         "type": "server",
         "port": 22120,
-        "command": ["cd Public/classes/; source config.bash; cd dir_serverSide/referee_site; ./serverSide_com.sh &> output"],
+        "command": ["cd Public/classes/; source config.bash; ./serverSide_com.sh &> output"],
         "sleep": 4
     }
 ]

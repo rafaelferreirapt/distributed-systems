@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import os
 import sys
 import json
@@ -17,7 +16,15 @@ from colorama import Fore, Back, Style
 def generate_config():
     global ssh
 
-    print "See what hosts are up to calculate the architecture of the solution"
+    with open('configs/mapping.json') as json_data:
+        jars = json.load(json_data)
+        json_data.close()
+
+    with open('configs/hosts.json') as json_data:
+        hosts = json.load(json_data)
+        json_data.close()
+
+    print Style.BRIGHT + Fore.GREEN + "See what hosts are up to calculate the architecture of the solution" + Style.RESET_ALL
 
     for host in hosts:
         if not is_up_host(host["host"]):
@@ -35,7 +42,7 @@ def generate_config():
     jars_hosts = []
 
     if len(hosts) == 0:
-        print "There are no machines active!"
+        print Fore.RED + "There are no machines active!" + Style.RESET_ALL
         exit(1)
     elif len(jars) <= len(hosts):
         for host in hosts:
@@ -63,7 +70,7 @@ def generate_config():
                 "host": hosts[len(hosts) - 1]
             }]
 
-    print "Save the hosts in a config file"
+    print Fore.GREEN + "Save the hosts in a config file! OK :D" + Style.RESET_ALL
 
     config = ConfigParser.RawConfigParser()
     config.add_section("mapping")
@@ -110,33 +117,21 @@ def generate_config():
 
 
 def upload():
-    call(["sh", "build.sh"])
+    print Style.DIM + Fore.BLUE + "Build and get ready: " + Style.RESET_ALL
 
+    call(["sh", "build.sh"])
     lst = parse_config()
 
     # clean
-    print "Cleaning the remote server"
-
-    for key, value in lst.iteritems():
-        ssh.connect(value["host"]["host"], username=value["host"]["user"], password=value["host"]["password"])
-
-        print value["host"]["host"]
-        print("rm -rf Public/*")
-        ssh.exec_command("rm -rf Public/*")
-
-        print("killall java")
-        ssh.exec_command("killall java")
-        ssh.exec_command("ps aux | grep java | grep \""+value["host"]["user"] +
-                         "\" | grep -v \"grep\" | awk '/ /{print $2}' | xargs kill -9")
-        ssh.close()
+    kill_all()
 
     # Upload folders on the remote server
-    print "Upload folders on the remote server"
+    print Style.DIM + Fore.BLUE + "Upload folders on the remote server" + Style.RESET_ALL
 
     for key, value in lst.iteritems():
         ssh.connect(value["host"]["host"], username=value["host"]["user"], password=value["host"]["password"])
 
-        print value["host"]["host"]
+        print Style.DIM + value["host"]["host"] + Style.RESET_ALL + " - " + Fore.LIGHTGREEN_EX + key + Style.RESET_ALL
 
         scp = SCPClient(ssh.get_transport())
 
@@ -144,100 +139,98 @@ def upload():
 
         for file_up in [f for f in os.listdir("javas/"+value["class"]["path"])
                         if os.path.isfile(os.path.join("javas/"+value["class"]["path"], f))]:
-            print os.path.join("javas/"+value["class"]["path"], file_up)
+            print Fore.LIGHTGREEN_EX + os.path.join("javas/"+value["class"]["path"], file_up) + Style.RESET_ALL
             scp.put(files=os.path.join("javas/"+value["class"]["path"], file_up),
                     remote_path="Public/classes/"+file_up,
                     recursive=True)
 
-        scp.put(files="java/",
+        print Fore.LIGHTGREEN_EX + "Public/classes/java.tar.gz" + Style.RESET_ALL
+        scp.put(files="java.tar.gz",
                 remote_path="Public/classes/",
                 recursive=True)
 
+        print Fore.LIGHTGREEN_EX + "cd Public/classes; tar -zxvf java.tar.gz -C .; mv java/* .; " \
+                                   "rm -rf java; rm java.tar.gz" + Style.RESET_ALL
+        ssh.exec_command("cd Public/classes; tar -zxvf java.tar.gz -C .; mv java/* .; rm -rf java; rm java.tar.gz")
+
+        print Fore.LIGHTGREEN_EX + "Public/classes/config.ini" + Style.RESET_ALL
         scp.put(files="configs/config_up.ini", remote_path="Public/classes/config.ini")
+
+        print Fore.LIGHTGREEN_EX + "Public/classes/config.bash" + Style.RESET_ALL
         scp.put(files="configs/config.bash", remote_path="Public/classes/")
 
         if value["class"]["class"] == "Registry":
+            print Fore.LIGHTGREEN_EX + "Public/classes/set_rmiregistry.sh" + Style.RESET_ALL
+            print Fore.LIGHTGREEN_EX + "Public/classes/set_rmiregistry_alt.sh" + Style.RESET_ALL
             scp.put(files=["set_rmiregistry.sh", "set_rmiregistry_alt.sh"],
                     remote_path="Public/classes/")
 
         ssh.close()
         scp.close()
 
-    print "Executing . . . in the workstation"
+    print Style.DIM + Fore.BLUE + "Executing . . . in the workstation" + Style.RESET_ALL
 
-    for server in order:
-        exc = lst[server]
-        ssh.connect(exc["host"]["host"],
-                    username=exc["host"]["user"],
-                    password=exc["host"]["password"])
+    for key, value in lst.iteritems():
+        print Style.DIM + value["host"]["host"] + Style.RESET_ALL + " - " + Fore.LIGHTGREEN_EX + key + Style.RESET_ALL
 
+        ssh.connect(value["host"]["host"],
+                    username=value["host"]["user"],
+                    password=value["host"]["password"])
+
+        print Fore.LIGHTGREEN_EX + "find . -name '*.sh' | xargs chmod u+x" + Style.RESET_ALL
         ssh.exec_command("find . -name '*.sh' | xargs chmod u+x")
 
-        print exc["host"]["host"]
-
-        for cmd in exc["class"]["command"]:
-            print cmd
+        for cmd in value["class"]["command"]:
+            print Fore.LIGHTGREEN_EX + cmd + Style.RESET_ALL
             ssh.exec_command(cmd)
-            time.sleep(exc["class"]["sleep"])
+            print Fore.LIGHTGREEN_EX + 'time.sleep(value["class"]["sleep"])' + Style.RESET_ALL
+            time.sleep(value["class"]["sleep"])
 
-    print "done!"
+    print Fore.GREEN + Style.DIM + "DONE!" + Style.RESET_ALL
 
 
-def get_log(log_host_hostname):
-    if len(log_host_hostname) == 1:
-        log_host_hostname = log_host_hostname[0]
-
-    for log_host in hosts:
-        if log_host["host"] == log_host_hostname:
-            break
+def get_log():
+    lst = parse_config()
 
     if not os.path.exists("logs"):
         os.makedirs("logs")
     try:
-        ssh.connect(log_host["host"], username=log_host["user"], password=log_host["password"])
+        ssh.connect(lst["Log"]["host"]["host"], username=lst["Log"]["host"]["user"], password=lst["Log"]["host"]["password"])
         ssh.exec_command("echo \"Hello!\"")
     except Exception:
-        print "Unable to connect to the host: %s" % log_host["host"]
+        print "Unable to connect to the host: %s" % lst["Log"]["host"]
         return
 
     sftp = ssh.open_sftp()
-    dir = sftp.listdir(".")
+    dir = sftp.listdir("Public/classes")
 
     for f in dir:
         if str(f).endswith(".log"):
             log_file = str(f)
-            sftp.get(log_file, "logs/" + log_file)
+            print Fore.GREEN + Style.DIM + log_file + Style.RESET_ALL
+            sftp.get("Public/classes/" + log_file, "logs/" + log_file)
+            call(["open", "logs/" + log_file])
 
 
 def kill_all():
     global ssh
 
-    for host in hosts:
+    lst = parse_config()
 
-        if not is_up_host(host["host"]):
-            hosts.remove(host)
-            continue
+    print Style.DIM + Fore.BLUE + "Cleaning the remote server" + Style.RESET_ALL
 
-        try:
-            ssh.connect(host["host"], username=host["user"], password=host["password"])
-            ssh.exec_command("echo \"Hello!\"")
-        except Exception:
-            hosts.remove(host)
+    for key, value in lst.iteritems():
+        ssh.connect(value["host"]["host"], username=value["host"]["user"], password=value["host"]["password"])
 
-    for host in hosts:
-        try:
-            ssh.connect(host["host"], username=host["user"], password=host["password"])
-            ssh.exec_command("echo \"Hello!\"")
-        except Exception:
-            continue
-
-        print host["host"]
-
-        print("rm -rf Public/*")
+        print Style.DIM + value["host"]["host"] + Style.RESET_ALL + " - " + Fore.LIGHTGREEN_EX + key + Style.RESET_ALL
+        print Fore.GREEN + "rm -rf Public/*" + Style.RESET_ALL
         ssh.exec_command("rm -rf Public/*")
 
-        print("killall java")
-        ssh.exec_command("killall java")
+        print(Fore.GREEN + "ps aux | grep java | grep \"" + value["host"]["user"] +
+              "\" | grep -v \"grep\" | awk '/ /{print $2}' | xargs kill -9" + Style.RESET_ALL)
+        ssh.exec_command("ps aux | grep java | grep \"" + value["host"]["user"] +
+                         "\" | grep -v \"grep\" | awk '/ /{print $2}' | xargs kill -9")
+        ssh.close()
 
 
 def show_logs(command="tail"):
@@ -248,19 +241,15 @@ def show_logs(command="tail"):
     print Style.BRIGHT + "\nSHOW LOGS\n" + Style.RESET_ALL
 
     for key, value in lst.iteritems():
-        if not is_up_host(value["host"]["host"]):
-            continue
-
         try:
             ssh.connect(value["host"]["host"], username=value["host"]["user"], password=value["host"]["password"])
-            ssh.exec_command("echo \"Hello!\"")
+
+            if len(command) == 1:
+                stdin, stdout, stderr = ssh.exec_command("find . -name 'output*' -exec " + command[0] + " {} \;")
+            else:
+                stdin, stdout, stderr = ssh.exec_command("find . -name 'output*' -exec " + command + " {} \;")
         except Exception:
             continue
-
-        if len(command) == 1:
-            stdin, stdout, stderr = ssh.exec_command("find . -name 'output*' -exec " + command[0] + " {} \;")
-        else:
-            stdin, stdout, stderr = ssh.exec_command("find . -name 'output*' -exec " + command + " {} \;")
 
         print Style.DIM + value["host"]["host"] + Style.RESET_ALL + " - " + Fore.LIGHTGREEN_EX + key + Style.RESET_ALL
 
@@ -351,6 +340,14 @@ def parse_config():
         }
     }.items(), key=lambda x: x[1]["order"]))
 
+    with open('configs/mapping.json') as json_data:
+        jars = json.load(json_data)
+        json_data.close()
+
+    with open('configs/hosts.json') as json_data:
+        hosts = json.load(json_data)
+        json_data.close()
+
     for key, value in lst.iteritems():
         for host in hosts:
             if value["hostname"] == host["host"]:
@@ -392,14 +389,6 @@ if __name__ == '__main__':
     if len(sys.argv) <= 1:
         print('Available functions are:\n' + repr(functions.keys()))
         exit(1)
-
-    with open('configs/hosts.json') as json_data:
-        hosts = json.load(json_data)
-        json_data.close()
-
-    with open('configs/mapping.json') as json_data:
-        jars = json.load(json_data)
-        json_data.close()
 
     ssh = paramiko.SSHClient()
     ssh.load_system_host_keys()
