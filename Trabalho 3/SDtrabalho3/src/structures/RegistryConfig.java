@@ -91,7 +91,7 @@ public class RegistryConfig {
      * @return parameter value
      */
     public int objectPort() {
-        return Integer.parseInt(prop.getProperty("registryobject_port"));
+        return Integer.parseInt(prop.getProperty("registryobject"));
     }
     /** 
      * Loads the parameter LOGGING_PORT from the configuration file.

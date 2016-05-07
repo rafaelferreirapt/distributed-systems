@@ -36,7 +36,7 @@ public class BenchServer {
         // port de escuta do serviço
         int rmiRegPortNumb;            
 
-        RegistryConfig rc = new RegistryConfig("../../config.ini");
+        RegistryConfig rc = new RegistryConfig("config.ini");
         rmiRegHostName = rc.registryHost();
         rmiRegPortNumb = rc.registryPort();
         

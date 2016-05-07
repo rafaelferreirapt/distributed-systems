@@ -121,9 +121,9 @@ def send_jar(host, jar):
     print "Jar: " + jar["class"]
     print "Sending the proper jar to the workstation"
 
-    ssh.connect(host["host"], username=host["user"], password=host["password"])
+    ssh.connect
+    ssh.exec_command("rm -rf *")(host["host"], username=host["user"], password=host["password"])
     sftp = ssh.open_sftp()
-    ssh.exec_command("rm -rf *")
 
     while u'libs\n' not in ssh.exec_command("ls")[1].readlines():
         ssh.exec_command("mkdir libs")

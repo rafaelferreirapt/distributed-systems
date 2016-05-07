@@ -5,29 +5,10 @@ import sys
 import json
 import paramiko
 import ConfigParser
-from subprocess import call
 from scp import SCPClient
-
-
-def send_jar(host, jar):
-    """
-    print "Jar: " + jar["class"]
-    print "Sending the proper jar to the workstation"
-
-    ssh.connect(host["host"], username=host["user"], password=host["password"])
-    sftp = ssh.open_sftp()
-    ssh.exec_command("rm -rf *")
-
-    while u'libs\n' not in ssh.exec_command("ls")[1].readlines():
-        ssh.exec_command("mkdir libs")
-
-    ssh.exec_command("killall java")
-    sftp.put(os.getcwd() + "/dist/SDtrabalho3.jar", "SDtrabalho3.jar")
-    sftp.put(os.getcwd() + "/libs/json-simple-1.1.jar", "libs/json-simple-1.1.jar")
-    sftp.put(os.getcwd() + "/libs/org.json-20120521.jar", "libs/org.json-20120521.jar")
-
-    ssh.exec_command("chmod -R 600 *")
-    """
+from subprocess import call
+import time
+import socket
 
 
 def generate_config():
@@ -96,9 +77,38 @@ def generate_config():
 
     with open('configs/config.ini', 'wb') as configfile:
         config.write(configfile)
+        configfile.close()
+
+    # to upload
+    config_up = ConfigParser.RawConfigParser()
+    config_up.add_section("mapping")
+
+    for jars_host in jars_hosts:
+        ip = socket.gethostbyname(jars_host["host"]["host"])
+
+        config_up.set("mapping", jars_host["class"]["class"] + "_HOST", ip)
+        if jars_host["class"]["type"] != "client":
+            config_up.set("mapping", jars_host["class"]["class"] + "_PORT", jars_host["class"]["port"])
+
+    config_up.set("mapping", "RegistryObject", 22125)
+    config_up.set("mapping", "group", jars_hosts[0]["host"]["user"])
+
+    with open('configs/config_up.ini', 'wb') as configfile:
+        config_up.write(configfile)
+        configfile.close()
+
+    with open('configs/config_up.ini', 'r+') as configfile:
+        data = configfile.read()
+        configfile.close()
+
+    with open('configs/config.bash', 'w+') as configfile:
+        data = data.replace(" ", "")
+        data = data.replace("[mapping]", "")
+        configfile.write(data)
+        configfile.close()
 
 
-def upload(wait=None):
+def upload():
     call(["sh", "build.sh"])
 
     settings = ConfigParser.ConfigParser()
@@ -159,6 +169,7 @@ def upload(wait=None):
 
         print("killall java")
         ssh.exec_command("killall java")
+        ssh.exec_command("ps aux | grep java | grep \""+value["host"]["user"]+"\" | grep -v \"grep\" | awk '/ /{print $2}' | xargs kill -9")
         ssh.close()
 
     # Upload folders on the remote server
@@ -170,11 +181,26 @@ def upload(wait=None):
         print value["host"]["host"]
 
         scp = SCPClient(ssh.get_transport())
-        scp.put(files="javas/"+value["class"]["path"],
-                remote_path="Public/classes/"+value["class"]["path"],
+
+        ssh.exec_command("mkdir -p Public/classes/"+value["class"]["path"]+"/")
+
+        for file_up in [f for f in os.listdir("javas/"+value["class"]["path"])
+                        if os.path.isfile(os.path.join("javas/"+value["class"]["path"], f))]:
+            print os.path.join("javas/"+value["class"]["path"], file_up)
+            scp.put(files=os.path.join("javas/"+value["class"]["path"], file_up),
+                    remote_path="Public/classes/"+file_up,
+                    recursive=True)
+
+        scp.put(files="java/",
+                remote_path="Public/classes/",
                 recursive=True)
 
-        scp.put(files="configs/config.ini", remote_path="Public/classes/")
+        scp.put(files="configs/config_up.ini", remote_path="Public/classes/config.ini")
+        scp.put(files="configs/config.bash", remote_path="Public/classes/")
+
+        if value["class"]["class"] == "Registry":
+            scp.put(files=["set_rmiregistry.sh", "set_rmiregistry_alt.sh"],
+                    remote_path="Public/classes/")
 
         ssh.close()
         scp.close()
@@ -192,53 +218,22 @@ def upload(wait=None):
         "Referee"
     ]
 
+    for server in order:
+        exc = lst[server]
+        ssh.connect(exc["host"]["host"],
+                    username=exc["host"]["user"],
+                    password=exc["host"]["password"])
 
+        ssh.exec_command("find . -name '*.sh' | xargs chmod u+x")
 
-    print "ok"
-    """
-    for json_host in jars_hosts:
+        print exc["host"]["host"]
 
-        sftp = ssh.open_sftp()
-        sftp.put(os.getcwd() + "/hosts.json", "hosts.json")
+        for cmd in exc["class"]["command"]:
+            print cmd
+            ssh.exec_command(cmd)
+            time.sleep(exc["class"]["sleep"])
 
-    jars_hosts = sorted(jars_hosts, key=lambda jar_host: jar_host["class"]["order"])
-
-    print "Executing each jar file on the proper workstation"
-
-    log_connection = None
-
-    for jars_host in jars_hosts:
-        print "[%s]" % (jars_host["host"]["host"])
-
-        try:
-            ssh.connect(jars_host["host"]["host"], username=jars_host["host"]["user"],
-                        password=jars_host["host"]["password"])
-            ssh.exec_command("echo \"Hello!\"")
-        except Exception:
-            continue
-
-        print jars_host["class"]["command"] % (
-            jars_host["class"]["package"] + "." + jars_host["class"]["class"] + "Run")
-        stdin, stdout, stderr = ssh.exec_command(
-            jars_host["class"]["command"] % (jars_host["class"]["package"] + "." + jars_host["class"]["class"] + "Run"))
-
-        if jars_host["class"]["class"] == "Log":
-            log_connection = stdout.channel
-
-    if len(wait) == 1 and wait[0] == "not":
-        print "Bye! Don't forget to call 'python machines.py show_logs'\n" + \
-              " and then: 'python machines.py get_log " + log_host["host"]["host"] + "'"
-        exit(1)
-
-    print "Waiting for the simulation end!"
-
-    if log_connection.recv_exit_status() == 0:
-        print "Simulation ended, copying log file to the local machine"
-
-        get_log(log_host["host"]["host"])
-    else:
-        print "UPS! Something went wrong..."
-    """
+    print "done!"
 
 
 def get_log(log_host_hostname):
@@ -302,21 +297,15 @@ def kill_all():
 def show_logs(command="tail"):
     global ssh
 
+    print "\nSHOW LOGS\n"
+
     for host in hosts:
         hostname = host["host"]
         response = os.system("ping -c 1 -W 1 " + hostname)
 
         if response != 0:
-            hosts.remove(host)
             continue
-        try:
-            ssh.connect(host["host"], username=host["user"], password=host["password"])
-        except Exception:
-            hosts.remove(host)
 
-    print "\nSHOW LOGS\n"
-
-    for host in hosts:
         try:
             ssh.connect(host["host"], username=host["user"], password=host["password"])
             ssh.exec_command("echo \"Hello!\"")
@@ -324,9 +313,9 @@ def show_logs(command="tail"):
             continue
 
         if len(command) == 1:
-            stdin, stdout, stderr = ssh.exec_command(command[0] + " output")
+            stdin, stdout, stderr = ssh.exec_command("find . -name 'output*' -exec " + command[0] + " {} \;")
         else:
-            stdin, stdout, stderr = ssh.exec_command(command + " output")
+            stdin, stdout, stderr = ssh.exec_command("find . -name 'output*' -exec " + command + " {} \;")
 
         print host["host"]
         print stdout.readlines()
