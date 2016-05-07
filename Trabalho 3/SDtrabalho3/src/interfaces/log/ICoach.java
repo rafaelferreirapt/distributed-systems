@@ -4,6 +4,7 @@
  */
 package interfaces.log;
 
+import java.rmi.RemoteException;
 import structures.CoachState;
 
 /**
@@ -16,19 +17,22 @@ public interface ICoach {
      *
      * @param team
      * @param state
+     * @throws java.rmi.RemoteException
      */
-    public void initCoachState(String team, CoachState state);
+    public void initCoachState(String team, CoachState state) throws RemoteException;
     
     /**
      *
      * @param team
+     * @throws java.rmi.RemoteException
      */
-    public void refreshStrengths(String team);
+    public void refreshStrengths(String team) throws RemoteException;
     
     /**
      *
      * @param team
      * @param state
+     * @throws java.rmi.RemoteException
      */
-    public void setCoachState(String team, CoachState state);
+    public void setCoachState(String team, CoachState state) throws RemoteException;
 }

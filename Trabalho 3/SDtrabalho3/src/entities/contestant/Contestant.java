@@ -4,6 +4,9 @@
  */
 package entities.contestant;
 
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import structures.ContestantState;
 
 
@@ -48,7 +51,11 @@ public class Contestant  extends Thread {
     
         state = ContestantState.SEAT_AT_THE_BENCH;
         
-        this.log.initContestant(this.state,this.team, this.id);
+        try {
+            this.log.initContestant(this.state,this.team, this.id);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Contestant.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
@@ -69,45 +76,49 @@ public class Contestant  extends Thread {
     
     @Override
     public void run(){
-        while(!referee_site.endOfMatch()){
-            switch(this.state){
-                case DO_YOUR_BEST:
-                    this.playground.pullTheRope(this.id, this.team);
-                    
-                    this.log.setContestantLastTrial(this.team, this.id);
-                    
-                    this.referee_site.amDone();
+        try {
+            while(!referee_site.endOfMatch()){
+                    switch(this.state){
+                        case DO_YOUR_BEST:
+                            this.playground.pullTheRope(this.id, this.team);
 
-                    this.playground.waitForAssertTrialDecision();
-                    this.log.removePosition(this.team, this.id);
-                    
-                    this.bench.seatDown(this.team);
+                            this.log.setContestantLastTrial(this.team, this.id);
 
-                    this.state = ContestantState.SEAT_AT_THE_BENCH;
+                            this.referee_site.amDone();
 
-                    break;
-                case SEAT_AT_THE_BENCH:
+                            this.playground.waitForAssertTrialDecision();
+                            this.log.removePosition(this.team, this.id);
 
-                    this.bench.waitForCallContestants(this.team, this.id); // espera que o treinador o chame
+                            this.bench.seatDown(this.team);
 
-                    if(this.referee_site.endOfMatch()){
-                        break;
+                            this.state = ContestantState.SEAT_AT_THE_BENCH;
+
+                            break;
+                        case SEAT_AT_THE_BENCH:
+
+                            this.bench.waitForCallContestants(this.team, this.id); // espera que o treinador o chame
+
+                            if(this.referee_site.endOfMatch()){
+                                break;
+                            }
+
+                            this.bench.followCoachAdvice(this.team, this.id); // o ultimo informa o utilizador
+                            this.log.setPosition(this.team, this.id);
+
+                            this.state = ContestantState.STAND_IN_POSITION;
+                            break;
+                        case STAND_IN_POSITION:
+                            this.referee_site.positioned();
+                            this.playground.waitForStartTrial();
+                            this.state = ContestantState.DO_YOUR_BEST;
+                            break;
                     }
-                    
-                    this.bench.followCoachAdvice(this.team, this.id); // o ultimo informa o utilizador
-                    this.log.setPosition(this.team, this.id);
-
-                    this.state = ContestantState.STAND_IN_POSITION;
-                    break;
-                case STAND_IN_POSITION:
-                    this.referee_site.positioned();
-                    this.playground.waitForStartTrial();
-                    this.state = ContestantState.DO_YOUR_BEST;
-                    break;
+                    if(!referee_site.endOfMatch()){
+                        this.log.setContestantState(state, team, this.id);
+                    }
             }
-            if(!referee_site.endOfMatch()){
-                this.log.setContestantState(state, team, this.id);
-            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(Contestant.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

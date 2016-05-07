@@ -9,6 +9,9 @@ from scp import SCPClient
 from subprocess import call
 import time
 import socket
+import subprocess
+from collections import OrderedDict
+from colorama import Fore, Back, Style
 
 
 def generate_config():
@@ -17,12 +20,10 @@ def generate_config():
     print "See what hosts are up to calculate the architecture of the solution"
 
     for host in hosts:
-        hostname = host["host"]
-        response = os.system("ping -c 1 -W 1 " + hostname)
-
-        if response != 0:
+        if not is_up_host(host["host"]):
             hosts.remove(host)
             continue
+
         try:
             ssh.connect(host["host"], username=host["user"], password=host["password"])
             ssh.exec_command("echo \"Hello!\"")
@@ -111,51 +112,7 @@ def generate_config():
 def upload():
     call(["sh", "build.sh"])
 
-    settings = ConfigParser.ConfigParser()
-    settings.read('configs/config.ini')
-
-    lst = {
-        "Coach": {
-            "hostname": settings.get("mapping", "coach_host"),
-        },
-        "Contestant": {
-            "hostname": settings.get("mapping", "contestant_host"),
-        },
-        "Referee": {
-            "hostname": settings.get("mapping", "referee_host"),
-        },
-        "Registry": {
-            "hostname": settings.get("mapping", "registry_host"),
-            "port": settings.get("mapping", "registry_port"),
-        },
-        "Log": {
-            "hostname": settings.get("mapping", "log_host"),
-            "port": settings.get("mapping", "log_port"),
-        },
-        "Bench": {
-            "hostname": settings.get("mapping", "bench_host"),
-            "port": settings.get("mapping", "bench_port"),
-        },
-        "Playground": {
-            "hostname": settings.get("mapping", "playground_host"),
-            "port": settings.get("mapping", "playground_port"),
-        },
-        "RefereeSite": {
-            "hostname": settings.get("mapping", "refereesite_host"),
-            "port": settings.get("mapping", "refereesite_port"),
-        }
-    }
-
-    for key, value in lst.iteritems():
-        for host in hosts:
-            if value["hostname"] == host["host"]:
-                value["host"] = host
-                break
-
-        for jar in jars:
-            if key == jar["class"]:
-                value["class"] = jar
-                break
+    lst = parse_config()
 
     # clean
     print "Cleaning the remote server"
@@ -169,7 +126,8 @@ def upload():
 
         print("killall java")
         ssh.exec_command("killall java")
-        ssh.exec_command("ps aux | grep java | grep \""+value["host"]["user"]+"\" | grep -v \"grep\" | awk '/ /{print $2}' | xargs kill -9")
+        ssh.exec_command("ps aux | grep java | grep \""+value["host"]["user"] +
+                         "\" | grep -v \"grep\" | awk '/ /{print $2}' | xargs kill -9")
         ssh.close()
 
     # Upload folders on the remote server
@@ -206,17 +164,6 @@ def upload():
         scp.close()
 
     print "Executing . . . in the workstation"
-
-    order = [
-        "Registry",
-        "Log",
-        "Bench",
-        "Playground",
-        "RefereeSite",
-        "Coach",
-        "Contestant",
-        "Referee"
-    ]
 
     for server in order:
         exc = lst[server]
@@ -266,12 +213,11 @@ def kill_all():
     global ssh
 
     for host in hosts:
-        hostname = host["host"]
-        response = os.system("ping -c 1 -W 1 " + hostname)
 
-        if response != 0:
+        if not is_up_host(host["host"]):
             hosts.remove(host)
             continue
+
         try:
             ssh.connect(host["host"], username=host["user"], password=host["password"])
             ssh.exec_command("echo \"Hello!\"")
@@ -297,17 +243,16 @@ def kill_all():
 def show_logs(command="tail"):
     global ssh
 
-    print "\nSHOW LOGS\n"
+    lst = parse_config()
 
-    for host in hosts:
-        hostname = host["host"]
-        response = os.system("ping -c 1 -W 1 " + hostname)
+    print Style.BRIGHT + "\nSHOW LOGS\n" + Style.RESET_ALL
 
-        if response != 0:
+    for key, value in lst.iteritems():
+        if not is_up_host(value["host"]["host"]):
             continue
 
         try:
-            ssh.connect(host["host"], username=host["user"], password=host["password"])
+            ssh.connect(value["host"]["host"], username=value["host"]["user"], password=value["host"]["password"])
             ssh.exec_command("echo \"Hello!\"")
         except Exception:
             continue
@@ -317,8 +262,14 @@ def show_logs(command="tail"):
         else:
             stdin, stdout, stderr = ssh.exec_command("find . -name 'output*' -exec " + command + " {} \;")
 
-        print host["host"]
-        print stdout.readlines()
+        print Style.DIM + value["host"]["host"] + Style.RESET_ALL + " - " + Fore.LIGHTGREEN_EX + key + Style.RESET_ALL
+
+        output = str(stdout.readlines())
+
+        if "exception" in output.lower() or "not" in output.lower() or "no" in output.lower():
+            print Fore.RED + output + Style.RESET_ALL
+        else:
+            print Fore.GREEN + output + Style.RESET_ALL
 
 
 def command(command_to="tail"):
@@ -354,6 +305,80 @@ def command(command_to="tail"):
 
         print host["host"]
         print stdout.readlines()
+
+
+def parse_config():
+    settings = ConfigParser.ConfigParser()
+    settings.read('configs/config.ini')
+
+    lst = OrderedDict(sorted({
+        "Coach": {
+            "hostname": settings.get("mapping", "coach_host"),
+            "order": 6
+        },
+        "Contestant": {
+            "hostname": settings.get("mapping", "contestant_host"),
+            "order": 7
+        },
+        "Referee": {
+            "hostname": settings.get("mapping", "referee_host"),
+            "order": 8
+        },
+        "Registry": {
+            "hostname": settings.get("mapping", "registry_host"),
+            "port": settings.get("mapping", "registry_port"),
+            "order": 1
+        },
+        "Log": {
+            "hostname": settings.get("mapping", "log_host"),
+            "port": settings.get("mapping", "log_port"),
+            "order": 2
+        },
+        "Bench": {
+            "hostname": settings.get("mapping", "bench_host"),
+            "port": settings.get("mapping", "bench_port"),
+            "order": 3
+        },
+        "Playground": {
+            "hostname": settings.get("mapping", "playground_host"),
+            "port": settings.get("mapping", "playground_port"),
+            "order": 4
+        },
+        "RefereeSite": {
+            "hostname": settings.get("mapping", "refereesite_host"),
+            "port": settings.get("mapping", "refereesite_port"),
+            "order": 5
+        }
+    }.items(), key=lambda x: x[1]["order"]))
+
+    for key, value in lst.iteritems():
+        for host in hosts:
+            if value["hostname"] == host["host"]:
+                value["host"] = host
+                break
+
+        for jar in jars:
+            if key == jar["class"]:
+                value["class"] = jar
+                break
+
+    return lst
+
+
+def is_up_host(ip_address):
+    with open(os.devnull, 'w') as DEVNULL:
+        try:
+            subprocess.check_call(
+
+                ['ping', '-c', '1', '-W', '1', ip_address],
+                stdout=DEVNULL,  # suppress output
+                stderr=DEVNULL
+            )
+            is_up = True
+        except subprocess.CalledProcessError:
+            is_up = False
+
+    return is_up
 
 
 if __name__ == '__main__':

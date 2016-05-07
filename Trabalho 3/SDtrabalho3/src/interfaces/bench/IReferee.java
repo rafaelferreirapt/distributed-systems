@@ -4,6 +4,8 @@
  */
 package interfaces.bench;
 
+import java.rmi.RemoteException;
+
 /**
  * Referee interface of Bench instance.
  * @author António Ferreira, 67405; Rodrigo Cunha, 67800
@@ -17,18 +19,21 @@ public interface IReferee {
      * in the Team A or B and set the coaches wait for call trial to zero. The
      * coachs are sleeping and need the flag callTrialTaken true to procede. In the
      * final there is a notifyAll() to wake up all the entities in the Bench.
+     * @throws java.rmi.RemoteException
      */
-    public void callTrial();
+    public void callTrial() throws RemoteException;
 
     /**
      * The referee will waken up the coaches with the trialDecisionTaken = true and 
      * with the notifyAll().
+     * @throws java.rmi.RemoteException
      */
-    public void assertTrialDecision();
+    public void assertTrialDecision() throws RemoteException;
     
     /**
      * This method will wakeup all the entities in the bench and declare that
      * the match was ended.
+     * @throws java.rmi.RemoteException
      */
-    public void wakeUp();
+    public void wakeUp() throws RemoteException;
 }

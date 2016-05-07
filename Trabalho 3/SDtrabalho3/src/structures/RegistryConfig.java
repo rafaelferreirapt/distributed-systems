@@ -20,7 +20,7 @@ public class RegistryConfig {
     /**
      * Logging name entry on the registry.
      */
-    public static String logNameEntry = "LoggingInt";
+    public static String logNameEntry = "LogInt";
 
     /**
      * Bench name entry on the registry.

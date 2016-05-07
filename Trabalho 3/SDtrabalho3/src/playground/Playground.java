@@ -102,7 +102,11 @@ public class Playground implements PlaygroundInterface{
             Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        log.updateRope(team, id);
+        try {
+            log.updateRope(team, id);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

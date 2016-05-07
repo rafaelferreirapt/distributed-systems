@@ -4,6 +4,9 @@
  */
 package entities.coach;
 
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import structures.CoachState;
 
 /**
@@ -27,6 +30,7 @@ public class Coach extends Thread {
      * @param r Instance that implements referee site coach methods.
      * @param team Team identifier, can be A or B.
      * @param l
+     * @throws java.rmi.RemoteException
      */
     public Coach(interfaces.bench.ICoach b, interfaces.referee_site.ICoach r, String team, interfaces.log.ICoach l){
         this.bench = b;
@@ -38,7 +42,11 @@ public class Coach extends Thread {
         this.setName("Coach of the team " + team);
         state = CoachState.WAIT_FOR_REFEREE_COMMAND;
         
-        this.log.initCoachState(team, state);
+        try {
+            this.log.initCoachState(team, state);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Coach.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
@@ -46,35 +54,39 @@ public class Coach extends Thread {
      */
     @Override
     public void run(){
-        while(!referee_site.endOfMatch()){
-            switch(this.state){
-                case ASSEMBLE_TEAM:
-                    this.bench.waitForFollowCoachAdvice(this.team);
-                    this.referee_site.informReferee(this.team);
-                    this.state = CoachState.WATCH_TRIAL;
-                    break;
-                case WAIT_FOR_REFEREE_COMMAND:
-                    this.bench.waitForCallTrial();
-
-                    if(this.referee_site.endOfMatch()){
+        try {
+            while(!this.referee_site.endOfMatch()){
+                switch(this.state){
+                    case ASSEMBLE_TEAM:
+                        this.bench.waitForFollowCoachAdvice(this.team);
+                        this.referee_site.informReferee(this.team);
+                        this.state = CoachState.WATCH_TRIAL;
                         break;
-                    }
+                    case WAIT_FOR_REFEREE_COMMAND:
+                        this.bench.waitForCallTrial();
 
-                    this.bench.callContestants(this.team);
-                    this.state = CoachState.ASSEMBLE_TEAM;
-                    break;
-                case WATCH_TRIAL:
-                    this.bench.waitForAssertTrialDecision();
-                    this.bench.reviewNotes(team);
-                    
-                    this.log.refreshStrengths(this.team);
-                    
-                    this.state = CoachState.WAIT_FOR_REFEREE_COMMAND;
-                    break;
+                        if(this.referee_site.endOfMatch()){
+                            break;
+                        }
+
+                        this.bench.callContestants(this.team);
+                        this.state = CoachState.ASSEMBLE_TEAM;
+                        break;
+                    case WATCH_TRIAL:
+                        this.bench.waitForAssertTrialDecision();
+                        this.bench.reviewNotes(team);
+
+                        this.log.refreshStrengths(this.team);
+
+                        this.state = CoachState.WAIT_FOR_REFEREE_COMMAND;
+                        break;
+                }
+                if(!referee_site.endOfMatch()){
+                    this.log.setCoachState(team, state);
+                }
             }
-            if(!referee_site.endOfMatch()){
-                this.log.setCoachState(team, state);
-            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(Coach.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

@@ -4,6 +4,7 @@
  */
 package interfaces.log;
 
+import java.rmi.RemoteException;
 import structures.RefereeState;
 
 /**
@@ -15,56 +16,66 @@ public interface IReferee {
     /**
      *
      * @param state
+     * @throws java.rmi.RemoteException
      */
-    public void initRefereeState(RefereeState state);
+    public void initRefereeState(RefereeState state) throws RemoteException;
     
     /**
      *
+     * @throws java.rmi.RemoteException
      */
-    public void newGame();
+    public void newGame() throws RemoteException;
     
     /**
      *
+     * @throws java.rmi.RemoteException
      */
-    public void newTrial();
-    
-    /**
-     *
-     * @return
-     */
-    public int assertTrialDecision();
-    
-    /**
-     *
-     * @return
-     */
-    public int getNumberOfGames();
+    public void newTrial() throws RemoteException;
     
     /**
      *
      * @return
+     * @throws java.rmi.RemoteException
      */
-    public int getTotalNumberOfGames();
+    public int assertTrialDecision() throws RemoteException;
     
     /**
      *
+     * @return
+     * @throws java.rmi.RemoteException
      */
-    public void printGameWinner();
+    public int getNumberOfGames() throws RemoteException;
+    
+    /**
+     *
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public int getTotalNumberOfGames() throws RemoteException;
+    
+    /**
+     *
+     * @throws java.rmi.RemoteException
+     */
+    public void printGameWinner() throws RemoteException;
     
     /**
      *
      * @param gameNumber
+     * @throws java.rmi.RemoteException
      */
-    public void newGame(int gameNumber);
+    public void newGame(int gameNumber) throws RemoteException;
     
     /**
      *
      * @param state
+     * @throws java.rmi.RemoteException
      */
-    public void setRefereeState(RefereeState state);
+    public void setRefereeState(RefereeState state) throws RemoteException;
     
     /**
      *
+     * @throws java.rmi.RemoteException
      */
-    public void declareMatchWinner();
+    public void declareMatchWinner() throws RemoteException;
 }
