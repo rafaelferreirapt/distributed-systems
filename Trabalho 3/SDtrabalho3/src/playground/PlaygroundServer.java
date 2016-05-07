@@ -24,7 +24,7 @@ import interfaces.log.LogInterface;
 public class PlaygroundServer{
    
     /**
-     * The main class for the shop server.
+     * The main class for the playground server.
      * @param args No arguments are going to be used.
      */
     public static void main(String[] args) {
@@ -40,12 +40,12 @@ public class PlaygroundServer{
         rmiRegHostName = rc.registryHost();
         rmiRegPortNumb = rc.registryPort();
         
-        LogInterface loggingInt = null;  
+        LogInterface logInt = null;  
 
         try
         { 
             Registry registry = LocateRegistry.getRegistry (rmiRegHostName, rmiRegPortNumb);
-            loggingInt = (LogInterface) registry.lookup (RegistryConfig.logNameEntry);
+            logInt = (LogInterface) registry.lookup (RegistryConfig.logNameEntry);
         }
         catch (RemoteException e)
         { 
@@ -66,7 +66,7 @@ public class PlaygroundServer{
         /* instanciação do objecto remoto que representa o playground e geração de um stub para ele */
         Playground playground = null;
         PlaygroundInterface playgroundInterface = null;
-        playground = new Playground(loggingInt);
+        playground = new Playground(logInt);
         
         try {
             playgroundInterface = (PlaygroundInterface) UnicastRemoteObject.exportObject(playground, rc.playgroundPort());

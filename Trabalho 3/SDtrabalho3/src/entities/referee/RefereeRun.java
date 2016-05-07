@@ -13,6 +13,8 @@ import interfaces.bench.BenchInterface;
 import interfaces.log.LogInterface;
 import interfaces.playground.PlaygroundInterface;
 import interfaces.referee_site.RefereeSiteInterface;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import structures.RegistryConfig;
 
 /**
@@ -109,6 +111,14 @@ public class RefereeRun {
         try { 
             ref.join ();
         } catch (InterruptedException e) {}
+        
+        System.out.println("Say to log that I have finished!");
+        
+        try {
+            log.finished();
+        } catch (RemoteException ex) {
+            Logger.getLogger(RefereeRun.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         System.out.println("Done!");
     }

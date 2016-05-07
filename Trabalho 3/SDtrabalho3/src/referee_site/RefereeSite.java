@@ -4,10 +4,17 @@
  */
 package referee_site;
 
+import interfaces.RegisterInterface;
 import interfaces.referee_site.RefereeSiteInterface;
+import java.rmi.NoSuchObjectException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import structures.RegistryConfig;
 
 /**
  * Referee Site instance.
@@ -144,6 +151,52 @@ public class RefereeSite implements RefereeSiteInterface{
 
     @Override
     public void signalShutdown() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        RegisterInterface reg = null;
+        Registry registry = null;
+
+        String rmiRegHostName;
+        int rmiRegPortNumb;
+        
+        RegistryConfig rc = new RegistryConfig("config.ini");
+        rmiRegHostName = rc.registryHost();
+        rmiRegPortNumb = rc.registryPort();
+        
+        try {
+            registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
+        } catch (RemoteException ex) {
+            Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        String nameEntryBase = RegistryConfig.registerHandler;
+        String nameEntryObject = RegistryConfig.refereeSiteNameEntry;
+        
+        try {
+            reg = (RegisterInterface) registry.lookup(nameEntryBase);
+        } catch (RemoteException e) {
+            System.out.println("RegisterRemoteObject lookup exception: " + e.getMessage());
+            Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, e);
+        } catch (NotBoundException e) {
+            System.out.println("RegisterRemoteObject not bound exception: " + e.getMessage());
+            Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, e);
+        }
+        try {
+            // Unregister ourself
+            reg.unbind(nameEntryObject);
+        } catch (RemoteException e) {
+            System.out.println("Referee Site registration exception: " + e.getMessage());
+            Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, e);
+        } catch (NotBoundException e) {
+            System.out.println("Referee Site not bound exception: " + e.getMessage());
+            Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        try {
+            // Unexport; this will also remove us from the RMI runtime
+            UnicastRemoteObject.unexportObject(this, true);
+        } catch (NoSuchObjectException ex) {
+            Logger.getLogger(RefereeSite.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println("Referee Site closed.");
     }
 }

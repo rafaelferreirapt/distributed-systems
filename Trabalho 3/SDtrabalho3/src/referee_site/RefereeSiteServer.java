@@ -23,7 +23,7 @@ import interfaces.RegisterInterface;
 public class RefereeSiteServer{
     
     /**
-     * The main class for the shop server.
+     * The main class for the referee site server.
      * @param args No arguments are going to be used.
      */
     public static void main(String[] args) {

@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  */
 public class RegistryConfig {
     /**
-     * Logging name entry on the registry.
+     * Log name entry on the registry.
      */
     public static String logNameEntry = "LogInt";
 
@@ -94,10 +94,10 @@ public class RegistryConfig {
         return Integer.parseInt(prop.getProperty("registryobject"));
     }
     /** 
-     * Loads the parameter LOGGING_PORT from the configuration file.
+     * Loads the parameter LOG_PORT from the configuration file.
      * @return parameter value
      */
-    public int loggingPort() {
+    public int logPort() {
         return Integer.parseInt(prop.getProperty("log_port"));
     }
     /** 

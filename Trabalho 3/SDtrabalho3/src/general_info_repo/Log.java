@@ -4,20 +4,32 @@
  */
 package general_info_repo;
 
+import interfaces.RegisterInterface;
+import interfaces.bench.BenchInterface;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 import interfaces.log.LogInterface;
+import interfaces.playground.PlaygroundInterface;
+import interfaces.referee_site.RefereeSiteInterface;
+import java.rmi.NoSuchObjectException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import structures.Constants;
 import structures.CoachState;
 import structures.ContestantState;
 import structures.RefereeState;
+import structures.RegistryConfig;
 
 /**
  * The log will be the gateway to all the information of the match, games, trials,
@@ -31,6 +43,7 @@ public class Log implements LogInterface{
    
     private final int N_COACHS;
     private final int N_CONTESTANTS;
+    private int numberEntitiesRunning = 3;
     
     /**
      *  File where the log will be saved
@@ -58,7 +71,7 @@ public class Log implements LogInterface{
     }
     
     /**
-     * This method writes the head of the logging file.
+     * This method writes the head of the log file.
      */
     private void writeInit(){
         try{
@@ -127,7 +140,7 @@ public class Log implements LogInterface{
     }
     
     /**
-     * This method will be called to finish write the logging file.
+     * This method will be called to finish write the log file.
      */
     public synchronized void writeEnd(){
         pw.println("\nLegend:");
@@ -405,12 +418,114 @@ public class Log implements LogInterface{
         }
     }
     
-    public void terminateServers(){
-        
+    @Override 
+    public void finished(){
+        numberEntitiesRunning--;
+        if (numberEntitiesRunning > 0){
+            return;
+        }
+        terminateServers();
     }
+    
+    public void terminateServers(){
+        RegisterInterface reg = null;
+        Registry registry = null;
+        
+        RegistryConfig rc = new RegistryConfig("config.ini");
+        String rmiRegHostName = rc.registryHost();
+        int rmiRegPortNumb = rc.registryPort();
+        
+        try {
+            registry = LocateRegistry.getRegistry(rmiRegHostName, rmiRegPortNumb);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Log.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-    @Override
-    public void signalShutdown() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String nameEntryBase = RegistryConfig.registerHandler;
+        String nameEntryObject = RegistryConfig.logNameEntry;
+        
+        // shutdown playground
+        try
+        {
+            PlaygroundInterface play = (PlaygroundInterface) registry.lookup (RegistryConfig.playgroundNameEntry);
+            play.signalShutdown();
+        }
+        catch (RemoteException e)
+        { 
+            System.out.println("Exception thrown while locating playground: " + e.getMessage () + "!");
+            Logger.getLogger(Log.class.getName()).log(Level.SEVERE, null, e);
+        }
+        catch (NotBoundException e)
+        { 
+            System.out.println("Playground is not registered: " + e.getMessage () + "!");
+            Logger.getLogger(Log.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        // shutdown referee site
+        try
+        {
+            RefereeSiteInterface refInt = (RefereeSiteInterface) registry.lookup (RegistryConfig.refereeSiteNameEntry);
+            refInt.signalShutdown();
+        }
+        catch (RemoteException e)
+        { 
+            System.out.println("Exception thrown while locating referee site: " + e.getMessage () + "!");
+            Logger.getLogger(Log.class.getName()).log(Level.SEVERE, null, e);
+        }
+        catch (NotBoundException e)
+        { 
+            System.out.println("Referee Site is not registered: " + e.getMessage () + "!");
+            Logger.getLogger(Log.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        // shutdown bench
+        try
+        {
+            BenchInterface whInt = (BenchInterface) registry.lookup (RegistryConfig.benchNameEntry);
+            whInt.signalShutdown();
+        }
+        catch (RemoteException e)
+        { 
+            System.out.println("Exception thrown while locating bench: " + e.getMessage () + "!");
+            Logger.getLogger(Log.class.getName()).log(Level.SEVERE, null, e);
+        }
+        catch (NotBoundException e)
+        { 
+            System.out.println("Bench is not registered: " + e.getMessage () + "!");
+            Logger.getLogger(Log.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        // shutdown log
+        
+        try {
+            reg = (RegisterInterface) registry.lookup(nameEntryBase);
+        } catch (RemoteException e) {
+            System.out.println("RegisterRemoteObject lookup exception: " + e.getMessage());
+            Logger.getLogger(Log.class.getName()).log(Level.SEVERE, null, e);
+        } catch (NotBoundException e) {
+            System.out.println("RegisterRemoteObject not bound exception: " + e.getMessage());
+            Logger.getLogger(Log.class.getName()).log(Level.SEVERE, null, e);
+        }
+        try {
+            // Unregister ourself
+            reg.unbind(nameEntryObject);
+        } catch (RemoteException e) {
+            System.out.println("Log registration exception: " + e.getMessage());
+            Logger.getLogger(Log.class.getName()).log(Level.SEVERE, null, e);
+        } catch (NotBoundException e) {
+            System.out.println("Log not bound exception: " + e.getMessage());
+            Logger.getLogger(Log.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        try {
+            // Unexport; this will also remove us from the RMI runtime
+            UnicastRemoteObject.unexportObject(this, true);
+        } catch (NoSuchObjectException ex) {
+            Logger.getLogger(Log.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        writeEnd();
+        
+        System.out.println("Log closed.");
     }
 }

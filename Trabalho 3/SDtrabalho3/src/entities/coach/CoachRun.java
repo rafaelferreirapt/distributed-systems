@@ -1,5 +1,6 @@
 package entities.coach;
 
+import entities.referee.RefereeRun;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -8,6 +9,8 @@ import java.util.ArrayList;
 import interfaces.bench.BenchInterface;
 import interfaces.log.LogInterface;
 import interfaces.referee_site.RefereeSiteInterface;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import structures.Constants;
 import structures.RegistryConfig;
 
@@ -105,6 +108,14 @@ public class CoachRun {
             try { 
                 c.join ();
             } catch (InterruptedException e) {}
+        }
+        
+        System.out.println("Say to log that I have finished!");
+        
+        try {
+            li.finished();
+        } catch (RemoteException ex) {
+            Logger.getLogger(RefereeRun.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         System.out.println("Done!");

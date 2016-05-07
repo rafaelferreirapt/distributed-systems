@@ -14,7 +14,7 @@ import java.rmi.RemoteException;
  */
 public interface RefereeSiteInterface extends ICoach, IContestant, IReferee, Remote{
     /**
-     * This function is used for the logging to signal the shop to shutdown.
+     * This function is used for the log to signal the referee site to shutdown.
      * 
      * @throws RemoteException may throw during a execution of a remote method call
      */

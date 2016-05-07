@@ -45,7 +45,7 @@ public class LogServer {
         log = new Log("");
         
         try {
-            logInterface = (LogInterface) UnicastRemoteObject.exportObject(log, rc.loggingPort());
+            logInterface = (LogInterface) UnicastRemoteObject.exportObject(log, rc.logPort());
         } catch (RemoteException e) {
             System.out.println("Excepção na geração do stub para o log: " + e.getMessage());
             System.exit(1);
