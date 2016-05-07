@@ -187,6 +187,10 @@ def upload():
             time.sleep(value["class"]["sleep"])
 
     print Fore.GREEN + Style.DIM + "DONE!" + Style.RESET_ALL
+    print Fore.BLUE + Style.BRIGHT + "Don't forget to:\n" \
+                                     "$ python machines.py show_logs  # to see the logs\n" \
+                                     "$ python machines.py get_log  # to get the final log\n" \
+                                     "$ python machines.py killall  # to kill the rmi register\n"
 
 
 def get_log():
@@ -268,32 +272,21 @@ def command(command_to="tail"):
 
     global ssh
 
-    for host in hosts:
-        hostname = host["host"]
-        response = os.system("ping -c 1 -W 1 " + hostname)
+    lst = parse_config()
 
-        if response != 0:
-            hosts.remove(host)
-            continue
+    print Style.BRIGHT + "\nCOMMAND: " + command_to[0] + "\n" + Style.RESET_ALL
+
+    for key, value in lst.iteritems():
         try:
-            ssh.connect(host["host"], username=host["user"], password=host["password"])
-            ssh.exec_command("echo \"Hello!\"")
-        except Exception:
-            hosts.remove(host)
-
-    print "\nCOMMAND: " + command_to[0] + "\n"
-
-    for host in hosts:
-        try:
-            ssh.connect(host["host"], username=host["user"], password=host["password"])
+            ssh.connect(value["host"]["host"], username=value["host"]["user"], password=value["host"]["password"])
             ssh.exec_command("echo \"Hello!\"")
         except Exception:
             continue
 
         stdin, stdout, stderr = ssh.exec_command(command_to[0])
 
-        print host["host"]
-        print stdout.readlines()
+        print Style.DIM + value["host"]["host"] + Style.RESET_ALL + " - " + Fore.LIGHTGREEN_EX + key + Style.RESET_ALL
+        print Fore.CYAN + str(stdout.readlines()) + Style.RESET_ALL
 
 
 def parse_config():
