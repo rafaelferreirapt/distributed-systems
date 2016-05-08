@@ -355,6 +355,18 @@ def parse_config():
     return lst
 
 
+def go(to):
+    lst = parse_config()
+
+    if len(to) != 1 or to[0] not in lst:
+        print Style.BRIGHT + "Please specify wich machine you want to connect: Coach, Contestant," \
+              " Referee, Registry, Log, Bench, Playground and RefereeSite." + Style.RESET_ALL
+
+    print Style.DIM + Fore.LIGHTBLUE_EX + "$ Password: " + lst[to[0]]["host"]["password"] + Style.RESET_ALL
+
+    call(["ssh", lst[to[0]]["host"]["user"] + "@" + lst[to[0]]["host"]["host"]])
+
+
 def is_up_host(ip_address):
     with open(os.devnull, 'w') as DEVNULL:
         try:
@@ -377,7 +389,8 @@ if __name__ == '__main__':
                  'killall': kill_all,
                  'show_logs': show_logs,
                  'get_log': get_log,
-                 'command': command}
+                 'command': command,
+                 'go': go}
 
     if len(sys.argv) <= 1:
         print('Available functions are:\n' + repr(functions.keys()))
