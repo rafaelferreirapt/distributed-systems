@@ -5,7 +5,7 @@ import json
 import paramiko
 import ConfigParser
 from scp import SCPClient
-from subprocess import call
+from subprocess import call, check_call
 import time
 import socket
 import subprocess
@@ -212,8 +212,29 @@ def get_log():
         if str(f).endswith(".log"):
             log_file = str(f)
             print Fore.GREEN + Style.DIM + log_file + Style.RESET_ALL
-            sftp.get("Public/classes/" + log_file, "logs/" + log_file)
-            call(["open", "logs/" + log_file])
+
+            print Fore.LIGHTGREEN_EX + "tar -pcvzf " + log_file + ".tar.gz Public/classes/" + log_file + Style.RESET_ALL
+            stdin, stdout, stderr = ssh.exec_command("tar -pcvzf " + log_file + ".tar.gz Public/classes/" + log_file)
+
+            log_connection = stdout.channel
+
+            if log_connection.recv_exit_status() == 0:
+                print Fore.LIGHTGREEN_EX + "get from the server: " + log_file + ".tar.gz" + Style.RESET_ALL
+                sftp.get(log_file + ".tar.gz", "logs/" + log_file + ".tar.gz")
+
+                print Fore.LIGHTGREEN_EX + "rm " + log_file + ".tar.gz" + Style.RESET_ALL
+                ssh.exec_command("rm " + log_file + ".tar.gz")
+
+                print Fore.LIGHTGREEN_EX + "tar -zxvf logs/" + log_file + ".tar.gz" + Style.RESET_ALL
+                check_call(["tar", "-zxvf", "logs/" + log_file + ".tar.gz"])
+
+                check_call(["mv", "Public/classes/"+log_file, "logs/"])
+                check_call(["rm", "-rf", "Public"])
+                check_call(["rm", "logs/" + log_file + ".tar.gz"])
+
+                call(["open", "logs/" + log_file])
+            else:
+                print Fore.RED + "Something went wrong!" + Style.RESET_ALL
 
 
 def kill_all():
@@ -359,10 +380,10 @@ def go(to):
     lst = parse_config()
 
     if len(to) != 1 or to[0] not in lst:
-        print Style.BRIGHT + "Please specify wich machine you want to connect: Coach, Contestant," \
+        print Fore.RED + "Please specify wich machine you want to connect: Coach, Contestant," \
               " Referee, Registry, Log, Bench, Playground and RefereeSite." + Style.RESET_ALL
 
-    print Style.DIM + Fore.LIGHTBLUE_EX + "$ Password: " + lst[to[0]]["host"]["password"] + Style.RESET_ALL
+    print Style.DIM + Fore.BLUE + "$ Password: " + Fore.RED + lst[to[0]]["host"]["password"] + Style.RESET_ALL
 
     call(["ssh", lst[to[0]]["host"]["user"] + "@" + lst[to[0]]["host"]["host"]])
 
