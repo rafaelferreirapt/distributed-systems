@@ -190,7 +190,8 @@ def upload():
     print Fore.BLUE + Style.BRIGHT + "Don't forget to:\n" \
                                      "$ python machines.py show_logs  # to see the logs\n" \
                                      "$ python machines.py get_log  # to get the final log\n" \
-                                     "$ python machines.py killall  # to kill the rmi register\n"
+                                     "$ python machines.py killall  # to kill the rmi register\n" \
+                                     "$ python machines.py go ENTITY_NAME  # to open one SSH SHELL\n"
 
 
 def get_log():
