@@ -5,6 +5,7 @@
 package interfaces.playground;
 
 import java.rmi.RemoteException;
+import structures.VectorTimestamp;
 
 /**
  * Contestant interface of Playground instance.
@@ -22,14 +23,18 @@ public interface IContestant {
     
     /**
      * Wait for start trial. Contestant method.
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void waitForStartTrial() throws RemoteException;
+    public VectorTimestamp waitForStartTrial(VectorTimestamp vt) throws RemoteException;
     
     /**
      * Wait for assert trial decision. Contestant method.
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void waitForAssertTrialDecision() throws RemoteException;
+    public VectorTimestamp waitForAssertTrialDecision(VectorTimestamp vt) throws RemoteException;
     
 }

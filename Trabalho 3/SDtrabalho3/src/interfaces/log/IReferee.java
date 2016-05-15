@@ -6,6 +6,7 @@ package interfaces.log;
 
 import java.rmi.RemoteException;
 import structures.RefereeState;
+import structures.VectorTimestamp;
 
 /**
  * 
@@ -69,9 +70,10 @@ public interface IReferee {
     /**
      *
      * @param state
+     * @param vt
      * @throws java.rmi.RemoteException
      */
-    public void setRefereeState(RefereeState state) throws RemoteException;
+    public void setRefereeState(RefereeState state, VectorTimestamp vt) throws RemoteException;
     
     /**
      *

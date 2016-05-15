@@ -112,9 +112,9 @@ public class ContestantRun {
         
         for (int i = 0; i < nContestants; i++){
             if(i < N_CONTESTANTS_TEAM){
-                contestants.add(new Contestant(pp, bp, rsp, i+1, teams[0], log));
+                contestants.add(new Contestant(pp, bp, rsp, i+1, i, teams[0], log));
             }else{
-                contestants.add(new Contestant(pp, bp, rsp, i-N_CONTESTANTS_TEAM+1, teams[1], log));
+                contestants.add(new Contestant(pp, bp, rsp, i-N_CONTESTANTS_TEAM+1, i, teams[1], log));
             }
         }
         

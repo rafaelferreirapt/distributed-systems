@@ -16,7 +16,7 @@ public class Constants {
     
     public static final int N_COACHS = 2;
     public static final int NUMBER_OF_TRIALS = 6;
-    public static final int NUMBER_OF_GAMES = 1000000;
+    public static final int NUMBER_OF_GAMES = 3;
     public static final int N_CONTESTANTS_TEAM = 5;
     public static final int MAX_STRENGTH = 24;
     public static final int MIN_STRENGTH = 20;

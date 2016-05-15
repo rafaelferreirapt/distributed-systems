@@ -5,6 +5,7 @@
 package interfaces.referee_site;
 
 import java.rmi.RemoteException;
+import structures.VectorTimestamp;
 
 /**
  * Referee interface of Referee Site instance.
@@ -40,21 +41,27 @@ public interface IReferee {
     
     /**
      * The referee waits to be informed by the team A and B.
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void waitForInformReferee() throws RemoteException;
+    public VectorTimestamp waitForInformReferee(VectorTimestamp vt) throws RemoteException;
 
     /**
      * The referee will wait fot the last contestant in operation amDone
      * when the trial has come to an end.
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void waitForAmDone() throws RemoteException;
+    public VectorTimestamp waitForAmDone(VectorTimestamp vt) throws RemoteException;
 
     /**
      * The referee waits for the contestant to be positioned.
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void waitAllPositioned() throws RemoteException;
+    public VectorTimestamp waitAllPositioned(VectorTimestamp vt) throws RemoteException;
 
 }

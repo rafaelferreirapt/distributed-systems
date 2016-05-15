@@ -23,6 +23,11 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import structures.Constants;
@@ -30,6 +35,7 @@ import structures.CoachState;
 import structures.ContestantState;
 import structures.RefereeState;
 import structures.RegistryConfig;
+import structures.VectorTimestamp;
 
 /**
  * The log will be the gateway to all the information of the match, games, trials,
@@ -48,9 +54,12 @@ public class Log implements LogInterface{
     /**
      *  File where the log will be saved
      */
-    private final File log;
+    private final File log, reorder;
     
-    private static PrintWriter pw;
+    private static PrintWriter pw, reorder_pw;
+    
+    private final ArrayList<Update> updates;
+
     
     /**
      * This will instantiate the log Class
@@ -66,6 +75,9 @@ public class Log implements LogInterface{
             SimpleDateFormat date = new SimpleDateFormat("yyyyMMddhhmmss");
             filename = "GameOfTheRope_" + date.format(today) + ".log";
         }
+        updates = new ArrayList<>();
+        String [] arr = filename.split("_");
+        reorder = new File(arr[0]+"_vector_"+arr[1]);
         this.log = new File(filename);
         this.writeInit();
     }
@@ -75,6 +87,7 @@ public class Log implements LogInterface{
      */
     private void writeInit(){
         try{
+            reorder_pw = new PrintWriter(reorder);
             pw = new PrintWriter(log);
             pw.println("                               Game of the Rope - Description of the internal state");
             
@@ -87,6 +100,7 @@ public class Log implements LogInterface{
                 head += " Cont " + Integer.toString(i);
             }
             head += "       Trial";
+            reorder_pw.println(head);
             pw.println(head);
             
             head = "Sta  Stat";
@@ -98,8 +112,10 @@ public class Log implements LogInterface{
                 head += " Sta SG";
             }
             head += " 3 2 1 . 1 2 3 NB PS";
-            pw.println(head);
             
+            reorder_pw.println(head);
+            pw.println(head);
+           
             pw.flush();
         } catch (FileNotFoundException ex) {
             System.err.println("File not found");
@@ -112,6 +128,7 @@ public class Log implements LogInterface{
      */
     @Override
     public synchronized void newGame(int gameNumber){
+        reorder_pw.println("Game " + gameNumber);
         pw.println("Game " + gameNumber);
         
         String head = "Ref  Coa 1";
@@ -124,6 +141,8 @@ public class Log implements LogInterface{
         }
         head += "       Trial";
         pw.println(head);
+        reorder_pw.println(head);
+
 
         head = "Sta  Stat";
         for(int i=1; i<=Match.N_CONTESTANTS/2; i++){
@@ -135,8 +154,10 @@ public class Log implements LogInterface{
         }
         head += " 3 2 1 . 1 2 3 NB PS";
         pw.println(head);
-        
+        reorder_pw.println(head);
+
         pw.flush();
+        reorder_pw.flush();
     }
     
     /**
@@ -151,6 +172,38 @@ public class Log implements LogInterface{
         pw.println("TRIAL – ?  – contestant identification at the position ? at the end of the rope for present trial (? - 1 .. 3)");
         pw.println("TRIAL – NB – trial number");
         pw.println("TRIAL – PS – position of the centre of the rope at the beginning of the trial");
+        reorder_pw.println("\nLegend:");
+        reorder_pw.println("Ref Sta    – state of the referee");
+        reorder_pw.println("Coa # Stat - state of the coach of team # (# - 1 .. 2)");
+        reorder_pw.println("Cont # Sta – state of the contestant # (# - 1 .. "+Integer.toString(Match.N_CONTESTANTS/2)+") of team whose coach was listed to the immediate left");
+        reorder_pw.println("Cont # SG  – strength of the contestant # (# - 1 .. "+Integer.toString(Match.N_CONTESTANTS/2)+") of team whose coach was listed to the immediate left");
+        reorder_pw.println("TRIAL – ?  – contestant identification at the position ? at the end of the rope for present trial (? - 1 .. 3)");
+        reorder_pw.println("TRIAL – NB – trial number");
+        reorder_pw.println("TRIAL – PS – position of the centre of the rope at the beginning of the trial");
+        
+        Map<Integer, Update> tab = new Hashtable<>();
+
+        for (int i = 0; i < this.updates.size(); i++) {
+            tab.put(i, updates.get(i));
+        }
+        
+        ArrayList<Map.Entry<Integer, Update>> l = new ArrayList(tab.entrySet());
+        
+        Collections.sort(l, new Comparator<Map.Entry<Integer, Update>>()
+        {
+            @Override
+            public int compare(Map.Entry<Integer, Update> o1, Map.Entry<Integer, Update> o2) 
+            {
+                return o1.getValue().compareTo(o2.getValue());
+            }
+        });
+        
+        for (int i = 0; i < l.size(); i++) {
+            reorder_pw.printf(l.get(l.size()-i-1).getValue().getText());
+        }
+       
+        reorder_pw.flush();
+        reorder_pw.close();
         pw.flush();
         pw.close();
     }
@@ -187,6 +240,7 @@ public class Log implements LogInterface{
     @Override
     public synchronized void declareMatchWinner(){
         pw.println(match.declareMatchWinner());
+        reorder_pw.println(match.declareMatchWinner());
     }
     
     /**
@@ -238,9 +292,9 @@ public class Log implements LogInterface{
      * @param contestant The contestant ID.
      */
     @Override
-    public synchronized void setContestantState(ContestantState state, String team, int contestant){
+    public synchronized void setContestantState(ContestantState state, String team, int contestant, VectorTimestamp vt){
         this.match.setContestantState(state, team, contestant);
-        this.printLine();
+        this.printLine(vt);
     }
     
     /**
@@ -259,9 +313,9 @@ public class Log implements LogInterface{
      * @param state coach state.
      */
     @Override
-    public synchronized void setCoachState(String team, CoachState state){
+    public synchronized void setCoachState(String team, CoachState state, VectorTimestamp vt){
         this.match.setCoachState(team, state);
-        this.printLine();
+        this.printLine(vt);
     }
     
     /**
@@ -278,9 +332,9 @@ public class Log implements LogInterface{
      * @param state referee state.
      */
     @Override
-    public synchronized void setRefereeState(RefereeState state){
+    public synchronized void setRefereeState(RefereeState state, VectorTimestamp vt){
         this.match.setRefereeState(state);
-        this.printLine();
+        this.printLine(vt);
     }
     
     /**
@@ -308,9 +362,9 @@ public class Log implements LogInterface{
      * @param contestant The contestant ID.
      */
     @Override
-    public synchronized void setPosition(String team, int contestant){
+    public synchronized void setPosition(String team, int contestant, VectorTimestamp vt){
         this.match.setPosition(team, contestant);
-        this.printLine();
+        this.printLine(vt);
 
     }
     
@@ -320,7 +374,7 @@ public class Log implements LogInterface{
      * @param contestant The contestant ID.
      */
     @Override
-    public synchronized void removePosition(String team, int contestant){
+    public synchronized void removePosition(String team, int contestant, VectorTimestamp vt){
         if(team.equals("A")){
             HashMap<Integer, Integer> tmpA = this.match.getPositionsA();
             for(int i = 1; i<=3; i++){
@@ -340,11 +394,12 @@ public class Log implements LogInterface{
                 }
             }
         }
-        this.printLine();
+        this.printLine(vt);
 
     }
     
-    private void printLine(){
+    private void printLine(VectorTimestamp vt){
+        String write = "";
         if(this.match.getCoachStatesN() != N_COACHS ||
             this.match.getContestantsStatesN() != N_CONTESTANTS){
             return;
@@ -354,29 +409,18 @@ public class Log implements LogInterface{
             return;
         }
         
-        pw.print(this.match.getRefereeState());
-        pw.print("  ");
-        pw.print(this.match.getCoachState("A"));
-        pw.print(" ");
+        write += this.match.getRefereeState() + "  " + this.match.getCoachState("A") + "  ";
         
         Set<Integer> contestants = this.match.getNumberOfContestants("A");
         
         for(Integer i : contestants){
-            pw.print(this.match.getContestantState("A", i));
-            pw.print(" ");
-            pw.print(this.match.getContestantStrength("A", i));
-            pw.print(" ");
+            write += this.match.getContestantState("A", i) + " " + this.match.getContestantStrength("A", i) + " ";
         }
             
-        pw.print(" ");
-        pw.print(this.match.getCoachState("B"));
-        pw.print(" ");
+        write += " " + this.match.getCoachState("B") + " ";
         
         for(Integer i : contestants){
-            pw.print(this.match.getContestantState("B", i));
-            pw.print(" ");
-            pw.print(this.match.getContestantStrength("B", i));
-            pw.print(" ");
+            write += this.match.getContestantState("B", i) + " " + this.match.getContestantStrength("B", i) + " ";
         }
         HashMap<Integer, Integer> positionsA = this.match.getPositionsA();
         HashMap<Integer, Integer> positionsB = this.match.getPositionsB();
@@ -403,9 +447,20 @@ public class Log implements LogInterface{
                 posB += "- ";
             }
         }
-        pw.printf(posA + "." + posB + "%2d %2d\n", this.match.gameNumberOfTrials(), this.match.getCentre_of_the_rope());
-                    
+        
+        write += String.format(posA + "." + posB + "%2d %2d\n", this.match.gameNumberOfTrials(), this.match.getCentre_of_the_rope());
+        
+        int[] arrayClocks = vt.toIntArray();
+        for (int i = 0; i < Constants.N_COACHS + Constants.N_CONTESTANTS_TEAM*2 + 2; i++) {
+            write = write + String.format(" %2d", arrayClocks[i]);
+        }
+        write += String.format("\n");
+
+        pw.printf(write);
         pw.flush();
+        
+        Update upd = new Update(write, vt.toIntArray());
+        updates.add(upd);
     }
     
     /**
@@ -415,6 +470,8 @@ public class Log implements LogInterface{
     public synchronized void printGameWinner(){
         if(this.match.getNumberOfGames() > 0){
             pw.println(this.match.getWinner());
+            reorder_pw.println(this.match.getWinner());
+            
         }
     }
     

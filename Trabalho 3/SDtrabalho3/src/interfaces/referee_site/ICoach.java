@@ -5,6 +5,7 @@
 package interfaces.referee_site;
 
 import java.rmi.RemoteException;
+import structures.VectorTimestamp;
 
 /**
  * Coach interface of Referee Site instance.
@@ -16,9 +17,11 @@ public interface ICoach {
      * The referee is waken up by the last of the coaches in operation 
      * "informReferee" when the teams are ready to proceed
      * @param team "A" or "B"
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void informReferee(String team) throws RemoteException;
+    public VectorTimestamp informReferee(String team, VectorTimestamp vt) throws RemoteException;
 
     /**
      * End of the match.

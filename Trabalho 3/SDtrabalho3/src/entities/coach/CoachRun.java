@@ -96,7 +96,7 @@ public class CoachRun {
         }
         
         for (int i = 0; i < N_COACHS; i++){
-            coachs.add(new Coach(bi, rsi, teams[i], li));
+            coachs.add(new Coach(bi, rsi, teams[i], i, li));
         }
         
         System.out.println("Number of coachs: " + coachs.size());

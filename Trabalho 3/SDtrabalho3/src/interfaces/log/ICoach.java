@@ -6,6 +6,7 @@ package interfaces.log;
 
 import java.rmi.RemoteException;
 import structures.CoachState;
+import structures.VectorTimestamp;
 
 /**
  * 
@@ -32,7 +33,8 @@ public interface ICoach {
      *
      * @param team
      * @param state
+     * @param vt
      * @throws java.rmi.RemoteException
      */
-    public void setCoachState(String team, CoachState state) throws RemoteException;
+    public void setCoachState(String team, CoachState state, VectorTimestamp vt) throws RemoteException;
 }

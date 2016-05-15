@@ -14,7 +14,9 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import structures.Constants;
 import structures.RegistryConfig;
+import structures.VectorTimestamp;
 
 /**
  * Referee Site instance.
@@ -25,6 +27,12 @@ public class RefereeSite implements RefereeSiteInterface{
     private boolean informRefereeA = false, informRefereeB = false;
     private int amDoneCounter = 0, positionedCounter = 0;
     private boolean matchEnds = false, amDoneCondition = false, positionedCondition = false;
+    
+    private final VectorTimestamp clocks;
+
+    public RefereeSite(){
+        this.clocks = new VectorTimestamp(Constants.N_COACHS + Constants.N_CONTESTANTS_TEAM*2 + 2, 0);
+    }
     
     /**
     * In referee life cycle, transition between "start of the match" and "start of a game" or 
@@ -57,21 +65,23 @@ public class RefereeSite implements RefereeSiteInterface{
      * @param team "A" or "B"
      */
     @Override
-    public synchronized void informReferee(String team) {
+    public synchronized VectorTimestamp informReferee(String team, VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         if(team.equals("A")){
             this.informRefereeA = true;
         }else if(team.equals("B")){
             this.informRefereeB = true;
         }
         notifyAll();
-
+        return this.clocks.clone();
     }
     
     /**
      * The referee waits to be informed by the team A and B.
      */
     @Override
-    public synchronized void waitForInformReferee(){
+    public synchronized VectorTimestamp waitForInformReferee(VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         while(!this.informRefereeA || !this.informRefereeB){
             try {
                 wait();
@@ -81,6 +91,7 @@ public class RefereeSite implements RefereeSiteInterface{
         }
         this.informRefereeA = false;
         this.informRefereeB = false;
+        return this.clocks.clone();
     }
     
      /**
@@ -88,11 +99,13 @@ public class RefereeSite implements RefereeSiteInterface{
      * when the trial has come to an end.
      */
     @Override
-    public synchronized void amDone() {
+    public synchronized VectorTimestamp amDone(VectorTimestamp vt) throws RemoteException {
+        this.clocks.update(vt);
         if(++this.amDoneCounter == 6){
             this.amDoneCondition = true;
             notifyAll();
         }
+        return this.clocks.clone();
     }
     
     /**
@@ -100,7 +113,8 @@ public class RefereeSite implements RefereeSiteInterface{
      * when the trial has come to an end.
      */
     @Override
-    public synchronized void waitForAmDone(){
+    public synchronized VectorTimestamp waitForAmDone(VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         while(!this.amDoneCondition){
             try {
                 wait();
@@ -110,24 +124,28 @@ public class RefereeSite implements RefereeSiteInterface{
         }
         this.amDoneCounter = 0;
         this.amDoneCondition = false;
+        return this.clocks.clone();
     }
     
     /**
      * The contestant notify the referee that is positioned.
      */
     @Override
-    public synchronized void positioned() {
+    public synchronized VectorTimestamp positioned(VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         if(++this.positionedCounter == 6){
             this.positionedCondition = true;
             notifyAll();
         }
+        return this.clocks.clone();
     }
     
     /**
      * The referee waits for the contestant to be positioned.
      */
     @Override
-    public synchronized void waitAllPositioned() {
+    public synchronized VectorTimestamp waitAllPositioned(VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         while(!this.positionedCondition){
             try {
                 wait();
@@ -138,6 +156,7 @@ public class RefereeSite implements RefereeSiteInterface{
         }
         this.positionedCounter = 0;
         this.positionedCondition = false;
+        return this.clocks.clone();
     }    
     
     /**
@@ -145,7 +164,7 @@ public class RefereeSite implements RefereeSiteInterface{
      * @return if has endeed or not.
      */
     @Override
-    public synchronized boolean endOfMatch(){
+    public synchronized boolean endOfMatch() throws RemoteException{
         return this.matchEnds;
     }
 

@@ -14,7 +14,9 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import structures.Constants;
 import structures.RegistryConfig;
+import structures.VectorTimestamp;
 
 
 /**
@@ -41,6 +43,9 @@ public class Bench implements BenchInterface{
     
     private boolean trialDecisionTaken = false;
     private boolean callTrialTaken = false;
+    
+    private final VectorTimestamp clocks;
+
             
     /**
      * We need to know how many contestants there are in the bench,
@@ -51,6 +56,7 @@ public class Bench implements BenchInterface{
     public Bench(int nContestantsTeamA, int nContestantsTeamB){
         this.nContestantsInBench = this.NUMBER_CONTESTANTS = nContestantsTeamA + nContestantsTeamB;
         this.N_CONTESTANTS_TEAM = nContestantsTeamA;
+        this.clocks = new VectorTimestamp(this.NUMBER_CONTESTANTS + Constants.N_COACHS + 2, 0);
     }
       
     /**
@@ -62,8 +68,10 @@ public class Bench implements BenchInterface{
      * final there is a notifyAll() to wake up all the entities in the Bench.
      */
     @Override
-    public synchronized void callTrial() {
-            while(this.coachesWaitCallTrial != 2 || this.nContestantsInBench != NUMBER_CONTESTANTS){
+    public synchronized VectorTimestamp callTrial(VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
+        while(this.coachesWaitCallTrial != 2 || this.nContestantsInBench != NUMBER_CONTESTANTS){
+
             try {
                 wait();
             } catch (InterruptedException ex) {
@@ -78,6 +86,7 @@ public class Bench implements BenchInterface{
         
         this.callTrialTaken=true;
         notifyAll();
+        return this.clocks.clone();
     }
     
     
@@ -86,7 +95,8 @@ public class Bench implements BenchInterface{
      * and can select the next team.
      */
     @Override
-    public synchronized void waitForCallTrial(){
+    public synchronized VectorTimestamp waitForCallTrial(VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         this.callTrialTaken = false;
         this.coachesWaitCallTrial++;
         notifyAll();
@@ -97,12 +107,14 @@ public class Bench implements BenchInterface{
                 
                 // when the referee sees that the match ends they must died
                 if(this.endMatch){
-                    return;
+                    return this.clocks.clone();
                 }
             } catch (InterruptedException ex) {
                 Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
+        return this.clocks.clone();
     }
 
     /**
@@ -110,9 +122,11 @@ public class Bench implements BenchInterface{
      * with the notifyAll().
      */
     @Override
-    public synchronized void assertTrialDecision() {
+    public synchronized VectorTimestamp assertTrialDecision(VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         trialDecisionTaken = true;
         notifyAll();
+        return this.clocks.clone();
     }
 
     /**
@@ -120,7 +134,8 @@ public class Bench implements BenchInterface{
      * referees in the assertTrialDecision.
      */
     @Override
-    public synchronized void waitForAssertTrialDecision(){
+    public synchronized VectorTimestamp waitForAssertTrialDecision(VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         while(!trialDecisionTaken){
             try {
                 wait();
@@ -133,6 +148,7 @@ public class Bench implements BenchInterface{
             trialDecisionTaken = false;
             this.nCoachesAlerted = 0;
         }
+        return this.clocks.clone();
     }
     
     /**
@@ -141,7 +157,8 @@ public class Bench implements BenchInterface{
      * @param team Team identifier, can be A or B.
      */
     @Override
-    public synchronized void reviewNotes(String team) {
+    public synchronized VectorTimestamp reviewNotes(String team, VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         while(this.nContestantsInBench < NUMBER_CONTESTANTS){
             try {
                 wait();
@@ -149,6 +166,8 @@ public class Bench implements BenchInterface{
                 Logger.getLogger(Bench.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
+        return this.clocks.clone();
     }
 
     /**
@@ -159,7 +178,8 @@ public class Bench implements BenchInterface{
      * @param team Team identifier, can be A or B.
      */
     @Override
-    public synchronized void callContestants(String team) {
+    public synchronized VectorTimestamp callContestants(String team, VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         int tmp[] = new int[3];
         
         for(int i=0; i<tmp.length; i++){
@@ -185,6 +205,7 @@ public class Bench implements BenchInterface{
         }else if(team.equals("B")){
             this.selectedContestantsB = tmp;
         }
+        return this.clocks.clone();
     }
     
     private boolean amISelected(String team, int idC){
@@ -218,7 +239,8 @@ public class Bench implements BenchInterface{
      * @param idC The contestant ID.
      */
     @Override
-    public synchronized void waitForCallContestants(String team, int idC){
+    public synchronized VectorTimestamp waitForCallContestants(String team, int idC, VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         if(team.equals("A")){
             while(!this.selectedA || !this.amISelected(team, idC)){
                 try {
@@ -231,7 +253,7 @@ public class Bench implements BenchInterface{
                 }
             }
             if(this.endMatch){
-                return;
+                return this.clocks.clone();
             }
             this.nContestantsInBench--;
             //System.err.println("Entrou A");
@@ -251,7 +273,7 @@ public class Bench implements BenchInterface{
                 }
             }
             if(this.endMatch){
-                return;
+                return this.clocks.clone();
             }
             this.nContestantsInBench--;
             //System.err.println("Entrou B");
@@ -259,6 +281,7 @@ public class Bench implements BenchInterface{
                 this.lastContestantUpB = idC;
             }
         }
+        return this.clocks.clone();
     }
     
     /**
@@ -269,7 +292,8 @@ public class Bench implements BenchInterface{
      * @param idC The contestant ID.
      */
     @Override
-    public synchronized void followCoachAdvice(String team, int idC) {
+    public synchronized VectorTimestamp followCoachAdvice(String team, int idC, VectorTimestamp vt) throws RemoteException {
+        this.clocks.update(vt);
         if(team.equals("A")){
             if(idC == this.lastContestantUpA){
                 this.followCoachA = true;
@@ -282,6 +306,7 @@ public class Bench implements BenchInterface{
             }
         }
         notifyAll();
+        return this.clocks.clone();
     }
     
     /**
@@ -290,7 +315,8 @@ public class Bench implements BenchInterface{
      * @param team Team identifier, can be A or B.
      */
     @Override
-    public synchronized void waitForFollowCoachAdvice(String team){
+    public synchronized VectorTimestamp waitForFollowCoachAdvice(String team, VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         if(team.equals("A")){
             this.selectedA = true;
             notifyAll();
@@ -320,6 +346,7 @@ public class Bench implements BenchInterface{
             this.selectedB = false;
             this.followCoachB = false;
         }
+        return this.clocks.clone();
     }
     
     /**
@@ -329,20 +356,26 @@ public class Bench implements BenchInterface{
      * @param team Team identifier, can be A or B.
      */
     @Override
-    public synchronized void seatDown(String team){
+    public synchronized VectorTimestamp seatDown(String team, VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         if(++this.nContestantsInBench==NUMBER_CONTESTANTS){
             notifyAll();
         }
+        
+        return this.clocks.clone();
     }
     
     /**
      * This method will wakeup all the entities in the bench and declare that
      * the match was ended.
+     * @return 
      */
     @Override
-    public synchronized void wakeUp(){
+    public synchronized VectorTimestamp wakeUp(VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         this.endMatch = true;
         notifyAll();
+        return this.clocks.clone();
     }
 
     @Override

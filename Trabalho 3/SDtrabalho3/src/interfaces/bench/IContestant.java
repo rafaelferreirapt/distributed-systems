@@ -5,6 +5,7 @@
 package interfaces.bench;
 
 import java.rmi.RemoteException;
+import structures.VectorTimestamp;
 
 /**
  * Contestant interface of Bench instance.
@@ -18,18 +19,22 @@ public interface IContestant {
      * In Contestants life cycle, transition between "seat at the bench" and "stand in position"
      * @param team Team identifier, can be A or B.
      * @param idC The contestant ID.
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void followCoachAdvice(String team, int idC) throws RemoteException;
+    public VectorTimestamp followCoachAdvice(String team, int idC, VectorTimestamp vt) throws RemoteException;
     
     /**
      * In Contestants life cycle, transition between "doYourBest" and "seat at the bench"
      * SEAT_AT_THE_BENCH – blocking state the contestants are waken up in operation 
      * callContestants by their coaches if they are selected to join the next trial
      * @param team Team identifier, can be A or B.
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void seatDown(String team) throws RemoteException;
+    public VectorTimestamp seatDown(String team, VectorTimestamp vt) throws RemoteException;
     
     /**
      * The contestants will wait here to be called to the trial in the bench.
@@ -41,8 +46,10 @@ public interface IContestant {
      * all the contestants are ready to go.
      * @param team Team identifier, can be A or B.
      * @param idC The contestant ID.
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void waitForCallContestants(String team, int idC) throws RemoteException;
+    public VectorTimestamp waitForCallContestants(String team, int idC, VectorTimestamp vt) throws RemoteException;
     
 }

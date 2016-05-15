@@ -5,6 +5,7 @@
 package interfaces.playground;
 
 import java.rmi.RemoteException;
+import structures.VectorTimestamp;
 
 /**
  * Referee interface of Playground instance.
@@ -14,14 +15,18 @@ public interface IReferee {
     
     /**
      * In Referee life cycle, transition between "teams ready" and "wait for trial conclusion".
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void startTrial() throws RemoteException;
+    public VectorTimestamp startTrial(VectorTimestamp vt) throws RemoteException;
     
     /**
      * In Referee life cycle, transition between "wait for trial conclusion" and "wait for trial conclusion".
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void assertTrialDecision() throws RemoteException;
+    public VectorTimestamp assertTrialDecision(VectorTimestamp vt) throws RemoteException;
     
 }

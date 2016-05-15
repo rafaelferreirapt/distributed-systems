@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import structures.Constants;
 import structures.RegistryConfig;
+import structures.VectorTimestamp;
 
 /**
  * Playground instance.
@@ -32,28 +33,34 @@ public class Playground implements PlaygroundInterface{
     
     private final interfaces.log.IPlayground log;
     
+    private final VectorTimestamp clocks;
+    
     /**
      * Log is a singleton, it needs the getInstance method.
      * @param l
      */
     public Playground(interfaces.log.IPlayground l){
         this.log = l;
+        this.clocks = new VectorTimestamp(Constants.N_COACHS + Constants.N_CONTESTANTS_TEAM*2 + 2, 0);
     }
     
     /**
      * In Referee life cycle, transition between "teams ready" and "wait for trial conclusion".
      */
     @Override
-    public synchronized void startTrial() {
+    public synchronized VectorTimestamp startTrial(VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         startTrialTaken = true;
         notifyAll();
+        return this.clocks.clone();
     }
 
     /**
      * Wait for start trial. Contestant method.
      */
     @Override
-    public synchronized void waitForStartTrial(){
+    public synchronized VectorTimestamp waitForStartTrial(VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         while(!startTrialTaken){
             try {
                 wait();
@@ -65,22 +72,26 @@ public class Playground implements PlaygroundInterface{
             this.contestantsIn = 0;
             startTrialTaken = false;
         }
+        return this.clocks.clone();
     }
     
     /**
      * In Referee life cycle, transition between "wait for trial conclusion" and "wait for trial conclusion".
      */
     @Override
-    public synchronized void assertTrialDecision() {
+    public synchronized VectorTimestamp assertTrialDecision(VectorTimestamp vt) throws RemoteException {
+        this.clocks.update(vt);
         trialDecisionTaken = true;
         notifyAll();
+        return this.clocks.clone();
     }
     
     /**
      * Wait for assert trial decision. Contestant method.
      */
     @Override
-    public synchronized void waitForAssertTrialDecision(){
+    public synchronized VectorTimestamp waitForAssertTrialDecision(VectorTimestamp vt) throws RemoteException{
+        this.clocks.update(vt);
         while(!trialDecisionTaken){
             try {
                 wait();
@@ -93,6 +104,7 @@ public class Playground implements PlaygroundInterface{
             trialDecisionTaken = false;
             this.contestantsAlerted = 0;
         }
+        return this.clocks.clone();
     }
     
     /**

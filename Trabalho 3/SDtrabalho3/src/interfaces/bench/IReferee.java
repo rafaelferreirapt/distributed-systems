@@ -5,6 +5,7 @@
 package interfaces.bench;
 
 import java.rmi.RemoteException;
+import structures.VectorTimestamp;
 
 /**
  * Referee interface of Bench instance.
@@ -19,21 +20,27 @@ public interface IReferee {
      * in the Team A or B and set the coaches wait for call trial to zero. The
      * coachs are sleeping and need the flag callTrialTaken true to procede. In the
      * final there is a notifyAll() to wake up all the entities in the Bench.
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void callTrial() throws RemoteException;
+    public VectorTimestamp callTrial(VectorTimestamp vt) throws RemoteException;
 
     /**
      * The referee will waken up the coaches with the trialDecisionTaken = true and 
      * with the notifyAll().
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void assertTrialDecision() throws RemoteException;
+    public VectorTimestamp assertTrialDecision(VectorTimestamp vt) throws RemoteException;
     
     /**
      * This method will wakeup all the entities in the bench and declare that
      * the match was ended.
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void wakeUp() throws RemoteException;
+    public VectorTimestamp wakeUp(VectorTimestamp vt) throws RemoteException;
 }

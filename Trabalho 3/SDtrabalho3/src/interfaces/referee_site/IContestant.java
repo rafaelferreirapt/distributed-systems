@@ -5,6 +5,7 @@
 package interfaces.referee_site;
 
 import java.rmi.RemoteException;
+import structures.VectorTimestamp;
 
 /**
  * Contestant interface of Referee Site instance.
@@ -15,9 +16,11 @@ public interface IContestant {
     /**
      * The referee is waken up by the last of the contestants in operation amDone
      * when the trial has come to an end.
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void amDone() throws RemoteException;
+    public VectorTimestamp amDone(VectorTimestamp vt) throws RemoteException;
 
     /**
      * End of the match. 
@@ -28,9 +31,11 @@ public interface IContestant {
     
     /**
      * The contestant notify the referee that is positioned.
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void positioned() throws RemoteException;
+    public VectorTimestamp positioned(VectorTimestamp vt) throws RemoteException;
     
 
 }

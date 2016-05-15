@@ -7,7 +7,9 @@ package entities.referee;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import structures.Constants;
 import structures.RefereeState;
+import structures.VectorTimestamp;
 
 /**
  * Referee instance.
@@ -22,6 +24,8 @@ public class Referee extends Thread {
     private final interfaces.bench.IReferee bench;
     private final interfaces.referee_site.IReferee referee_site;
     private final interfaces.log.IReferee log;
+    private final VectorTimestamp myClock;
+    private VectorTimestamp receivedClock;
     
     /**
      * It will be passed to the Referee the methods of the bench and referee site
@@ -46,12 +50,15 @@ public class Referee extends Thread {
         } catch (RemoteException ex) {
             Logger.getLogger(Referee.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        this.myClock = new VectorTimestamp(Constants.N_COACHS + Constants.N_CONTESTANTS_TEAM*2 + 2, 0);
+
     }
     
     @Override
     public void run(){
         try {
-            while(!referee_site.endOfMatch()){
+            while(!this.referee_site.endOfMatch()){
                 switch(this.state){
                     case START_OF_THE_MATCH:
                         this.referee_site.annouceNewGame();
@@ -60,23 +67,44 @@ public class Referee extends Thread {
                         this.state = RefereeState.START_OF_A_GAME;
                         break;
                     case START_OF_A_GAME:
-                        
+
                         this.log.newTrial();
+
                         //System.err.println("New Trial");
-                        this.bench.callTrial(); // vai acordar os treinadores <= esperar que os jogadores estejam todos sentados
+                        this.myClock.increment();
+                        this.receivedClock = this.bench.callTrial(this.myClock.clone()); // vai acordar os treinadores <= esperar que os jogadores estejam todos sentados
+                        this.myClock.update(this.receivedClock);
+
                         this.state = RefereeState.TEAMS_READY;
                         break;
                     case TEAMS_READY:
-                        this.referee_site.waitForInformReferee(); // esperar que o treinador o informe
-                        this.referee_site.waitAllPositioned();
                         
-                        this.playground.startTrial();
+                        this.myClock.increment();
+                        this.receivedClock = this.referee_site.waitForInformReferee(this.myClock.clone()); // esperar que o treinador o informe
+                        this.myClock.update(this.receivedClock);
+                        
+                        this.myClock.increment();
+                        this.receivedClock = this.referee_site.waitAllPositioned(this.myClock.clone());
+                        this.myClock.update(this.receivedClock);
+                        
+                        this.myClock.increment();
+                        this.receivedClock = this.playground.startTrial(this.myClock.clone());
+                        this.myClock.update(this.receivedClock);
                         this.state = RefereeState.WAIT_FOR_TRIAL_CONCLUSION;
                         break;
                     case WAIT_FOR_TRIAL_CONCLUSION:
-                        this.referee_site.waitForAmDone(); // ultimo jogador tem de avisar o arbitro
-                        this.bench.assertTrialDecision();
-                        this.playground.assertTrialDecision();
+                        
+                        this.myClock.increment();
+                        this.receivedClock = this.referee_site.waitForAmDone(this.myClock.clone()); // ultimo jogador tem de avisar o arbitro
+                        this.myClock.update(this.receivedClock);
+                        
+                        this.myClock.increment();
+                        this.receivedClock = this.bench.assertTrialDecision(this.myClock.clone());
+                        this.myClock.update(this.receivedClock);
+                        
+                        this.myClock.increment();
+                        this.receivedClock = this.playground.assertTrialDecision(this.myClock.clone());
+                        this.myClock.update(this.receivedClock);
                         
                         switch(this.log.assertTrialDecision()){
                             case -2:
@@ -86,14 +114,16 @@ public class Referee extends Thread {
                                 this.state = RefereeState.END_OF_A_GAME;
                                 break;
                             case 1:
-                                this.bench.callTrial();
+                                this.myClock.increment();
+                                this.receivedClock = this.bench.callTrial(this.myClock.clone());
+                                this.myClock.update(this.receivedClock);
                                 this.state = RefereeState.TEAMS_READY;
                                 break;
                         }
                         
                         break;
                     case END_OF_A_GAME:
-                        
+
                         System.out.println("Ended game: " + this.log.getNumberOfGames());
                         
                         if(this.log.getNumberOfGames() < this.log.getTotalNumberOfGames()){
@@ -105,7 +135,9 @@ public class Referee extends Thread {
                         }else{
                             //this.log.declareMatchWinner();
                             this.referee_site.declareMatchWinner();
-                            this.bench.wakeUp();
+                            this.myClock.increment();
+                            this.receivedClock = this.bench.wakeUp(this.myClock.clone());
+                            this.myClock.update(this.receivedClock);
                             this.state = RefereeState.END_OF_THE_MATCH;
                             System.out.println("END MATCH");
                         }
@@ -113,7 +145,7 @@ public class Referee extends Thread {
                         
                         break;
                 }
-                this.log.setRefereeState(state);
+                this.log.setRefereeState(state, this.myClock.clone());
             }
             this.log.printGameWinner();
             this.log.declareMatchWinner();
