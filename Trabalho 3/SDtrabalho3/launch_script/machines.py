@@ -137,10 +137,11 @@ def upload():
 
         ssh.exec_command("mkdir -p Public/classes/"+value["class"]["path"]+"/")
 
-        for file_up in [f for f in os.listdir("javas/"+value["class"]["path"]) if os.path.isfile(os.path.join("javas/"+value["class"]["path"], f))]:
+        for file_up in [f for f in os.listdir("javas/"+value["class"]["path"])
+                        if os.path.isfile(os.path.join("javas/"+value["class"]["path"], f))]:
             print Fore.LIGHTGREEN_EX + os.path.join("javas/"+value["class"]["path"], file_up) + Style.RESET_ALL
             scp.put(files=os.path.join("javas/"+value["class"]["path"], file_up),
-                    remote_path="Public/classes/"+value["class"]["path"] + "/" + file_up,
+                    remote_path="Public/classes/"+file_up,
                     recursive=True)
 
         print Fore.LIGHTGREEN_EX + "Public/classes/java.tar.gz" + Style.RESET_ALL
@@ -383,7 +384,8 @@ def go(to):
         print Fore.RED + "Please specify wich machine you want to connect: Coach, Contestant," \
               " Referee, Registry, Log, Bench, Playground and RefereeSite." + Style.RESET_ALL
 
-    call(["sshpass", "-p", lst[to[0]]["host"]["password"], "ssh", lst[to[0]]["host"]["user"] + "@" + lst[to[0]]["host"]["host"]])
+    call(["sshpass", "-p", lst[to[0]]["host"]["password"], "ssh",
+          lst[to[0]]["host"]["user"] + "@" + lst[to[0]]["host"]["host"]])
 
 
 def is_up_host(ip_address):
