@@ -467,6 +467,8 @@ public class Log implements LogInterface{
         }
         write += String.format("\n");
         
+        reorder_pw.printf(write);
+        reorder_pw.flush();
         pw.printf(write);
         pw.flush();
         
