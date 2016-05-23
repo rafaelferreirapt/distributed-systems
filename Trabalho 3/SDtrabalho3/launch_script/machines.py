@@ -421,6 +421,8 @@ if __name__ == '__main__':
     ssh = paramiko.SSHClient()
     ssh.load_system_host_keys()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    paramiko.util.log_to_file("filename.log")
+
 
     if sys.argv[1] in functions.keys():
         if len(sys.argv[2:]) == 0:

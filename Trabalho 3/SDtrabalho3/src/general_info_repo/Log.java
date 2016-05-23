@@ -139,7 +139,14 @@ public class Log implements LogInterface{
         for(int i=1; i<=Match.N_CONTESTANTS/2; i++){
             head += " Cont " + Integer.toString(i);
         }
-        head += "       Trial";
+        head += "       Trial         ";
+        for(int i=1; i<N_CONTESTANTS+N_COACHS+1; i++){
+            if(i != N_CONTESTANTS+N_COACHS+1/2){
+                head += "  ";
+            }else{
+                head += "VCk";
+            }
+        }
         pw.println(head);
         reorder_pw.println(head);
 
@@ -152,8 +159,11 @@ public class Log implements LogInterface{
         for(int i=1; i<=Match.N_CONTESTANTS/2; i++){
             head += " Sta SG";
         }
-        head += " 3 2 1 . 1 2 3 NB PS";
+        head += " 3 2 1 . 1 2 3 NB PS  ";
         pw.println(head);
+        for(int i=1; i<N_CONTESTANTS+N_COACHS+1; i++){
+            head += i + "  ";
+        }
         reorder_pw.println(head);
 
         pw.flush();
@@ -448,7 +458,7 @@ public class Log implements LogInterface{
             }
         }
         
-        write += String.format(posA + "." + posB + "%2d %2d\n", this.match.gameNumberOfTrials(), this.match.getCentre_of_the_rope());
+        write += String.format(posA + "." + posB + "%2d %2d", this.match.gameNumberOfTrials(), this.match.getCentre_of_the_rope());
         
         int[] arrayClocks = vt.toIntArray();
         for (int i = 0; i < Constants.N_COACHS + Constants.N_CONTESTANTS_TEAM*2 + 2; i++) {
