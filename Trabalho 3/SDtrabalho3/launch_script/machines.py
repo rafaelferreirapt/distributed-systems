@@ -149,9 +149,9 @@ def upload():
                 remote_path="Public/classes/",
                 recursive=True)
 
-        print Fore.LIGHTGREEN_EX + "cd Public/classes; tar -zxvf java.tar.gz -C .; mv java/* .; " \
+        print Fore.LIGHTGREEN_EX + "cd Public/classes; tar -zxvf java.tar.gz; mv java/* .; " \
                                    "rm -rf java; rm java.tar.gz" + Style.RESET_ALL
-        ssh.exec_command("cd Public/classes; tar -zxvf java.tar.gz -C .; mv java/* .; rm -rf java; rm java.tar.gz")
+        ssh.exec_command("cd Public/classes; tar -zxvf java.tar.gz; mv java/* .; rm -rf java; rm java.tar.gz")
 
         print Fore.LIGHTGREEN_EX + "Public/classes/config.ini" + Style.RESET_ALL
         scp.put(files="configs/config_up.ini", remote_path="Public/classes/config.ini")
