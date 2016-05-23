@@ -384,9 +384,7 @@ def go(to):
         print Fore.RED + "Please specify wich machine you want to connect: Coach, Contestant," \
               " Referee, Registry, Log, Bench, Playground and RefereeSite." + Style.RESET_ALL
 
-    print Style.DIM + Fore.BLUE + "$ Password: " + Fore.RED + lst[to[0]]["host"]["password"] + Style.RESET_ALL
-
-    call(["ssh", lst[to[0]]["host"]["user"] + "@" + lst[to[0]]["host"]["host"]])
+    call(["sshpass", "-p", lst[to[0]]["host"]["password"], "ssh", lst[to[0]]["host"]["user"] + "@" + lst[to[0]]["host"]["host"]])
 
 
 def is_up_host(ip_address):
