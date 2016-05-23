@@ -116,6 +116,7 @@ public class Log implements LogInterface{
             reorder_pw.println(head);
             pw.println(head);
            
+            reorder_pw.flush();
             pw.flush();
         } catch (FileNotFoundException ex) {
             System.err.println("File not found");
@@ -465,7 +466,7 @@ public class Log implements LogInterface{
             write = write + String.format(" %2d", arrayClocks[i]);
         }
         write += String.format("\n");
-
+        
         pw.printf(write);
         pw.flush();
         

@@ -4,7 +4,7 @@
         "path": "dir_clientSide/coach",
         "package": "entities.coach",
         "type": "client",
-        "command": ["cd Public/classes/; source config.bash; cd dir_clientSide/coach; ./clientSide_com.sh &> output"],
+        "command": ["cd Public/classes/; source config.bash; ./clientSide_com.sh &> output"],
         "sleep": 0
     },
     {
@@ -12,7 +12,7 @@
         "path": "dir_clientSide/contestant",
         "package": "entities.contestant",
         "type": "client",
-        "command": ["cd Public/classes/; source config.bash; cd dir_clientSide/contestant; ./clientSide_com.sh &> output"],
+        "command": ["cd Public/classes/; source config.bash; ./clientSide_com.sh &> output"],
         "sleep": 0
     },
     {
@@ -20,7 +20,7 @@
         "path": "dir_clientSide/referee",
         "package": "entities.referee",
         "type": "client",
-        "command": ["cd Public/classes/; source config.bash; cd dir_clientSide/referee; ./clientSide_com.sh &> output"],
+        "command": ["cd Public/classes/; source config.bash; ./clientSide_com.sh &> output"],
         "sleep": 0
     },
     {
@@ -29,8 +29,8 @@
         "package": "registry",
         "type": "registry",
         "port": 22124,
-        "command": ["cd Public/classes/; source config.bash; cd dir_registry; ./set_rmiregistry.sh $registry_port &> output_set_rmiregistry",
-                    "cd Public/classes/; source config.bash; cd dir_registry; ./registry_com.sh &> output"],
+        "command": ["cd Public/classes/; source config.bash; ./set_rmiregistry.sh $registry_port &> output_set_rmiregistry",
+                    "cd Public/classes/; source config.bash; ./registry_com.sh &> output"],
         "sleep": 4
     },
     {
@@ -39,7 +39,7 @@
         "package": "general_info_repo",
         "type": "server",
         "port": 22123,
-        "command": ["cd Public/classes/; source config.bash; cd dir_serverSide/general_info_repo; ./serverSide_com.sh &> output"],
+        "command": ["cd Public/classes/; source config.bash; ./serverSide_com.sh &> output"],
         "sleep": 4
     },
     {
@@ -48,7 +48,7 @@
         "package": "bench",
         "type": "server",
         "port": 22122,
-        "command": ["cd Public/classes/; source config.bash; cd dir_serverSide/bench; ./serverSide_com.sh &> output"],
+        "command": ["cd Public/classes/; source config.bash; ./serverSide_com.sh &> output"],
         "sleep": 4
     },
     {
@@ -57,7 +57,7 @@
         "package": "playground",
         "type": "server",
         "port": 22121,
-        "command": ["cd Public/classes/; source config.bash; cd dir_serverSide/playground; ./serverSide_com.sh &> output"],
+        "command": ["cd Public/classes/; source config.bash; ./serverSide_com.sh &> output"],
         "sleep": 4
     },
     {
@@ -66,7 +66,7 @@
         "package": "referee_site",
         "type": "server",
         "port": 22120,
-        "command": ["cd Public/classes/; source config.bash; cd dir_serverSide/referee_site; ./serverSide_com.sh &> output"],
+        "command": ["cd Public/classes/; source config.bash; ./serverSide_com.sh &> output"],
         "sleep": 4
     }
 ]
