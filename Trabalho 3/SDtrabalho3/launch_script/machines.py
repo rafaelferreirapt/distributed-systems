@@ -144,14 +144,14 @@ def upload():
                     remote_path="Public/classes/"+file_up,
                     recursive=True)
 
-        print Fore.LIGHTGREEN_EX + "Public/classes/java.tar.gz" + Style.RESET_ALL
-        scp.put(files="java.tar.gz",
+        print Fore.LIGHTGREEN_EX + "Public/classes/java.zip" + Style.RESET_ALL
+        scp.put(files="java.zip",
                 remote_path="Public/classes/",
                 recursive=True)
 
-        print Fore.LIGHTGREEN_EX + "cd Public/classes; tar -zxvf java.tar.gz; mv java/* .; " \
-                                   "rm -rf java; rm java.tar.gz" + Style.RESET_ALL
-        ssh.exec_command("cd Public/classes; tar -zxvf java.tar.gz; mv java/* .; rm -rf java; rm java.tar.gz")
+        print Fore.LIGHTGREEN_EX + "cd Public/classes; unzip java.zip; mv java/* .; " \
+                                   "rm -rf java; rm java.zip" + Style.RESET_ALL
+        ssh.exec_command("cd Public/classes; unzip java.zip; mv java/* .;")  # rm -rf java; rm java.zip")
 
         print Fore.LIGHTGREEN_EX + "Public/classes/config.ini" + Style.RESET_ALL
         scp.put(files="configs/config_up.ini", remote_path="Public/classes/config.ini")

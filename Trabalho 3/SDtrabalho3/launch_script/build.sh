@@ -17,4 +17,4 @@ mv playground/ java
 mv general_info_repo java/
 mv entities java/
 
-tar -pcvzf java.tar.gz java
+zip -r java.zip java
