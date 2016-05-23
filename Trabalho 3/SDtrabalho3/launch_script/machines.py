@@ -384,8 +384,9 @@ def go(to):
         print Fore.RED + "Please specify wich machine you want to connect: Coach, Contestant," \
               " Referee, Registry, Log, Bench, Playground and RefereeSite." + Style.RESET_ALL
 
-    call(["sshpass", "-p", lst[to[0]]["host"]["password"], "ssh",
-          lst[to[0]]["host"]["user"] + "@" + lst[to[0]]["host"]["host"]])
+    print Style.DIM + Fore.BLUE + "$ Password: " + Fore.RED + lst[to[0]]["host"]["password"] + Style.RESET_ALL
+
+    call(["sshpass", "-p", lst[to[0]]["host"]["password"], "ssh", lst[to[0]]["host"]["user"] + "@" + lst[to[0]]["host"]["host"]])
 
 
 def is_up_host(ip_address):
@@ -420,8 +421,6 @@ if __name__ == '__main__':
     ssh = paramiko.SSHClient()
     ssh.load_system_host_keys()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    paramiko.util.log_to_file("filename.log")
-
 
     if sys.argv[1] in functions.keys():
         if len(sys.argv[2:]) == 0:
