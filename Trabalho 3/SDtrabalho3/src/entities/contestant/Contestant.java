@@ -65,7 +65,11 @@ public class Contestant  extends Thread {
             Logger.getLogger(Contestant.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        this.myClock = new VectorTimestamp(Constants.N_COACHS + Constants.N_CONTESTANTS_TEAM*2 + 2, this.totalID + 1);
+        if(this.team.equals("A")){
+            this.myClock = new VectorTimestamp(Constants.N_COACHS + Constants.N_CONTESTANTS_TEAM*2 + 2, this.totalID + 2);
+        }else{
+            this.myClock = new VectorTimestamp(Constants.N_COACHS + Constants.N_CONTESTANTS_TEAM*2 + 2, this.totalID + 3);
+        }
 
     }
     

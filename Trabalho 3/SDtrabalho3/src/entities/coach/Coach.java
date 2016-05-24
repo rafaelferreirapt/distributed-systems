@@ -58,7 +58,11 @@ public class Coach extends Thread {
         } catch (RemoteException ex) {
             Logger.getLogger(Coach.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.myClock = new VectorTimestamp(Constants.N_COACHS + Constants.N_CONTESTANTS_TEAM*2 + 2, Constants.N_CONTESTANTS_TEAM*2 + this.id + 1);
+        if(this.team.equals("A")){
+            this.myClock = new VectorTimestamp(Constants.N_COACHS + Constants.N_CONTESTANTS_TEAM*2 + 2, this.id + 1);
+        }else{
+            this.myClock = new VectorTimestamp(Constants.N_COACHS + Constants.N_CONTESTANTS_TEAM*2 + 2, Constants.N_CONTESTANTS_TEAM + this.id + 1);
+        }
 
     }
     

@@ -187,7 +187,7 @@ public class Bench implements BenchInterface{
             int selected;
 
             do{
-                selected = (int)Math.ceil(Math.random() * (this.N_CONTESTANTS_TEAM - 1) + 1);
+                selected = (int)Math.ceil(Math.random() * (this.N_CONTESTANTS_TEAM));
                 repeated = false;
 
                 for(int j=0; j<i; j++){

@@ -103,15 +103,15 @@ public class Log implements LogInterface{
             reorder_pw.println(head);
             pw.println(head);
             
-            head = "Sta  Stat";
+            head = "Sta  Sta";
             for(int i=1; i<=Match.N_CONTESTANTS/2; i++){
-                head += " Sta SG";
+                head += " Sta SG ";
             }
             head += "  Stat";
             for(int i=1; i<=Match.N_CONTESTANTS/2; i++){
-                head += " Sta SG";
+                head += " Sta SG ";
             }
-            head += " 3 2 1 . 1 2 3 NB PS";
+            head += "3 2 1 . 1 2 3 NB PS";
             
             reorder_pw.println(head);
             pw.println(head);
@@ -129,6 +129,7 @@ public class Log implements LogInterface{
      */
     @Override
     public synchronized void newGame(int gameNumber){
+        
         reorder_pw.println("Game " + gameNumber);
         pw.println("Game " + gameNumber);
         
@@ -152,18 +153,22 @@ public class Log implements LogInterface{
         reorder_pw.println(head);
 
 
-        head = "Sta  Stat";
+        head = "Sta  Sta   ";
         for(int i=1; i<=Match.N_CONTESTANTS/2; i++){
-            head += " Sta SG";
+            head += "Sta SG ";
         }
-        head += "  Stat";
+        head += "Sta   ";
         for(int i=1; i<=Match.N_CONTESTANTS/2; i++){
-            head += " Sta SG";
+            head += "Sta SG ";
         }
-        head += " 3 2 1 . 1 2 3 NB PS  ";
+        head += " 3 2 1 . 1 2 3 NB PS ";
         pw.println(head);
-        for(int i=1; i<N_CONTESTANTS+N_COACHS+1; i++){
-            head += i + "  ";
+        for(int i=1; i<=N_CONTESTANTS+N_COACHS+1; i++){
+            if(i+1 > 9){
+                head += i + " ";
+            }else{
+                head += i + "  ";
+            }
         }
         reorder_pw.println(head);
 
@@ -175,6 +180,7 @@ public class Log implements LogInterface{
      * This method will be called to finish write the log file.
      */
     public synchronized void writeEnd(){
+        
         pw.println("\nLegend:");
         pw.println("Ref Sta    – state of the referee");
         pw.println("Coa # Stat - state of the coach of team # (# - 1 .. 2)");
@@ -183,6 +189,20 @@ public class Log implements LogInterface{
         pw.println("TRIAL – ?  – contestant identification at the position ? at the end of the rope for present trial (? - 1 .. 3)");
         pw.println("TRIAL – NB – trial number");
         pw.println("TRIAL – PS – position of the centre of the rope at the beginning of the trial");
+        pw.println("VCk  0  -  local clock of the referee");
+        pw.println("VCk  1  -  local clock of the coach of team 1");
+        pw.println("VCk  2  -  local clock of the contestant 1 of team 1");
+        pw.println("VCk  3  -  local clock of the contestant 2 of team 1");
+        pw.println("VCk  4  -  local clock of the contestant 3 of team 1");
+        pw.println("VCk  5  -  local clock of the contestant 4 of team 1");
+        pw.println("VCk  6  -  local clock of the contestant 5 of team 1");
+        pw.println("VCk  7  -  local clock of the coach of team 2");
+        pw.println("VCk  8  -  local clock of the contestant 1 of team 2");
+        pw.println("VCk  9  -  local clock of the contestant 2 of team 2");
+        pw.println("VCk  10  -  local clock of the contestant 3 of team 2");
+        pw.println("VCk  11  -  local clock of the contestant 4 of team 2");
+        pw.println("VCk  12  -  local clock of the contestant 5 of team 2");
+
         reorder_pw.println("\nLegend:");
         reorder_pw.println("Ref Sta    – state of the referee");
         reorder_pw.println("Coa # Stat - state of the coach of team # (# - 1 .. 2)");
@@ -191,27 +211,19 @@ public class Log implements LogInterface{
         reorder_pw.println("TRIAL – ?  – contestant identification at the position ? at the end of the rope for present trial (? - 1 .. 3)");
         reorder_pw.println("TRIAL – NB – trial number");
         reorder_pw.println("TRIAL – PS – position of the centre of the rope at the beginning of the trial");
-        
-        Map<Integer, Update> tab = new Hashtable<>();
-
-        for (int i = 0; i < this.updates.size(); i++) {
-            tab.put(i, updates.get(i));
-        }
-        
-        ArrayList<Map.Entry<Integer, Update>> l = new ArrayList(tab.entrySet());
-        
-        Collections.sort(l, new Comparator<Map.Entry<Integer, Update>>()
-        {
-            @Override
-            public int compare(Map.Entry<Integer, Update> o1, Map.Entry<Integer, Update> o2) 
-            {
-                return o1.getValue().compareTo(o2.getValue());
-            }
-        });
-        
-        for (int i = 0; i < l.size(); i++) {
-            reorder_pw.printf(l.get(l.size()-i-1).getValue().getText());
-        }
+        reorder_pw.println("VCk  0  -  local clock of the referee");
+        reorder_pw.println("VCk  1  -  local clock of the coach of team 1");
+        reorder_pw.println("VCk  2  -  local clock of the contestant 1 of team 1");
+        reorder_pw.println("VCk  3  -  local clock of the contestant 2 of team 1");
+        reorder_pw.println("VCk  4  -  local clock of the contestant 3 of team 1");
+        reorder_pw.println("VCk  5  -  local clock of the contestant 4 of team 1");
+        reorder_pw.println("VCk  6  -  local clock of the contestant 5 of team 1");
+        reorder_pw.println("VCk  7  -  local clock of the coach of team 2");
+        reorder_pw.println("VCk  8  -  local clock of the contestant 1 of team 2");
+        reorder_pw.println("VCk  9  -  local clock of the contestant 2 of team 2");
+        reorder_pw.println("VCk  10  -  local clock of the contestant 3 of team 2");
+        reorder_pw.println("VCk  11  -  local clock of the contestant 4 of team 2");
+        reorder_pw.println("VCk  12  -  local clock of the contestant 5 of team 2");
        
         reorder_pw.flush();
         reorder_pw.close();
@@ -428,7 +440,7 @@ public class Log implements LogInterface{
             write += this.match.getContestantState("A", i) + " " + this.match.getContestantStrength("A", i) + " ";
         }
             
-        write += " " + this.match.getCoachState("B") + " ";
+        write += this.match.getCoachState("B") + "  ";
         
         for(Integer i : contestants){
             write += this.match.getContestantState("B", i) + " " + this.match.getContestantStrength("B", i) + " ";
@@ -462,18 +474,17 @@ public class Log implements LogInterface{
         write += String.format(posA + "." + posB + "%2d %2d", this.match.gameNumberOfTrials(), this.match.getCentre_of_the_rope());
         
         int[] arrayClocks = vt.toIntArray();
-        for (int i = 0; i < Constants.N_COACHS + Constants.N_CONTESTANTS_TEAM*2 + 2; i++) {
+        for (int i = 0; i < Constants.N_COACHS + Constants.N_CONTESTANTS_TEAM*2 + 1; i++) {
             write = write + String.format(" %2d", arrayClocks[i]);
         }
         write += String.format("\n");
         
-        reorder_pw.printf(write);
-        reorder_pw.flush();
         pw.printf(write);
         pw.flush();
         
         Update upd = new Update(write, vt.toIntArray());
         updates.add(upd);
+                
     }
     
     /**
@@ -481,6 +492,29 @@ public class Log implements LogInterface{
      */
     @Override
     public synchronized void printGameWinner(){
+        Map<Integer, Update> tab = new Hashtable<>();
+
+        for (int i = 0; i < this.updates.size(); i++) {
+            tab.put(i, updates.get(i));
+        }
+
+        ArrayList<Map.Entry<Integer, Update>> l = new ArrayList(tab.entrySet());
+
+        Collections.sort(l, new Comparator<Map.Entry<Integer, Update>>()
+        {
+            @Override
+            public int compare(Map.Entry<Integer, Update> o1, Map.Entry<Integer, Update> o2) 
+            {
+                return o1.getValue().compareTo(o2.getValue());
+            }
+        });
+
+        for (int i = 0; i < l.size(); i++) {
+            reorder_pw.printf(l.get(l.size()-i-1).getValue().getText());
+        }
+
+        updates.clear();
+        
         if(this.match.getNumberOfGames() > 0){
             pw.println(this.match.getWinner());
             reorder_pw.println(this.match.getWinner());
