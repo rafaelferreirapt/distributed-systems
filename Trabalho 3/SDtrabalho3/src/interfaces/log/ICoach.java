@@ -25,16 +25,19 @@ public interface ICoach {
     /**
      *
      * @param team
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void refreshStrengths(String team) throws RemoteException;
+    public VectorTimestamp refreshStrengths(String team, VectorTimestamp vt) throws RemoteException;
     
     /**
      *
      * @param team
      * @param state
      * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void setCoachState(String team, CoachState state, VectorTimestamp vt) throws RemoteException;
+    public VectorTimestamp setCoachState(String team, CoachState state, VectorTimestamp vt) throws RemoteException;
 }

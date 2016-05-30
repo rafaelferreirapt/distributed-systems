@@ -50,6 +50,8 @@ public class Log implements LogInterface{
     private final int N_COACHS;
     private final int N_CONTESTANTS;
     private int numberEntitiesRunning = 3;
+    private final VectorTimestamp clocks;
+
     
     /**
      *  File where the log will be saved
@@ -69,7 +71,8 @@ public class Log implements LogInterface{
     public Log(String filename){
         N_COACHS = Constants.N_COACHS;
         N_CONTESTANTS = Constants.N_CONTESTANTS_TEAM * 2;
-        
+        this.clocks = new VectorTimestamp(N_CONTESTANTS + N_COACHS + 2, 0);
+
         if(filename.length()==0){
             Date today = Calendar.getInstance().getTime();
             SimpleDateFormat date = new SimpleDateFormat("yyyyMMddhhmmss");
@@ -129,7 +132,6 @@ public class Log implements LogInterface{
      */
     @Override
     public synchronized void newGame(int gameNumber){
-        
         reorder_pw.println("Game " + gameNumber);
         pw.println("Game " + gameNumber);
         
@@ -235,17 +237,21 @@ public class Log implements LogInterface{
      * New game and print line with the game.
      */
     @Override
-    public synchronized void newGame(){
+    public synchronized VectorTimestamp newGame(VectorTimestamp vt){
+        this.clocks.update(vt);
         match.newGame();
         this.newGame(this.match.getNumberOfGames());
+        return this.clocks.clone();
     }
     
     /**
      * New trial with the game.
      */
     @Override
-    public synchronized void newTrial(){
+    public synchronized VectorTimestamp newTrial(VectorTimestamp vt){
+        this.clocks.update(vt);
         match.newTrial();
+        return this.clocks.clone();
     }
     
     /**
@@ -261,9 +267,11 @@ public class Log implements LogInterface{
      * Declare match winner.
      */
     @Override
-    public synchronized void declareMatchWinner(){
+    public synchronized VectorTimestamp declareMatchWinner(VectorTimestamp vt){
+        this.clocks.update(vt);
         pw.println(match.declareMatchWinner());
         reorder_pw.println(match.declareMatchWinner());
+        return this.clocks.clone();
     }
     
     /**
@@ -282,8 +290,10 @@ public class Log implements LogInterface{
      * @param contestant The contestant ID.
      */
     @Override
-    public synchronized void updateRope(String team, int contestant){
+    public synchronized VectorTimestamp updateRope(String team, int contestant, VectorTimestamp vt){
+        this.clocks.update(vt);
         match.updateRope(team, match.getContestantStrength(team, contestant));
+        return this.clocks.clone();
     }
     
     /**
@@ -315,9 +325,11 @@ public class Log implements LogInterface{
      * @param contestant The contestant ID.
      */
     @Override
-    public synchronized void setContestantState(ContestantState state, String team, int contestant, VectorTimestamp vt){
+    public synchronized VectorTimestamp setContestantState(ContestantState state, String team, int contestant, VectorTimestamp vt){
+        this.clocks.update(vt);
         this.match.setContestantState(state, team, contestant);
         this.printLine(vt);
+        return this.clocks.clone();
     }
     
     /**
@@ -336,9 +348,11 @@ public class Log implements LogInterface{
      * @param state coach state.
      */
     @Override
-    public synchronized void setCoachState(String team, CoachState state, VectorTimestamp vt){
+    public synchronized VectorTimestamp setCoachState(String team, CoachState state, VectorTimestamp vt){
+        this.clocks.update(vt);
         this.match.setCoachState(team, state);
         this.printLine(vt);
+        return this.clocks.clone();
     }
     
     /**
@@ -355,9 +369,11 @@ public class Log implements LogInterface{
      * @param state referee state.
      */
     @Override
-    public synchronized void setRefereeState(RefereeState state, VectorTimestamp vt){
+    public synchronized VectorTimestamp setRefereeState(RefereeState state, VectorTimestamp vt){
+        this.clocks.update(vt);
         this.match.setRefereeState(state);
         this.printLine(vt);
+        return this.clocks.clone();
     }
     
     /**
@@ -366,8 +382,10 @@ public class Log implements LogInterface{
      * @param contestant The contestant ID.
      */
     @Override
-    public synchronized void setContestantLastTrial(String team, int contestant){
+    public synchronized VectorTimestamp setContestantLastTrial(String team, int contestant, VectorTimestamp vt){
+        this.clocks.update(vt);        
         this.match.setContestantLastTrial(team, contestant);
+        return this.clocks.clone();
     }
     
     /**
@@ -375,20 +393,24 @@ public class Log implements LogInterface{
      * @param team Team identifier, can be A or B.
      */
     @Override
-    public synchronized void refreshStrengths(String team){
+    public synchronized VectorTimestamp refreshStrengths(String team, VectorTimestamp vt){
+        this.clocks.update(vt);        
         this.match.refreshStrengths(team);
+        return this.clocks.clone();
     }
     
     /**
      * Set position, we only need the team and the contestant id.
      * @param team Team identifier, can be A or B.
      * @param contestant The contestant ID.
+     * @return 
      */
     @Override
-    public synchronized void setPosition(String team, int contestant, VectorTimestamp vt){
+    public synchronized VectorTimestamp setPosition(String team, int contestant, VectorTimestamp vt){
+        this.clocks.update(vt);
         this.match.setPosition(team, contestant);
         this.printLine(vt);
-
+        return this.clocks.clone();
     }
     
     /**
@@ -397,7 +419,8 @@ public class Log implements LogInterface{
      * @param contestant The contestant ID.
      */
     @Override
-    public synchronized void removePosition(String team, int contestant, VectorTimestamp vt){
+    public synchronized VectorTimestamp removePosition(String team, int contestant, VectorTimestamp vt){
+        this.clocks.update(vt);
         if(team.equals("A")){
             HashMap<Integer, Integer> tmpA = this.match.getPositionsA();
             for(int i = 1; i<=3; i++){
@@ -418,7 +441,7 @@ public class Log implements LogInterface{
             }
         }
         this.printLine(vt);
-
+        return this.clocks.clone();
     }
     
     private void printLine(VectorTimestamp vt){
@@ -491,7 +514,8 @@ public class Log implements LogInterface{
      * Print game winner.
      */
     @Override
-    public synchronized void printGameWinner(){
+    public synchronized VectorTimestamp printGameWinner(VectorTimestamp vt){
+        this.clocks.update(vt);
         Map<Integer, Update> tab = new Hashtable<>();
 
         for (int i = 0; i < this.updates.size(); i++) {
@@ -520,6 +544,8 @@ public class Log implements LogInterface{
             reorder_pw.println(this.match.getWinner());
             
         }
+        
+        return this.clocks.clone();
     }
     
     @Override 

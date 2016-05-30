@@ -37,26 +37,32 @@ public class RefereeSite implements RefereeSiteInterface{
     /**
     * In referee life cycle, transition between "start of the match" and "start of a game" or 
     * between "end of a game" and "start of a gam   e".
+     * @param vt
+     * @return 
     */
     @Override
-    public void annouceNewGame() {
-        
+    public synchronized VectorTimestamp annouceNewGame(VectorTimestamp vt) {
+        this.clocks.update(vt);
+        return this.clocks.clone();
     }
 
     /**
     * In referee life cycle, transition between "wait for trial conclusion" and "end of a game".
     */
     @Override
-    public void declareGameWinner() {
-        
+    public synchronized VectorTimestamp declareGameWinner(VectorTimestamp vt) {
+        this.clocks.update(vt);
+        return this.clocks.clone();
     }
 
     /**
     * In referee life cycle, transition between "end of a game" and "end of the match".
     */
     @Override
-    public void declareMatchWinner() {
+    public synchronized VectorTimestamp declareMatchWinner(VectorTimestamp vt) {
+        this.clocks.update(vt);
         this.matchEnds = true;
+        return this.clocks.clone();        
     }
     
      /**

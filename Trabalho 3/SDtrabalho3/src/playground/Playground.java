@@ -114,7 +114,8 @@ public class Playground implements PlaygroundInterface{
      * @param team "A" or "B"
      */
     @Override
-    public void pullTheRope(int id, String team) {
+    public synchronized VectorTimestamp pullTheRope(int id, String team, VectorTimestamp vt) {
+        this.clocks.update(vt);
         try {
             Thread.sleep((int)Math.ceil(Math.random() * DELAY_MAX + DELAY_MIN));
         } catch (InterruptedException ex) {
@@ -122,10 +123,12 @@ public class Playground implements PlaygroundInterface{
         }
         
         try {
-            log.updateRope(team, id);
+            log.updateRope(team, id, vt);
         } catch (RemoteException ex) {
             Logger.getLogger(Playground.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return this.clocks.clone();
+
     }
 
     @Override

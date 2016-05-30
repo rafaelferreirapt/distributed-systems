@@ -16,21 +16,27 @@ public interface IReferee {
     /**
     * In referee life cycle, transition between "start of the match" and "start of a game" or 
     * between "end of a game" and "start of a game".
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
     */
-    public void annouceNewGame() throws RemoteException;
+    public VectorTimestamp annouceNewGame(VectorTimestamp vt) throws RemoteException;
     
     /**
     * In referee life cycle, transition between "wait for trial conclusion" and "end of a game".
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
     */
-    public void declareGameWinner() throws RemoteException;
+    public VectorTimestamp declareGameWinner(VectorTimestamp vt) throws RemoteException;
     
     /**
     * In referee life cycle, transition between "end of a game" and "end of the match".
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
     */
-    public void declareMatchWinner() throws RemoteException;
+    public VectorTimestamp declareMatchWinner(VectorTimestamp vt) throws RemoteException;
     
     /**
      * End of the match. 

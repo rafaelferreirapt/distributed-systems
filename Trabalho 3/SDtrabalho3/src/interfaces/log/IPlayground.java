@@ -5,6 +5,7 @@
 package interfaces.log;
 
 import java.rmi.RemoteException;
+import structures.VectorTimestamp;
 
 /**
  * 
@@ -16,7 +17,9 @@ public interface IPlayground {
      *
      * @param team
      * @param contestant
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void updateRope(String team, int contestant) throws RemoteException;
+    public VectorTimestamp updateRope(String team, int contestant, VectorTimestamp vt) throws RemoteException;
 }

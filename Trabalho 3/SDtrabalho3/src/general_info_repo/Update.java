@@ -20,7 +20,7 @@ public class Update implements Comparable{
      * @param text Text to be saved
      * @param clock Vector clock associated
      */
-    public Update(String text, int [] clock)    {
+    public Update(String text, int[] clock){
         this.text = text;
         this.clock = clock;
     }
@@ -29,7 +29,7 @@ public class Update implements Comparable{
      * Returns the text associated to the object
      * @return text associated
      */
-    public String getText() {
+    public String getText(){
         return text;
     }
 
@@ -37,7 +37,7 @@ public class Update implements Comparable{
      * Sets the text that is going to be associated to the Vector clock
      * @param text object String to be associated
      */
-    public void setText(String text) {
+    public void setText(String text){
         this.text = text;
     }
 
@@ -45,7 +45,7 @@ public class Update implements Comparable{
      * Gets the clock associated to the object.
      * @return integer array containing the vector clock
      */
-    public int [] getClock() {
+    public int [] getClock(){
         return clock;
     }
 
@@ -53,7 +53,7 @@ public class Update implements Comparable{
      * Sets the clock associated to the object.
      * @param clock integer array containing the vector clock
      */
-    public void setClock(int [] clock) {
+    public void setClock(int [] clock){
         this.clock = clock;
     }   
     
@@ -63,7 +63,7 @@ public class Update implements Comparable{
      * @return the result of the comparison (-1, 1 or 0)
      */
     @Override
-    public int compareTo(Object u)  {
+    public int compareTo(Object u){
         int[] array1 = this.clock;
         int[] array2 = ((Update) u).getClock();
         
@@ -71,15 +71,15 @@ public class Update implements Comparable{
         boolean array1_lesser_array2 = false;
         boolean array1_lesser_equal_array2 = false;
         
-        for(int i = 0; i < array1.length; i++)  {
-            if(array1[i] > array2[i])    {
+        for(int i = 0; i < array1.length; i++){
+            if(array1[i] > array2[i]){
                 array1_greater_array2 = true;
             }
-            if(array1[i] <= array2[i])  {
-                if(array1[i] < array2[i])    {
+            if(array1[i] <= array2[i]){
+                if(array1[i] < array2[i]){
                     array1_lesser_array2 = true;
                 }
-                else    {
+                else{
                     array1_lesser_equal_array2 = true;
                 }
             }
@@ -94,7 +94,7 @@ public class Update implements Comparable{
     }
     
     @Override
-    public String toString()    {
+    public String toString(){
         return text;
     }
 

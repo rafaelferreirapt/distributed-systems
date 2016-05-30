@@ -17,9 +17,11 @@ public interface IContestant {
      * In Contestants life cycle, transition between "doYourBest" and "doYourBest"
      * @param id contestant identifier
      * @param team "A" or "B"
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void pullTheRope(int id, String team) throws RemoteException;
+    public VectorTimestamp pullTheRope(int id, String team, VectorTimestamp vt) throws RemoteException;
     
     /**
      * Wait for start trial. Contestant method.

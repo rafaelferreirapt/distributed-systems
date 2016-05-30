@@ -109,13 +109,17 @@ public class Coach extends Thread {
                         this.receivedClock = this.bench.reviewNotes(this.team, this.myClock.clone());
                         this.myClock.update(this.receivedClock);
                         
-                        this.log.refreshStrengths(this.team);
+                        this.myClock.increment();
+                        this.receivedClock = this.log.refreshStrengths(this.team, this.myClock.clone());
+                        this.myClock.update(this.receivedClock);
 
                         this.state = CoachState.WAIT_FOR_REFEREE_COMMAND;
                         break;
                 }
                 if(!referee_site.endOfMatch()){
-                    this.log.setCoachState(team, state, this.myClock.clone());
+                    this.myClock.increment();
+                    this.receivedClock = this.log.setCoachState(team, state, this.myClock.clone());
+                    this.myClock.update(this.receivedClock);
                 }
             }
         } catch (RemoteException ex) {

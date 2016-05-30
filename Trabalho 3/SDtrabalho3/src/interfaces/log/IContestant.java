@@ -27,27 +27,31 @@ public interface IContestant {
      *
      * @param team
      * @param contestant
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void setContestantLastTrial(String team, int contestant) throws RemoteException;
+    public VectorTimestamp setContestantLastTrial(String team, int contestant, VectorTimestamp vt) throws RemoteException;
     
     /**
      *
      * @param team
      * @param contestant
      * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void removePosition(String team, int contestant, VectorTimestamp vt) throws RemoteException;
+    public VectorTimestamp removePosition(String team, int contestant, VectorTimestamp vt) throws RemoteException;
     
     /**
      *
      * @param team
      * @param contestant
      * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void setPosition(String team, int contestant, VectorTimestamp vt) throws RemoteException;
+    public VectorTimestamp setPosition(String team, int contestant, VectorTimestamp vt) throws RemoteException;
     
     /**
      *
@@ -55,7 +59,8 @@ public interface IContestant {
      * @param team
      * @param contestant
      * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void setContestantState(ContestantState state, String team, int contestant, VectorTimestamp vt) throws RemoteException;
+    public VectorTimestamp setContestantState(ContestantState state, String team, int contestant, VectorTimestamp vt) throws RemoteException;
 }

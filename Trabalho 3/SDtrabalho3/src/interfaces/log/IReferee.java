@@ -23,15 +23,19 @@ public interface IReferee {
     
     /**
      *
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void newGame() throws RemoteException;
+    public VectorTimestamp newGame(VectorTimestamp vt) throws RemoteException;
     
     /**
      *
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void newTrial() throws RemoteException;
+    public VectorTimestamp newTrial(VectorTimestamp vt) throws RemoteException;
     
     /**
      *
@@ -56,9 +60,11 @@ public interface IReferee {
     
     /**
      *
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void printGameWinner() throws RemoteException;
+    public VectorTimestamp printGameWinner(VectorTimestamp vt) throws RemoteException;
     
     /**
      *
@@ -71,13 +77,16 @@ public interface IReferee {
      *
      * @param state
      * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void setRefereeState(RefereeState state, VectorTimestamp vt) throws RemoteException;
+    public VectorTimestamp setRefereeState(RefereeState state, VectorTimestamp vt) throws RemoteException;
     
     /**
      *
+     * @param vt
+     * @return 
      * @throws java.rmi.RemoteException
      */
-    public void declareMatchWinner() throws RemoteException;
+    public VectorTimestamp declareMatchWinner(VectorTimestamp vt) throws RemoteException;
 }

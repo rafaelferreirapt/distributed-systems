@@ -23,7 +23,7 @@ public class VectorTimestamp implements Cloneable, Serializable{
      * @param size size of the vector clock
      * @param localindex local index of the vector clock
      */
-    public VectorTimestamp(int size, int localindex) {
+    public VectorTimestamp(int size, int localindex){
         this.localindex = localindex;
         this.ts = new int[size];
     }
@@ -31,7 +31,7 @@ public class VectorTimestamp implements Cloneable, Serializable{
     /**
      * Increments the local index declared on the constructor.
      */
-    public synchronized void increment() {
+    public synchronized void increment(){
         ts[localindex]++;
     }
     
@@ -39,7 +39,7 @@ public class VectorTimestamp implements Cloneable, Serializable{
      * Updates the vector clock.
      * @param vt the Vector clock
      */
-    public synchronized void update(VectorTimestamp vt) {
+    public synchronized void update(VectorTimestamp vt){
         for (int i = 0; i < vt.ts.length; i++) {
             ts[i] = Math.max(vt.ts[i], this.ts[i]);
         }
@@ -49,7 +49,7 @@ public class VectorTimestamp implements Cloneable, Serializable{
      * Returns a deep copy of the object.
      * @return deep copy of the object
      */
-    public synchronized VectorTimestamp getCopy() {
+    public synchronized VectorTimestamp getCopy(){
         return this.clone();
     }
     
@@ -57,7 +57,7 @@ public class VectorTimestamp implements Cloneable, Serializable{
      * Returns the vector clock as an integer array.
      * @return integer array containing the vector clock
      */
-    public synchronized int[] toIntArray() {
+    public synchronized int[] toIntArray(){
         return ts;
     }
     

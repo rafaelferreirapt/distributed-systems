@@ -95,9 +95,13 @@ public class Contestant  extends Thread {
             while(!this.referee_site.endOfMatch()){
                     switch(this.state){
                         case DO_YOUR_BEST:
-                            this.playground.pullTheRope(this.id, this.team);
-
-                            this.log.setContestantLastTrial(this.team, this.id);
+                            this.myClock.increment();
+                            this.receivedClock = this.playground.pullTheRope(this.id, this.team, this.myClock.clone());
+                            this.myClock.update(this.receivedClock);
+                            
+                            this.myClock.increment();
+                            this.receivedClock = this.log.setContestantLastTrial(this.team, this.id, this.myClock.clone());
+                            this.myClock.update(this.receivedClock);
                             
                             this.myClock.increment();
                             this.receivedClock = this.referee_site.amDone(this.myClock.clone());
@@ -107,8 +111,10 @@ public class Contestant  extends Thread {
                             this.receivedClock = this.playground.waitForAssertTrialDecision(this.myClock.clone());
                             this.myClock.update(this.receivedClock);
                             
-                            this.log.removePosition(this.team, this.id, this.myClock.clone());
-
+                            this.myClock.increment();
+                            this.receivedClock = this.log.removePosition(this.team, this.id, this.myClock.clone());
+                            this.myClock.update(this.receivedClock);
+                            
                             this.myClock.increment();
                             this.receivedClock = this.bench.seatDown(this.team, this.myClock.clone());
                             this.myClock.update(this.receivedClock);
@@ -129,7 +135,9 @@ public class Contestant  extends Thread {
                             this.receivedClock = this.bench.followCoachAdvice(this.team, this.id, this.myClock.clone()); // o ultimo informa o utilizador
                             this.myClock.update(this.receivedClock);
                             
-                            this.log.setPosition(this.team, this.id, this.myClock.clone());
+                            this.myClock.increment();
+                            this.receivedClock = this.log.setPosition(this.team, this.id, this.myClock.clone());
+                            this.myClock.update(this.receivedClock);
 
                             this.state = ContestantState.STAND_IN_POSITION;
                             break;
@@ -145,7 +153,9 @@ public class Contestant  extends Thread {
                             break;
                     }
                     if(!referee_site.endOfMatch()){
-                        this.log.setContestantState(state, team, this.id, this.myClock.clone());
+                        this.myClock.increment();
+                        this.receivedClock = this.log.setContestantState(state, team, this.id, this.myClock.clone());
+                        this.myClock.update(this.receivedClock);
                     }
             }
         } catch (RemoteException ex) {
