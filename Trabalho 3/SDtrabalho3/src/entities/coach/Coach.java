@@ -40,7 +40,6 @@ public class Coach extends Thread {
      * @param team Team identifier, can be A or B.
      * @param id
      * @param l
-     * @throws java.rmi.RemoteException
      */
     public Coach(interfaces.bench.ICoach b, interfaces.referee_site.ICoach r, String team, int id, interfaces.log.ICoach l){
         this.bench = b;
